@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height"
+                android:gravity="center_vertical"
+                android:text="核查地点" />
+
+            <TextView
+                android:id="@+id/hc_location"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height"
+                android:gravity="center_vertical"
+                android:maxEms="5"
+                android:text="公安部在逃人员" />
+
+            <TextView
+                android:id="@+id/wanted"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height"
+                android:gravity="center_vertical"
+                android:maxEms="5"
+                android:text="省情报中心路面核查" />
+
+            <TextView
+                android:id="@+id/road_check"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height"
+                android:gravity="center_vertical"
+                android:maxEms="5"
+                android:text="车主身份证号码" />
+
+            <TextView
+                android:id="@+id/id_num"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height"
+                android:gravity="center_vertical"
+                android:maxEms="5"
+                android:text="姓名" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height"
+                android:gravity="center_vertical"
+                android:maxEms="5"
+                android:text="电动车牌号" />
+
+            <TextView
+                android:id="@+id/plateform_num"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height"
+                android:gravity="center_vertical"
+                android:maxEms="5"
+                android:text="品牌" />
+
+            <TextView
+                android:id="@+id/car_brand"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height"
+                android:gravity="center_vertical"
+                android:maxEms="5"
+                android:text="车架号" />
+
+            <TextView
+                android:id="@+id/cjh"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height"
+                android:gravity="center_vertical"
+                android:maxEms="5"
+                android:text="发动机号" />
+
+            <TextView
+                android:id="@+id/fdjh"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height"
+                android:gravity="center_vertical"
+                android:text="非机动车序列号" />
+
+            <TextView
+                android:id="@+id/fdj_sequence"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

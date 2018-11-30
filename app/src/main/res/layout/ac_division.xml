@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_marginTop="76dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="诊察核录"
+            android:textSize="26sp" />
+        <TextView
+            android:layout_toRightOf="@id/app_name"
+            android:layout_alignBottom="@id/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="5.0"
+            android:textSize="11sp" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_marginTop="@dimen/divison_tab_margin"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/emblem"
+        android:scaleType="centerInside" />
+
+    <TextView
+        android:id="@+id/lmhc"
+        android:layout_width="@dimen/division_tab_width"
+        android:layout_height="@dimen/division_tab_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/divison_tab_margin"
+        android:background="@drawable/division_tab_bkg1_selector"
+        android:gravity="center"
+        android:text="路面核查"
+        android:textColor="@color/tab_color_one"
+        android:textSize="@dimen/division_text_size" />
+
+    <TextView
+        android:id="@+id/hchhl"
+        android:layout_width="@dimen/division_tab_width"
+        android:layout_height="@dimen/division_tab_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/divison_tab_margin"
+        android:background="@drawable/division_tab_bkg2_selector"
+        android:gravity="center"
+        android:text="护城河核录"
+        android:textColor="@color/tab_color_two"
+        android:textSize="@dimen/division_text_size" />
+
+    <TextView
+        android:id="@+id/abhl"
+        android:layout_width="@dimen/division_tab_width"
+        android:layout_height="@dimen/division_tab_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/divison_tab_margin"
+        android:background="@drawable/division_tab_bkg3_selector"
+        android:gravity="center"
+        android:text="安保核录"
+        android:textColor="@color/tab_color_three"
+        android:textSize="@dimen/division_text_size" />
+
+</LinearLayout>

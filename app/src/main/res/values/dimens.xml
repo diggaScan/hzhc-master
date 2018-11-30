@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--ac_division-->
+    <dimen name="division_tab_height">65dp</dimen>
+    <dimen name="division_tab_width">200dp</dimen>
+    <dimen name="divison_tab_margin">18dp</dimen>
+
+    <dimen name="division_text_size">16sp</dimen>
+
+
+    <!--ac_location-->
+    <dimen name="location_address_height">40dp</dimen>
+
+    <!--ac_functions-->
+    <dimen name="function_rv_height">150dp</dimen>
+    <dimen name="function_tv_height">25dp</dimen>
+
+
+    <!--ac_main_functions-->
+    <dimen name="input_date_width">108dp</dimen>
+    <dimen name="input_height">36dp</dimen>
+    <dimen name="input_heightx2">80dp</dimen>
+    <dimen name="input_heightx4">148dp</dimen>
+    <dimen name="input_heightx3d2">131dp</dimen>
+    <dimen name="input_width">240dp</dimen>
+    <dimen name="input_margin_bot">12dp</dimen>
+    <dimen name="module_title_size">16sp</dimen>
+    <dimen name="module_title_padding">15dp</dimen>
+
+    <dimen name="info_input_text_size">15sp</dimen>
+    <!--ac_nations_list-->
+    <dimen name="rv_nation_list_item_height">40dp</dimen>
+
+    <!--info_display-->
+    <dimen name="info_display_item_height">32dp</dimen>
+
+    <!--form_format-->
+    <dimen name="form_margin_left">5dp</dimen>
+    <dimen name="form_margin_interval">5dp</dimen>
+    <dimen name="form_text_margin_left">5dp</dimen>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  
+
+    <color name="white">#ffffff</color>
+    <color name="gray_back_screen">#efeeee</color>
+    <color name="recycler_selected_item">#ded754</color>
+</resources>

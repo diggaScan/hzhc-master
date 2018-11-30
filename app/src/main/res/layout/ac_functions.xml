@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:gravity="center_vertical"
+        android:text="常用项"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/function_tv_height"
+        android:background="@color/light_gray"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/function_rv_height"/>
+    <TextView
+        android:gravity="center_vertical"
+        android:text="辅助项"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/function_tv_height"
+        android:background="@color/light_gray"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/secondary"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/function_rv_height"/>
+    <TextView
+        android:gravity="center_vertical"
+        android:text="其他"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/function_tv_height"
+        android:background="@color/light_gray"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/other"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/function_rv_height"/>
+</LinearLayout>

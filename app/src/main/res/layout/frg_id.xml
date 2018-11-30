@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="3dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/module_title_shape"
+            android:padding="@dimen/module_title_padding"
+            android:text="身份证查询"
+            android:textColor="@color/white"
+            android:textSize="@dimen/module_title_size"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/id_input"
+            android:layout_width="@dimen/input_width"
+            android:layout_height="@dimen/input_height"
+            android:layout_centerInParent="true"
+            android:background="@drawable/palteform_underline"
+            android:digits="1234567890xX"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="输入身份证号码"
+            android:inputType="number"
+            android:maxLength="18"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textColorHint="@color/hint_color" />
+
+
+        <TextView
+            android:id="@+id/tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/id_input"
+            android:layout_alignLeft="@+id/id_input"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:text="注：输入15或18位身份证号码"
+            android:textColor="@color/white"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/query"
+            android:layout_width="@dimen/input_width"
+            android:layout_height="@dimen/input_height"
+            android:layout_below="@id/tip"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/round_location_enter_bkg"
+            android:text="查询"
+            android:textColor="@color/white" />
+
+
+    </RelativeLayout>
+
+</ScrollView>

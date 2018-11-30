@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/module_title_shape"
+            android:padding="@dimen/module_title_padding"
+            android:text="路面批量核查"
+            android:textColor="@color/white"
+            android:textSize="@dimen/module_title_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/input_height"
+            android:layout_above="@id/id_num"
+            android:background="@null"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="@dimen/input_margin_bot"
+            android:gravity="center"
+            android:drawableLeft="@drawable/ic_map"
+            android:text="这个地址由首页传入"
+            android:textColor="@color/white" />
+
+        <EditText
+            android:id="@+id/id_num"
+            android:layout_width="@dimen/input_width"
+            android:layout_height="@dimen/input_height"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="@dimen/input_margin_bot"
+            android:background="@drawable/palteform_underline"
+            android:gravity="center"
+            android:hint="身份证号码"
+            android:textColorHint="@color/hint_color"/>
+
+        <EditText
+            android:id="@+id/phone_num"
+            android:layout_width="@dimen/input_width"
+            android:layout_height="@dimen/input_height"
+            android:layout_below="@id/id_num"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="@dimen/input_margin_bot"
+            android:background="@drawable/palteform_underline"
+            android:gravity="center"
+            android:hint="手机号码"
+            android:textColorHint="@color/hint_color"/>
+
+        <Button
+            android:id="@+id/query"
+            android:layout_width="@dimen/input_width"
+            android:layout_height="@dimen/input_height"
+            android:layout_below="@id/phone_num"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/round_location_enter_bkg"
+            android:text="加入核查"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+</ScrollView>

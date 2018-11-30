@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/module_title_shape"
+            android:padding="@dimen/module_title_padding"
+            android:text="旅馆住宿人员查询"
+            android:textColor="@color/white"
+            android:textSize="@dimen/module_title_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/hotel_name"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/input_height"
+            android:layout_above="@id/room_num"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="@dimen/input_margin_bot"
+            android:background="@null"
+            android:drawableLeft="@drawable/ic_hotel_input"
+            android:gravity="center"
+            android:hint="点击选择旅馆名称"
+            android:textColor="@color/white"
+            android:textColorHint="@color/hint_color" />
+
+        <EditText
+            android:id="@+id/room_num"
+            android:layout_width="@dimen/input_width"
+            android:layout_height="@dimen/input_height"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="@dimen/input_margin_bot"
+            android:background="@drawable/palteform_underline"
+            android:gravity="center"
+            android:hint="房间号"
+            android:textColorHint="@color/hint_color" />
+
+        <TextView
+            android:id="@+id/time_from"
+            android:layout_width="@dimen/input_date_width"
+            android:layout_height="@dimen/input_height"
+            android:layout_below="@id/room_num"
+            android:layout_alignLeft="@id/room_num"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/input_margin_bot"
+            android:background="@drawable/palteform_underline"
+            android:gravity="center"
+            android:hint="住店日期"
+            android:textColor="@color/white"
+            android:textColorHint="@color/hint_color" />
+
+        <TextView
+            android:id="@+id/time_to"
+            android:layout_width="@dimen/input_date_width"
+            android:layout_height="@dimen/input_height"
+            android:layout_below="@id/room_num"
+            android:layout_alignRight="@id/room_num"
+            android:layout_marginBottom="@dimen/input_margin_bot"
+            android:background="@drawable/palteform_underline"
+            android:gravity="center"
+            android:hint="离店日期"
+            android:textColor="@color/white"
+            android:textColorHint="@color/hint_color" />
+
+        <ImageView
+            android:id="@+id/range_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/room_num"
+            android:layout_alignBottom="@id/time_from"
+            android:layout_toRightOf="@id/time_from"
+            android:src="@drawable/ic_remove_white_24dp" />
+
+        <Button
+            android:id="@+id/query"
+            android:layout_width="@dimen/input_width"
+            android:layout_height="@dimen/input_height"
+            android:layout_below="@id/time_to"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/round_location_enter_bkg"
+            android:text="查询"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+</ScrollView>

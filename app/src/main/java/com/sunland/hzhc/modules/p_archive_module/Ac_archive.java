@@ -25,12 +25,14 @@ public class Ac_archive extends Ac_base {
     public ViewPager vp_frgs;
 
     public String identity_num;
+    public int tab_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.ac_archive);
         showNavIcon(true);
+        setToolbarTitle("个人综合信息");
         handleIntent();
         initView();
     }
@@ -41,6 +43,7 @@ public class Ac_archive extends Ac_base {
             Bundle bundle = intent.getBundleExtra("bundle");
             if (bundle != null) {
                 identity_num = bundle.getString("id");
+                tab_id = bundle.getInt("tab_id");
             }
         }
     }
@@ -57,6 +60,7 @@ public class Ac_archive extends Ac_base {
         vp_frgs.setAdapter(myViewPagerAdapter);
         vp_frgs.setOffscreenPageLimit(3);
         tl_items.setupWithViewPager(vp_frgs);
+        vp_frgs.setCurrentItem(tab_id);
     }
 
 

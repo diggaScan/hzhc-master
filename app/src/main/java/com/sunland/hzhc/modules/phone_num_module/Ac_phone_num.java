@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.Ac_base_info;
-import com.sunland.hzhc.modules.BaseRequestBean;
 import com.sunland.hzhc.modules.phone_num_module.bean.RyInfo;
 import com.sunland.hzhc.modules.phone_num_module.bean.RyPhoneResBean;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
@@ -40,6 +40,9 @@ public class Ac_phone_num extends Ac_base_info {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.ac_phone_num);
+        showNavIcon(true);
+        setToolbarTitle("人员列表");
+
         dataSet = new ArrayList<>();
         queryYdjwData(Dictionary.GET_PERSON_MOBILE_JOIN_INFO);
     }

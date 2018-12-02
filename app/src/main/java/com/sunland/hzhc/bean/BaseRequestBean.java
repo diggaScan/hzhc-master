@@ -1,4 +1,4 @@
-package com.sunland.hzhc.modules;
+package com.sunland.hzhc.bean;
 
 /**
  * Created by PeitaoYe

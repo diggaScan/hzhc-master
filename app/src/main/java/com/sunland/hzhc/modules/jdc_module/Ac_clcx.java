@@ -1,18 +1,42 @@
 package com.sunland.hzhc.modules.jdc_module;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.UserInfo;
+import com.sunland.hzhc.bean.BaseRequestBean;
+import com.sunland.hzhc.bean.i_inspect_car.Clxx;
+import com.sunland.hzhc.bean.i_inspect_car.Dlxx;
+import com.sunland.hzhc.bean.i_inspect_car.InspectCarReqBean;
+import com.sunland.hzhc.bean.i_inspect_car.InspectCarResBean;
+import com.sunland.hzhc.bean.i_inspect_car.Request;
 import com.sunland.hzhc.modules.Ac_base_info;
-import com.sunland.hzhc.modules.BaseRequestBean;
 import com.sunland.hzhc.modules.jdc_module.bean.ClxxzhResponseBean;
 import com.sunland.hzhc.modules.jdc_module.bean.InfoJDCXQs;
+import com.sunland.hzhc.modules.lmhc_module.LmhcResBean;
+import com.sunland.hzhc.modules.lmhc_module.MyTaskParams;
+import com.sunland.hzhc.modules.lmhc_module.QueryHttp;
+import com.sunland.hzhc.modules.p_archive_module.Ac_archive;
+import com.sunland.hzhc.modules.sfz_module.Ac_rycx;
+import com.sunland.hzhc.modules.sfz_module.beans.CountryPersonReqBean;
+import com.sunland.hzhc.modules.sfz_module.beans.PersonOfCountryJsonRet;
+import com.sunlandgroup.Global;
 import com.sunlandgroup.def.bean.result.ResultBase;
+import com.sunlandgroup.utils.JsonUtils;
+
+import java.net.URLEncoder;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class Ac_clcx extends Ac_base_info {
 
@@ -47,14 +71,22 @@ public class Ac_clcx extends Ac_base_info {
     public TextView tv_fdjh;
     @BindView(R.id.fdj_sequence)
     public TextView tv_fdj_sequence;
+    @BindView(R.id.xp)
+    public ImageView iv_xp;
+    @BindView(R.id.sfzh_check)
+    public Button btn_sfzh;
 
+    private String sfzh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.ac_clcx);
         showNavIcon(true);
+        setToolbarTitle("机动车信息");
         queryYdjwData(Dictionary.CAR_INFO_JOIN);
+        queryYdjwData(Dictionary.INSPECT_CAR);
+        initView();
     }
 
     @Override
@@ -71,6 +103,9 @@ public class Ac_clcx extends Ac_base_info {
         }
     }
 
+    private void initView() {
+        tv_location.setText(UserInfo.hc_address);
+    }
 
     @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
@@ -87,24 +122,46 @@ public class Ac_clcx extends Ac_base_info {
                 bean.setPageNum(1);
                 bean.setCount(10);
                 return bean;
-            case Dictionary.GET_CAR_INFO_BY_SFZH:
-                CzsycReqBean czsycReqBean = new CzsycReqBean();
-                assembleBasicObj(czsycReqBean);
-                czsycReqBean.setSfzh("330226199312016717");
-                return czsycReqBean;
-            case Dictionary.CAR_FOCUS:
-                VehicleFocusReqBean vehicleFocusReqBean = new VehicleFocusReqBean();
-                assembleBasicObj(vehicleFocusReqBean);
-                vehicleFocusReqBean.setCphm("浙BEW138");
-                vehicleFocusReqBean.setHpzl("02");
-                vehicleFocusReqBean.setSyr_sfzmhm("");
-                return vehicleFocusReqBean;
-
+            case Dictionary.COUNTRY_PERSON:
+                CountryPersonReqBean countryPersonReqBean = new CountryPersonReqBean();
+                assembleBasicObj(countryPersonReqBean);
+                countryPersonReqBean.setSfzh(sfzh);
+                return countryPersonReqBean;
+            case Dictionary.INSPECT_CAR:
+                InspectCarReqBean inspectCarReqBean = new InspectCarReqBean();
+                assembleBasicObj(inspectCarReqBean);
+                inspectCarReqBean.setYhdm("115576");
+                Request request = new Request();
+                Dlxx dlxx = new Dlxx();
+                dlxx.setHCDZ(UserInfo.hc_address);
+                Clxx clxx = new Clxx();
+                clxx.setCPHM(cphm);
+                clxx.setCLLX(hpzl);
+                request.setDlxx(dlxx);
+                request.setClxx(clxx);
+                inspectCarReqBean.setRequest(request);
+                return inspectCarReqBean;
         }
-
         return null;
     }
 
+
+    @OnClick({R.id.sfzh_check, R.id.focus})
+    public void onClick(View view) {
+        int id = view.getId();
+        Bundle bundle = new Bundle();
+        switch (id) {
+            case R.id.sfzh_check:
+                bundle.putString("id", sfzh);
+                hop2Activity(Ac_rycx.class, bundle);
+                break;
+            case R.id.focus:
+                bundle.putString("id", sfzh);
+                bundle.putInt("tab_id", 1);
+                hop2Activity(Ac_archive.class, bundle);
+                break;
+        }
+    }
 
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
@@ -112,17 +169,84 @@ public class Ac_clcx extends Ac_base_info {
             case Dictionary.CAR_INFO_JOIN:
                 ClxxzhResponseBean resBean = (ClxxzhResponseBean) resultBase;
                 InfoJDCXQs infoJDCXQs = resBean.getInfoJDCXQs().get(0);
-                tv_id_num.setText(infoJDCXQs.getZjh());
-                tv_name.setText(infoJDCXQs.getClsyr());
-                tv_plateform_num.setText(infoJDCXQs.getCphm());
-                tv_car_type.setText(infoJDCXQs.getCllx());
-                tv_car_brand.setText(infoJDCXQs.getClpp());
-                tv_type_num.setText(infoJDCXQs.getClxh());
-                tv_car_color.setText(infoJDCXQs.getClys());
-                tv_sbdm.setText(infoJDCXQs.getClsbdh());
-                tv_fdjh.setText(infoJDCXQs.getFdjh());
-                tv_fdj_sequence.setText(infoJDCXQs.getFdjxh());
+                sfzh = infoJDCXQs.getZjh();
+                if (sfzh != null || !sfzh.isEmpty()) {
+                    btn_sfzh.setVisibility(View.VISIBLE);
+                }
+                setText(tv_id_num, sfzh);
+                setText(tv_name, infoJDCXQs.getClsyr());
+                setText(tv_plateform_num, infoJDCXQs.getCphm());
+                setText(tv_car_type, infoJDCXQs.getCllx());
+                setText(tv_car_brand, infoJDCXQs.getClpp());
+                setText(tv_type_num, infoJDCXQs.getClxh());
+                setText(tv_car_color, infoJDCXQs.getClys());
+                setText(tv_sbdm, infoJDCXQs.getClsbdh());
+                setText(tv_fdjh, infoJDCXQs.getFdjh());
+                setText(tv_fdj_sequence, infoJDCXQs.getFdjxh());
+                queryWanted();
+                queryYdjwDataNoDialog(Dictionary.COUNTRY_PERSON);
                 break;
+            case Dictionary.COUNTRY_PERSON:
+                PersonOfCountryJsonRet personOfCountry = (PersonOfCountryJsonRet) resultBase;
+                final String xp = personOfCountry.getXP();
+                if (xp != null) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (xp != null) {
+                                byte[] bitmapArray = Base64.decode(xp, Base64.DEFAULT);
+                                final Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        iv_xp.setImageBitmap(bitmap);
+                                    }
+                                });
+                            }
+                        }
+                    }).start();
+                }
+                break;
+            case Dictionary.INSPECT_CAR:
+                InspectCarResBean inspectCarResBean = (InspectCarResBean) resultBase;
+                tv_road_check.setText(inspectCarResBean.getMessage());
+                break;
+
+        }
+    }
+
+    private void queryWanted() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    MyTaskParams taskParams = new MyTaskParams();
+                    taskParams.putHead("jySfzh", "330103199107170010");
+                    taskParams.putHead("jyXm", URLEncoder.encode("华晓阳", "UTF-8"));
+                    taskParams.putHead("jyBmbh", "330100230500");//330100230500;04E5E90AFFD64035B700F6B62D772E2E
+                    taskParams.putHead("version", Global.VERSION_URL);
+                    taskParams.putEntity("sfzh", sfzh);
+                    final String result = QueryHttp.post(Global.PERSON_CHECK_QGZT_URL, taskParams);
+                    //-1 查无结果,2100再逃
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            LmhcResBean lmhcResBean = JsonUtils.fromJson(result, LmhcResBean.class);
+                            tv_wanted.setText(lmhcResBean.getMessage());
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void setText(TextView textView, String content) {
+        if (content == null || content.isEmpty()) {
+            textView.setText("无");
+        } else {
+            textView.setText(content);
         }
     }
 }

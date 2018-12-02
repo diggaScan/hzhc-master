@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/plateform_background"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:overScrollMode="never"
+    android:scrollbars="none">
 
     <LinearLayout
         android:id="@+id/container"
@@ -11,85 +13,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/input_height"
-            android:layout_gravity="center_vertical"
-            android:background="@color/white"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/form_text_margin_left">
+        <include layout="@layout/hc_location_layout" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="核查地点" />
-
-            <TextView
-                android:id="@+id/hc_location"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/form_margin_left"
-            android:background="@color/white"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/input_height"
-
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:maxEms="5"
-                    android:paddingLeft="@dimen/form_text_margin_left"
-                    android:text="公安部在逃人员" />
-
-                <TextView
-                    android:id="@+id/wanted"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/info_display_item_height"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/form_text_margin_left" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="@dimen/form_text_margin_left"
-                android:layout_marginRight="@dimen/form_text_margin_left"
-                android:background="@color/divider_color" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/input_height"
-                android:background="@color/white"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:maxEms="5"
-                    android:paddingLeft="@dimen/form_text_margin_left"
-                    android:text="省情报中心路面核查" />
-
-                <TextView
-                    android:id="@+id/road_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/info_display_item_height"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/form_text_margin_left" />
-            </LinearLayout>
-        </LinearLayout>
-
+        <include layout="@layout/check_status_layout" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -101,7 +27,8 @@
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:shrinkColumns="1,2">
 
 
                 <TableRow
@@ -178,7 +105,7 @@
                     <TextView
                         android:id="@+id/gender"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/form_text_margin_left" />
                 </TableRow>
@@ -206,7 +133,7 @@
                     <TextView
                         android:id="@+id/birth"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/form_text_margin_left" />
                 </TableRow>
@@ -234,7 +161,7 @@
                     <TextView
                         android:id="@+id/ethnic_group"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/form_text_margin_left" />
                 </TableRow>
@@ -262,7 +189,7 @@
                     <TextView
                         android:id="@+id/origin_place"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/form_text_margin_left" />
                 </TableRow>
@@ -290,7 +217,7 @@
                     <TextView
                         android:id="@+id/driver_license"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/form_text_margin_left" />
                 </TableRow>
@@ -304,7 +231,7 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/input_height"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
@@ -318,9 +245,16 @@
                     <TextView
                         android:id="@+id/vehicles"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/form_text_margin_left" />
+
+                    <Button
+                        android:id="@+id/jdc_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="核查"
+                        android:visibility="gone" />
                 </TableRow>
 
                 <View
@@ -343,12 +277,26 @@
                         android:paddingLeft="@dimen/form_text_margin_left"
                         android:text="登记电动车" />
 
-                    <TextView
-                        android:id="@+id/e_vehicles"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/e_vehicles"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/form_text_margin_left" />
+
+                        <Button
+                            android:id="@+id/fjdc_check"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:text="核查"
+                            android:visibility="gone" />
+                    </RelativeLayout>
                 </TableRow>
 
                 <View
@@ -371,12 +319,26 @@
                         android:paddingLeft="@dimen/form_text_margin_left"
                         android:text="电话号码" />
 
-                    <TextView
-                        android:id="@+id/phone_num"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/phone_num"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/form_text_margin_left" />
+
+                        <Button
+                            android:id="@+id/phone_check"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:text="核查"
+                            android:visibility="gone" />
+                    </RelativeLayout>
                 </TableRow>
 
                 <View
@@ -434,6 +396,33 @@
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/form_text_margin_left" />
                 </TableRow>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="@dimen/form_text_margin_left"
+                    android:layout_marginRight="@dimen/form_text_margin_left"
+                    android:background="@color/divider_color" />
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/input_height"
+                        android:gravity="center_vertical"
+                        android:maxEms="5"
+                        android:paddingLeft="@dimen/form_text_margin_left"
+                        android:text="访查信息" />
+
+                    <TextView
+                        android:id="@+id/fcxx"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/form_text_margin_left" />
+                </TableRow>
             </TableLayout>
 
             <ImageView
@@ -442,31 +431,6 @@
                 android:layout_height="@dimen/input_heightx4"
                 android:layout_gravity="right|top" />
         </FrameLayout>
-
-        <Button
-            android:id="@+id/archive"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/input_height"
-            android:text="档案" />
-
-        <Button
-            android:id="@+id/track"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="轨迹" />
-
-        <Button
-            android:id="@+id/focus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="人员关注" />
-
-        <Button
-            android:id="@+id/owned_cars"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="名下车辆" />
-
     </LinearLayout>
 
 

@@ -1,60 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="72dp">
-
-    <TextView
-        android:id="@+id/room_num"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true" />
+    android:layout_height="wrap_content"
+    android:padding="@dimen/form_margin_left">
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/room_num" />
-
-    <TextView
-        android:id="@+id/tfsj"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rzsj"
-        android:layout_alignLeft="@id/rzsj" />
-
-    <TextView
-        android:id="@+id/tf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/tfsj"
-        android:layout_toRightOf="@id/tfsj"
-        android:text="退房时间" />
-
-    <TextView
-        android:id="@+id/rzsj"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/name" />
-
-    <TextView
-        android:id="@+id/rz"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/rzsj"
-        android:layout_toRightOf="@id/rzsj"
-        android:text="入住时间" />
+        android:layout_margin="@dimen/form_margin_left" />
 
     <TextView
         android:id="@+id/gender"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/name"
+        android:layout_marginLeft="@dimen/form_margin_left"
+
+        android:layout_toRightOf="@id/name" />
 
     <TextView
         android:id="@+id/identity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tfsj" />
+        android:layout_below="@id/tfsj"
+        android:layout_alignBaseline="@id/gender"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:layout_toRightOf="@id/gender" />
+
+    <TextView
+        android:id="@+id/fjh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_alignBaseline="@id/fjh_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:layout_toRightOf="@id/fjh_str" />
+
+    <TextView
+        android:id="@+id/fjh_str"
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:text="房间号" />
+
+
+    <TextView
+        android:id="@+id/rzsj_str"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fjh_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:text="入住时间" />
+
+    <TextView
+        android:id="@+id/rzsj"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/rzsj_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:layout_toRightOf="@id/rzsj_str" />
+
+    <TextView
+        android:id="@+id/tfsj"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tfsj_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:layout_toRightOf="@id/tfsj_str" />
+
+    <TextView
+        android:id="@+id/tfsj_str"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rzsj_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:text="退房时间" />
+
 
 </RelativeLayout>

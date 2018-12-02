@@ -1,56 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="72dp">
-
-    <TextView
-        android:id="@+id/zjbh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true" />
+    android:layout_height="wrap_content"
+    android:id="@+id/container"
+    android:padding="@dimen/form_margin_left">
 
     <TextView
         android:id="@+id/xm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/zjbh" />
-
-    <TextView
-        android:id="@+id/xxsj"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/sxsj"
-        android:layout_alignLeft="@id/sxsj" />
-
-    <TextView
-        android:id="@+id/xx"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/xxsj"
-        android:layout_toRightOf="@id/xxsj"
-        android:text="下机时间" />
-
-    <TextView
-        android:id="@+id/sxsj"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/xm" />
-
-    <TextView
-        android:id="@+id/sx"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/sxsj"
-        android:layout_toRightOf="@id/sxsj"
-        android:text="上机时间" />
-
+        android:layout_margin="@dimen/form_margin_left" />
 
     <TextView
         android:id="@+id/sfzh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/xxsj" />
+        android:layout_alignBaseline="@id/xm"
+        android:layout_toRightOf="@id/xm" />
+
+    <TextView
+        android:id="@+id/zjbh_str"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/xm"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:text="主机编号" />
+
+    <TextView
+        android:id="@+id/zjbh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/zjbh_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:layout_toRightOf="@id/zjbh_str" />
+
+    <TextView
+        android:id="@+id/sxsj"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/sxsj_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:layout_toRightOf="@id/sxsj_str" />
+
+    <TextView
+        android:id="@+id/sxsj_str"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/zjbh_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:text="上机时间" />
+
+    <TextView
+        android:id="@+id/xxsj"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/xxsj_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:layout_toRightOf="@id/xxsj_str" />
+
+    <TextView
+        android:id="@+id/xxsj_str"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sxsj_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:text="下机时间" />
+
 
 </RelativeLayout>

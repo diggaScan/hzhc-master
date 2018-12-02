@@ -3,27 +3,36 @@ package com.sunland.hzhc.modules.sfz_module;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Base64;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.UserInfo;
+import com.sunland.hzhc.bean.BaseRequestBean;
+import com.sunland.hzhc.bean.i_inspect_person.Dlxx;
+import com.sunland.hzhc.bean.i_inspect_person.InspectPersonJsonRet;
+import com.sunland.hzhc.bean.i_inspect_person.InspectPersonReqBean;
+import com.sunland.hzhc.bean.i_inspect_person.Request;
+import com.sunland.hzhc.bean.i_inspect_person.RyxxReq;
+import com.sunland.hzhc.bean.i_inspect_person.RyxxRes;
 import com.sunland.hzhc.modules.Ac_base_info;
-import com.sunland.hzhc.modules.BaseRequestBean;
-import com.sunland.hzhc.modules.jdc_module.CzsycReqBean;
+import com.sunland.hzhc.modules.jdc_module.Ac_clcx;
 import com.sunland.hzhc.modules.lmhc_module.LmhcResBean;
 import com.sunland.hzhc.modules.lmhc_module.MyTaskParams;
 import com.sunland.hzhc.modules.lmhc_module.QueryHttp;
-import com.sunland.hzhc.modules.own_car_module.Ac_car_list;
 import com.sunland.hzhc.modules.p_archive_module.Ac_archive;
 import com.sunland.hzhc.modules.sfz_module.beans.CountryPersonReqBean;
+import com.sunland.hzhc.modules.sfz_module.beans.InfoFCXX;
 import com.sunland.hzhc.modules.sfz_module.beans.InfoRYXXForJDC;
-import com.sunland.hzhc.modules.sfz_module.beans.InspectPersonReqBean;
 import com.sunland.hzhc.modules.sfz_module.beans.PersonOfCountryJsonRet;
 import com.sunland.hzhc.modules.sfz_module.beans.RyzhxxReqBean;
 import com.sunland.hzhc.modules.sfz_module.beans.RyzhxxResBean;
@@ -68,20 +77,30 @@ public class Ac_rycx extends Ac_base_info {
     public TextView tv_og_address;
     @BindView(R.id.temp_address)
     public TextView tv_temp_address;
+    @BindView(R.id.e_vehicles)
+    public TextView tv_fjdc;
     @BindView(R.id.xp)
     public ImageView iv_xp;
-
-    private String identity_num;
+    @BindView(R.id.fcxx)
+    public TextView tv_fcxx;
+    @BindView(R.id.jdc_check)
+    public Button btn_jdc_check;
+    @BindView(R.id.fjdc_check)
+    public Button btn_fjdc_check;
+    @BindView(R.id.phone_check)
+    public Button btn_phone_check;
+    private String sfzh;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.ac_info_detail_test);
         showNavIcon(true);
+        setToolbarTitle("个人信息");
         initView();
         queryYdjwData(Dictionary.PERSON_COMPLEX);
         queryYdjwDataNoDialog(Dictionary.COUNTRY_PERSON);
-//        queryYdjwDataNoDialog(Dictionary.INSPECT_PERSON);
+        queryYdjwDataNoDialog(Dictionary.INSPECT_PERSON);
     }
 
     public void initView() {
@@ -97,7 +116,7 @@ public class Ac_rycx extends Ac_base_info {
                     taskParams.putHead("jyXm", URLEncoder.encode("华晓阳", "UTF-8"));
                     taskParams.putHead("jyBmbh", "330100230500");//330100230500;04E5E90AFFD64035B700F6B62D772E2E
                     taskParams.putHead("version", Global.VERSION_URL);
-                    taskParams.putEntity("sfzh", identity_num);
+                    taskParams.putEntity("sfzh", sfzh);
                     final String result = QueryHttp.post(Global.PERSON_CHECK_QGZT_URL, taskParams);
                     //-1 查无结果,2100再逃
                     runOnUiThread(new Runnable() {
@@ -122,7 +141,7 @@ public class Ac_rycx extends Ac_base_info {
         if (intent != null) {
             Bundle bundle = intent.getBundleExtra("bundle");
             if (bundle != null) {
-                identity_num = bundle.getString("id");
+                sfzh = bundle.getString("id");
             }
         }
     }
@@ -134,42 +153,47 @@ public class Ac_rycx extends Ac_base_info {
             case Dictionary.PERSON_COMPLEX:
                 RyzhxxReqBean bean = new RyzhxxReqBean();
                 assembleBasicObj(bean);
-                bean.setSfzh(identity_num);
+                bean.setSfzh(sfzh);
                 return bean;
             case Dictionary.COUNTRY_PERSON:
                 CountryPersonReqBean countryPersonReqBean = new CountryPersonReqBean();
                 assembleBasicObj(countryPersonReqBean);
-                countryPersonReqBean.setSfzh(identity_num);
+                countryPersonReqBean.setSfzh(sfzh);
                 return countryPersonReqBean;
             case Dictionary.INSPECT_PERSON:
-                InspectPersonReqBean inspectPerson = new InspectPersonReqBean();
-                assembleBasicObj(inspectPerson);
-                return inspectPerson;
+                InspectPersonReqBean inspectPersonReqBean = new InspectPersonReqBean();
+                assembleBasicObj(inspectPersonReqBean);
+                Request request = new Request();
+                inspectPersonReqBean.setYhdm(UserInfo.jhdm);
+                Dlxx dlxx = new Dlxx();
+                dlxx.setHCDZ(UserInfo.hc_address);
+                request.setDlxx(dlxx);
+                RyxxReq ryxxReq = new RyxxReq();
+                ryxxReq.setJNJW("01");
+                ryxxReq.setZJLX("10");
+                ryxxReq.setZJHM(sfzh);
+                ryxxReq.setSJHM("");
+                request.setRyxxReq(ryxxReq);
+                inspectPersonReqBean.setRequest(request);
+                return inspectPersonReqBean;
         }
         return null;
     }
 
-    @OnClick({R.id.archive, R.id.track, R.id.focus, R.id.owned_cars})
+    @OnClick({R.id.focus, R.id.jdc_check})
     public void onClick(View view) {
         int id = view.getId();
+        Bundle bundle = new Bundle();
         switch (id) {
-            case R.id.archive:
-                Bundle bundle = new Bundle();
-                bundle.putString("id", identity_num);
+            case R.id.focus:
+                bundle.putString("id", sfzh);
+                bundle.putInt("tab_id", 1);
                 hop2Activity(Ac_archive.class, bundle);
                 break;
-            case R.id.track:
-                queryYdjwData(Dictionary.PERSON_LOCUS_INFOS);
+            case R.id.jdc_check:
+                bundle.putString("sfzh",sfzh );
+                hop2Activity(Ac_clcx.class, bundle);
                 break;
-            case R.id.focus:
-                queryYdjwData(Dictionary.PERSON_FOCUS_INFO);
-                break;
-            case R.id.owned_cars:
-                Bundle bundle1 = new Bundle();
-                bundle1.putString("sfzh", identity_num);
-                hop2Activity(Ac_car_list.class, bundle1);
-                break;
-
         }
     }
 
@@ -178,39 +202,58 @@ public class Ac_rycx extends Ac_base_info {
         switch (reqName) {
             case Dictionary.PERSON_COMPLEX:
                 RyzhxxResBean ryzhxxResBean = (RyzhxxResBean) resultBase;
-                tv_id_num.setText(ryzhxxResBean.getSfzh());
-                tv_name.setText(ryzhxxResBean.getXm());
-                tv_gender.setText(ryzhxxResBean.getXb());
-                tv_birth.setText(ryzhxxResBean.getCsrq());
-                tv_ethnic.setText(ryzhxxResBean.getMz());
-                tv_origin_place.setText(ryzhxxResBean.getJg());
-                tv_driver_license.setText(ryzhxxResBean.getZjcx());
+                setText(tv_id_num, ryzhxxResBean.getSfzh());
+                setText(tv_name, ryzhxxResBean.getXm());
+                setText(tv_gender, ryzhxxResBean.getXb());
+                setText(tv_birth, ryzhxxResBean.getCsrq());
+                setText(tv_ethnic, ryzhxxResBean.getMz());
+                setText(tv_origin_place, ryzhxxResBean.getJg());
+                setText(tv_driver_license, ryzhxxResBean.getZjcx());
+                setText(tv_og_address, ryzhxxResBean.getHjdz());
                 List<InfoRYXXForJDC> jdcs = ryzhxxResBean.getJdc_list();
                 if (jdcs != null) {
                     StringBuilder hphms = new StringBuilder();
-
                     for (InfoRYXXForJDC jdc : jdcs) {
-                        hphms.append(jdc.getHphm()).append(",");
+                        hphms.append(jdc.getHphm()).append("   ");
                     }
-                    tv_vehicle.setText(hphms);
+                    setText(tv_vehicle, hphms.toString());
+                    showButton(btn_jdc_check, hphms.toString());
                 }
                 List<String> dh_list = ryzhxxResBean.getDh_list();
                 if (dh_list != null) {
                     StringBuilder phone_nums = new StringBuilder();
                     for (String phone_num : dh_list) {
-                        phone_nums.append(phone_num).append(",");
+                        phone_nums.append(phone_num).append("   ");
                     }
-                    tv_phone_num.setText(phone_nums);
+                    setText(tv_phone_num, phone_nums.toString());
+                    showButton(btn_phone_check, phone_nums.toString());
                 }
 
-                tv_og_address.setText(ryzhxxResBean.getHjdz());
                 List<XQInfoZZ> zzxx_list = ryzhxxResBean.getZzxx_list();
                 if (zzxx_list != null) {
                     StringBuilder temp_adds = new StringBuilder();
                     for (XQInfoZZ xqInfoZZ : zzxx_list) {
                         temp_adds.append(xqInfoZZ.getZzdz());
                     }
-                    tv_temp_address.setText(temp_adds);
+                    setText(tv_temp_address, temp_adds.toString());
+                }
+
+                List<String> fjdc_list = ryzhxxResBean.getFjdc_list();
+                if (fjdc_list != null) {
+                    StringBuilder temp_adds = new StringBuilder();
+                    for (String fjdc : fjdc_list) {
+                        temp_adds.append(fjdc).append("   ");
+                    }
+                    setText(tv_fjdc, temp_adds.toString());
+                    showButton(btn_fjdc_check, temp_adds.toString());
+                }
+                List<InfoFCXX> fcxxes = ryzhxxResBean.getFcxx_list();
+                if (fcxxes != null) {
+                    StringBuilder fcxx = new StringBuilder();
+                    for (InfoFCXX infoFcxx : fcxxes) {
+                        fcxx.append(infoFcxx.getFcsj()).append(infoFcxx.getFcdz()).append("   ");
+                    }
+                    setText(tv_fcxx, fcxx.toString());
                 }
                 break;
             case Dictionary.COUNTRY_PERSON:
@@ -229,12 +272,63 @@ public class Ac_rycx extends Ac_base_info {
                                 }
                             });
                         }
-
                     }
                 }).start();
                 break;
+            case Dictionary.INSPECT_PERSON:
+                InspectPersonJsonRet inspectPersonJsonRet = (InspectPersonJsonRet) resultBase;
+                RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
+                if (ryxxRes != null) {
+                    tv_road_check.setText(ryxxRes.getHcjg() + "  " + ryxxRes.getBjxx());
+                    if (ryxxRes.getFhm().equals("000")) {
+                        tv_road_check.setTextColor(Color.GREEN);
+                    } else {
+                        tv_road_check.setTextColor(Color.RED);
+                    }
+                }
+                break;
+        }
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.ac_sfz_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        Bundle bundle = new Bundle();
+        switch (id) {
+            case R.id.archive:
+
+                bundle.putString("id", sfzh);
+                bundle.putInt("tab_id", 0);
+                hop2Activity(Ac_archive.class, bundle);
+                break;
+            case R.id.track:
+                bundle.putString("id", sfzh);
+                bundle.putInt("tab_id", 2);
+                hop2Activity(Ac_archive.class, bundle);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void setText(TextView textView, String content) {
+        if (content == null || content.isEmpty()) {
+            textView.setText("无");
+        } else {
+            textView.setText(content);
+        }
+    }
+
+    public void showButton(Button btn, String content) {
+        if (content == null || content.isEmpty()) {
+            btn.setVisibility(View.GONE);
+        } else {
+            btn.setVisibility(View.VISIBLE);
         }
     }
 }

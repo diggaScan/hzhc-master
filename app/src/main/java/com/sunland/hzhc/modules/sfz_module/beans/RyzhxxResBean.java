@@ -22,7 +22,7 @@ public class RyzhxxResBean extends ResultBase {
     private List<InfoRYXXForJDC> jdc_list;//机动车聚合信息
     private List<String> fjdc_list;//	非机动车聚合信息
     private List<XQInfoZZ> zzxx_list;//	暂住聚合信息
-    private List<InfoFCXX> fcxx_list;
+    private List<InfoFCXX> fcxx_list;//访查
 
     public List<InfoFCXX> getFcxx_list() {
         return fcxx_list;

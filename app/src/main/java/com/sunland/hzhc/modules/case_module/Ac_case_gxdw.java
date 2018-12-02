@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import com.sunland.hzhc.Ac_base;
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.R;
-import com.sunland.hzhc.modules.BaseRequestBean;
+import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.case_module.bean.DwBaseInfo;
 import com.sunland.hzhc.modules.case_module.bean.DwListResBean;
 import com.sunland.hzhc.modules.xmzh_module.Rv_Jg_adapter;
@@ -54,6 +54,8 @@ public class Ac_case_gxdw extends Ac_base implements OnRequestCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.ac_case_gxdw);
+        showNavIcon(true);
+        setToolbarTitle("管辖单位列表");
         mRequestManager = new RequestManager(this, this);
         readDb();
         showDistricts();
@@ -178,13 +180,18 @@ public class Ac_case_gxdw extends Ac_base implements OnRequestCallback {
         DwListResBean dwListResBean = (DwListResBean) bean;
         dw.clear();
         dwdm.clear();
-        for (DwBaseInfo info : dwListResBean.getDwlist()) {
-            all_dwmc.add(info.getName());
-            all_dwdm.add(info.getCode());
+        List<DwBaseInfo> dwBaseInfoList = dwListResBean.getDwlist();
+        if (dwBaseInfoList != null) {
+            for (DwBaseInfo info : dwBaseInfoList) {
+                all_dwmc.add(info.getName());
+                all_dwdm.add(info.getCode());
+            }
+            dw.addAll(all_dwmc);
+            dwdm.addAll(all_dwdm);
+            dw_adapter.notifyDataSetChanged();
         }
-        dw.addAll(all_dwmc);
-        dwdm.addAll(all_dwdm);
-        dw_adapter.notifyDataSetChanged();
+
+
     }
 
     @Override

@@ -8,13 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.Ac_base_info;
-import com.sunland.hzhc.modules.BaseRequestBean;
+import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
 import com.sunlandgroup.def.bean.result.ResultBase;
 
 import java.util.ArrayList;
@@ -38,6 +38,8 @@ public class Ac_xmzh_list extends Ac_base_info {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.ac_xmzh_list);
+        showNavIcon(true);
+        setToolbarTitle("人员列表");
         initView();
         queryYdjwData(Dictionary.GET_PERSON_JOIN_INFO);
     }
@@ -60,9 +62,10 @@ public class Ac_xmzh_list extends Ac_base_info {
     private void initView() {
         dataSet = new ArrayList<>();
         adapter = new MyRvAdapter(dataSet);
-        GridLayoutManager manager = new GridLayoutManager(this, 2);
+        GridLayoutManager manager = new GridLayoutManager(this, 1);
         rv_name_list.setAdapter(adapter);
         rv_name_list.setLayoutManager(manager);
+        rv_name_list.addItemDecoration(new Rv_Item_decoration(this));
     }
 
     @Override
@@ -118,6 +121,7 @@ public class Ac_xmzh_list extends Ac_base_info {
             myViewHolder.tv_identity.setText(info.getSfzh());
             myViewHolder.tv_name.setText(info.getXm());
             myViewHolder.tv_gender.setText(info.getXb());
+            myViewHolder.tv_src.setText(info.getSjly());
         }
 
         @Override
@@ -131,7 +135,7 @@ public class Ac_xmzh_list extends Ac_base_info {
             TextView tv_gender;
             TextView tv_age;
             TextView tv_address;
-            ImageView iv_tx;
+            TextView tv_src;
 
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -140,7 +144,8 @@ public class Ac_xmzh_list extends Ac_base_info {
                 tv_gender = itemView.findViewById(R.id.gender);
                 tv_age = itemView.findViewById(R.id.age);
                 tv_address = itemView.findViewById(R.id.address);
-                iv_tx = itemView.findViewById(R.id.tx);
+                tv_src = itemView.findViewById(R.id.src);
+
             }
         }
     }

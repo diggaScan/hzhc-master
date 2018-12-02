@@ -44,7 +44,7 @@
         <activity android:name=".modules.ddc_module.Ac_ddc_list" />
         <activity android:name=".modules.xmzh_module.Ac_jg_list" />
         <activity android:name=".modules.case_module.Ac_case_detail" />
-        <activity android:name=".modules.own_car_module.Ac_car_list"></activity>
+        <activity android:name=".modules.own_car_module.Ac_car_list" />
     </application>
 
 </manifest>

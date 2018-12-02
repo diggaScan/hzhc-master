@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import com.sunland.hzhc.Ac_base;
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.R;
-import com.sunland.hzhc.modules.BaseRequestBean;
+import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.Internet_cafe_module.bean.WbBaseInfo;
 import com.sunland.hzhc.modules.Internet_cafe_module.bean.WbListResBean;
 import com.sunland.hzhc.modules.xmzh_module.Rv_Jg_adapter;

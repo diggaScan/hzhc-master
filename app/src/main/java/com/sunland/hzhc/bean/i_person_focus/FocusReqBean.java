@@ -1,6 +1,6 @@
-package com.sunland.hzhc.modules.sfz_module.beans;
+package com.sunland.hzhc.bean.i_person_focus;
 
-import com.sunland.hzhc.modules.BaseRequestBean;
+import com.sunland.hzhc.bean.BaseRequestBean;
 
 public class FocusReqBean extends BaseRequestBean {
 

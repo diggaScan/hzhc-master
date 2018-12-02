@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.sunland.hzhc.Ac_base;
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.R;
-import com.sunland.hzhc.modules.BaseRequestBean;
+import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.case_module.bean.CaseCateResBean;
 import com.sunland.hzhc.modules.case_module.bean.LbList;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;

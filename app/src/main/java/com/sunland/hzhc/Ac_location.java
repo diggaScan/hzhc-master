@@ -83,6 +83,7 @@ public class Ac_location extends Ac_base {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.ac_location);
         getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        iv_nav.setImageResource(R.drawable.ic_arrow_blue_24dp);
         showTollbar(false);
         initView();
         initMap();

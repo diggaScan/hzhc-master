@@ -41,7 +41,7 @@ public class Ac_jg_list extends Ac_base {
     private final int PROVINCES_LEVEL = 0;
     private final int DISTRICTS_LEVEL = 2;
     private final String[] large_cities = {"110000", "120000", "310000", "500000"};
-    private boolean hasDistrict;
+    private boolean hasDistrict = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,8 @@ public class Ac_jg_list extends Ac_base {
         initView();
         readjgData();
         showjgData("%0000", 0);
+        showjgData("330%00", 1);
+        showjgData("3301%", 2);
     }
 
     private void initView() {
@@ -73,6 +75,13 @@ public class Ac_jg_list extends Ac_base {
                 String name = dataSet_provinces.get(position);
                 String code = getDqCode(name);
                 String arg;
+                if (code.equals("710000") || code.equals("810000") || code.equals("820000")) {
+                    Intent intent = new Intent();
+                    intent.putExtra("code", code);
+                    intent.putExtra("name", name);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
                 if (Arrays.asList(large_cities).contains(code)) {
                     arg = code.substring(0, 2) + "%";
                     hasDistrict = false;

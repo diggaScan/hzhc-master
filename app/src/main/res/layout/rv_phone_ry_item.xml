@@ -1,27 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="80dp">
+    android:layout_height="wrap_content"
+    android:padding="@dimen/form_margin_left">
 
     <TextView
         android:id="@+id/xm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true" />
+        android:layout_margin="@dimen/form_margin_left" />
+
+    <TextView
+        android:id="@+id/sfzh_str"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/xm"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:text="身份证号" />
 
     <TextView
         android:id="@+id/sfzh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/xm" />
+        android:layout_alignBaseline="@id/sfzh_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:layout_toRightOf="@id/sfzh_str" />
+
+    <TextView
+        android:id="@+id/sjly_str"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sfzh_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:text="数据来源" />
 
     <TextView
         android:id="@+id/sjly"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/sfzh" />
+        android:layout_alignBaseline="@id/sjly_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:layout_toRightOf="@id/sjly_str" />
 
 </RelativeLayout>

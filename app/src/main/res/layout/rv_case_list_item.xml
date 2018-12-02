@@ -1,38 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     android:id="@+id/case_container"
-    android:layout_height="108dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/form_margin_left">
 
     <TextView
-        android:id="@+id/ajlb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/afsj"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/gxds"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/jyaq"
+        android:id="@+id/ajbh_str"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="2" />
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:text="案件编号" />
 
     <TextView
         android:id="@+id/ajbh"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/ajbh_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:layout_toRightOf="@id/ajbh_str" />
 
     <TextView
-        android:id="@+id/ajzt"
+        android:id="@+id/gxdw_str"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ajbh_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:text="管辖单位" />
+
+    <TextView
+        android:id="@+id/gxdw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/gxdw_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:layout_toRightOf="@id/gxdw_str" />
+
+    <TextView
+        android:id="@+id/ajlb_str"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gxdw_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:text="案件类别" />
+
+    <TextView
+        android:id="@+id/ajlb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/ajlb_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:layout_toRightOf="@id/ajlb_str" />
+
+
+    <TextView
+        android:id="@+id/afsj_str"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ajlb"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:text="案发时间" />
+
+    <TextView
+        android:id="@+id/afsj"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/afsj_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:layout_toRightOf="@id/afsj_str" />
+
+
+    <TextView
+        android:layout_marginTop="15dp"
+        android:id="@+id/jyaq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/afsj_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:ellipsize="end"
+        android:maxLines="3" />
+
 </RelativeLayout>

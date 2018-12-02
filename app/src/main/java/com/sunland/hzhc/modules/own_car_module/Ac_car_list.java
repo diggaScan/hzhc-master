@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.sunland.hzhc.Ac_base;
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.R;
-import com.sunland.hzhc.modules.BaseRequestBean;
+import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.jdc_module.CzsycReqBean;
 import com.sunland.hzhc.modules.own_car_module.own_car_bean.CarBaseInfo;
 import com.sunland.hzhc.modules.own_car_module.own_car_bean.OwnedCarResBean;

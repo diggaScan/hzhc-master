@@ -1,7 +1,6 @@
 package com.sunland.hzhc.modules.sfz_module.beans;
 
-import com.sunland.hzhc.modules.BaseRequestBean;
-import com.sunlandgroup.def.bean.result.ResultBase;
+import com.sunland.hzhc.bean.BaseRequestBean;
 
 public class CountryPersonReqBean extends BaseRequestBean {
     private String sfzh;

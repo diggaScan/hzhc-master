@@ -1,6 +1,6 @@
 package com.sunland.hzhc.modules.Hotel_module;
 
-import com.sunland.hzhc.modules.BaseRequestBean;
+import com.sunland.hzhc.bean.BaseRequestBean;
 
 public class PllgrzReqBean extends BaseRequestBean {
 

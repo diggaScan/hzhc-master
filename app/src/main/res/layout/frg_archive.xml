@@ -4,16 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:shrinkColumns="0">
 
-
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -26,9 +24,9 @@
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -44,9 +42,9 @@
                 android:id="@+id/eng_name"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -62,9 +60,9 @@
                 android:id="@+id/gender"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -80,9 +78,9 @@
                 android:id="@+id/nation"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -98,9 +96,9 @@
                 android:id="@+id/birth"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -116,9 +114,9 @@
                 android:id="@+id/birth_place"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -134,9 +132,9 @@
                 android:id="@+id/origin_place"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -152,9 +150,9 @@
                 android:id="@+id/id_num"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -170,9 +168,9 @@
                 android:id="@+id/passport"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -188,9 +186,9 @@
                 android:id="@+id/ga_passport"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -206,9 +204,9 @@
                 android:id="@+id/taiwan_passport"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -224,9 +222,9 @@
                 android:id="@+id/live_cert"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -242,10 +240,10 @@
                 android:id="@+id/ethnic_group"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -261,9 +259,9 @@
                 android:id="@+id/driver_license"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -279,9 +277,9 @@
                 android:id="@+id/citizen_card"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -297,9 +295,9 @@
                 android:id="@+id/phone_num"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -315,9 +313,9 @@
                 android:id="@+id/marriage_reg"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -333,10 +331,10 @@
                 android:id="@+id/gzdw"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
 
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -352,9 +350,8 @@
                 android:id="@+id/car_reg"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height" />
-        </LinearLayout>
+        </TableRow>
 
-    </LinearLayout>
-
+    </TableLayout>
 
 </ScrollView>

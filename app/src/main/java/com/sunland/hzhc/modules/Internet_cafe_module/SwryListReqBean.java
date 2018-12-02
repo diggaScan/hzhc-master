@@ -1,6 +1,6 @@
 package com.sunland.hzhc.modules.Internet_cafe_module;
 
-import com.sunland.hzhc.modules.BaseRequestBean;
+import com.sunland.hzhc.bean.BaseRequestBean;
 
 public class SwryListReqBean extends BaseRequestBean {
     private String wbmc;

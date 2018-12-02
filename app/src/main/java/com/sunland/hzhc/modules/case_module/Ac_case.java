@@ -10,11 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.Ac_base_info;
-import com.sunland.hzhc.modules.BaseRequestBean;
 import com.sunland.hzhc.modules.case_module.bean.CaseListResBean;
 import com.sunland.hzhc.modules.case_module.bean.InfoAJLB;
 import com.sunland.hzhc.modules.xmzh_module.Rv_Jg_adapter;
@@ -86,8 +87,14 @@ public class Ac_case extends Ac_base_info {
             case Dictionary.CASE_INFO:
                 CaseListResBean caseListResBean = (CaseListResBean) resultBase;
                 dataSet.clear();
-                dataSet.addAll(caseListResBean.getInfoAJLBs());
-                initRv();
+                List<InfoAJLB> infoAJLBS = caseListResBean.getInfoAJLBs();
+                if (infoAJLBS != null) {
+                    dataSet.addAll(caseListResBean.getInfoAJLBs());
+                    initRv();
+                } else {
+                    Toast.makeText(this, "未找到相应案件", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
         }
     }
@@ -144,8 +151,7 @@ public class Ac_case extends Ac_base_info {
             myViewHolder.tv_afsj.setText(info.getAfsj());
             myViewHolder.tv_ajbh.setText(info.getAjbh());
             myViewHolder.tv_ajlb.setText(info.getAjlb());
-            myViewHolder.tv_ajzt.setText(info.getAjzt());
-            myViewHolder.tv_gxds.setText(info.getGxds());
+            myViewHolder.tv_gxdw.setText(info.getGxdw());
             myViewHolder.tv_jyaq.setText(info.getJyaq());
 
             myViewHolder.rl_container.setOnClickListener(new View.OnClickListener() {
@@ -167,10 +173,10 @@ public class Ac_case extends Ac_base_info {
         class MyViewHolder extends RecyclerView.ViewHolder {
             TextView tv_ajlb;
             TextView tv_afsj;
-            TextView tv_gxds;
+            TextView tv_gxdw;
             TextView tv_jyaq;
             TextView tv_ajbh;
-            TextView tv_ajzt;
+
             RelativeLayout rl_container;
 
             public MyViewHolder(@NonNull View itemView) {
@@ -178,10 +184,10 @@ public class Ac_case extends Ac_base_info {
                 rl_container = itemView.findViewById(R.id.case_container);
                 tv_ajlb = itemView.findViewById(R.id.ajlb);
                 tv_afsj = itemView.findViewById(R.id.afsj);
-                tv_gxds = itemView.findViewById(R.id.gxds);
+                tv_gxdw = itemView.findViewById(R.id.gxdw);
                 tv_jyaq = itemView.findViewById(R.id.jyaq);
                 tv_ajbh = itemView.findViewById(R.id.ajbh);
-                tv_ajzt = itemView.findViewById(R.id.ajzt);
+
             }
         }
     }

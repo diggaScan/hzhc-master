@@ -19,4 +19,5 @@ public class InfoFCXX {
     public void setFcdz(String fcdz) {
         this.fcdz = fcdz;
     }
+
 }

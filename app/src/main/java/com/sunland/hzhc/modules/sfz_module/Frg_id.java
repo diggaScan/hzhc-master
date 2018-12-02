@@ -26,7 +26,6 @@ public class Frg_id extends Frg_base {
     @Override
     public void initView() {
 
-
     }
 
     @OnClick(R.id.query)

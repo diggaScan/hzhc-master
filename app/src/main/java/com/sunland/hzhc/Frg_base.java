@@ -1,19 +1,17 @@
 package com.sunland.hzhc;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.sunland.hzhc.modules.BaseRequestBean;
+import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunlandgroup.Global;
 
 import java.text.SimpleDateFormat;
@@ -24,7 +22,6 @@ import butterknife.ButterKnife;
 public abstract class Frg_base extends Fragment {
 
     public Context context;
-
 
     @Override
     public void onAttach(Context context) {
@@ -85,6 +82,13 @@ public abstract class Frg_base extends Fragment {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String pda_time = simpleDateFormat.format(date);
         baseRequestBean.setPdaTime(pda_time);
+    }
 
+    public void setText(TextView textView, String content) {
+        if (content == null || content.isEmpty()) {
+            textView.setText("无");
+        } else {
+            textView.setText(content);
+        }
     }
 }

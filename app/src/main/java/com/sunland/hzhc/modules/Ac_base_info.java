@@ -5,14 +5,17 @@ import android.support.annotation.Nullable;
 
 import com.sunland.hzhc.Ac_base;
 import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.bean.BaseRequestBean;
+import com.sunland.hzhc.bean.i_inspect_car.InspectCarResBean;
+import com.sunland.hzhc.bean.i_inspect_person.InspectPersonJsonRet;
 import com.sunland.hzhc.modules.Hotel_module.bean.LGResBean;
 import com.sunland.hzhc.modules.Internet_cafe_module.bean.RyResBean;
 import com.sunland.hzhc.modules.case_module.bean.CaseListResBean;
 import com.sunland.hzhc.modules.jdc_module.bean.ClxxzhResponseBean;
+import com.sunland.hzhc.modules.own_car_module.own_car_bean.CarBaseInfo;
 import com.sunland.hzhc.modules.phone_num_module.bean.RyPhoneResBean;
 import com.sunland.hzhc.modules.sfz_module.beans.PersonOfCountryJsonRet;
 import com.sunland.hzhc.modules.sfz_module.beans.RyzhxxResBean;
-import com.sunland.hzhc.modules.own_car_module.own_car_bean.CarBaseInfo;
 import com.sunland.hzhc.modules.xmzh_module.XmzhResBean;
 import com.sunlandgroup.Global;
 import com.sunlandgroup.def.bean.result.ResultBase;
@@ -31,7 +34,6 @@ public abstract class Ac_base_info extends Ac_base implements OnRequestCallback 
         super.onCreate(savedInstanceState);
         mRequestManager = new RequestManager(this, this);
         handleIntent();
-
     }
 
     public abstract void handleIntent();
@@ -85,7 +87,9 @@ public abstract class Ac_base_info extends Ac_base implements OnRequestCallback 
             case Dictionary.COUNTRY_PERSON:
                 return PersonOfCountryJsonRet.class;
             case Dictionary.INSPECT_PERSON:
-                return CarBaseInfo.class;
+                return InspectPersonJsonRet.class;
+            case Dictionary.INSPECT_CAR:
+                return InspectCarResBean.class;
         }
         return null;
     }

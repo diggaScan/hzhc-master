@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import com.sunland.hzhc.Ac_base;
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.R;
-import com.sunland.hzhc.modules.BaseRequestBean;
+import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.Hotel_module.bean.LgBaseInfo;
 import com.sunland.hzhc.modules.Hotel_module.bean.LgLbResBean;
 import com.sunland.hzhc.modules.xmzh_module.Rv_Jg_adapter;
@@ -54,6 +54,7 @@ public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.ac_hotel_name);
         showNavIcon(true);
+        setToolbarTitle("旅馆列表");
         initView();
         readDb();
         mRequestManager = new RequestManager(this, this);
@@ -165,12 +166,14 @@ public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
         dataSet_hotels.clear();
         lgdm.clear();
         List<LgBaseInfo> lgBaseInfos = lgLbResBean.getLGList();
-        for (LgBaseInfo info : lgBaseInfos) {
-            all_lg.add(info.getLgmc());
-            all_lg_code.add(info.getLgmc_code());
+        if (lgBaseInfos != null) {
+            for (LgBaseInfo info : lgBaseInfos) {
+                all_lg.add(info.getLgmc());
+                all_lg_code.add(info.getLgmc_code());
+            }
         }
         dataSet_hotels.addAll(all_lg);
-        lgdm.addAll(lgdm);
+        lgdm.addAll(all_lg_code);
         h_adapter.notifyDataSetChanged();
 
 

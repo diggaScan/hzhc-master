@@ -1,6 +1,6 @@
 package com.sunland.hzhc.modules.case_module;
 
-import com.sunland.hzhc.modules.BaseRequestBean;
+import com.sunland.hzhc.bean.BaseRequestBean;
 
 public class AjxxReqbean extends BaseRequestBean {
     private CaseInfoDto caseInfoDto;

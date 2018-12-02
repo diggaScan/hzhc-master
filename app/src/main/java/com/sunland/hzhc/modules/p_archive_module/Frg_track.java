@@ -11,10 +11,11 @@ import android.widget.TextView;
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.Frg_base;
 import com.sunland.hzhc.R;
-import com.sunland.hzhc.modules.BaseRequestBean;
+import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.p_archive_module.track_bean.GjList;
 import com.sunland.hzhc.modules.p_archive_module.track_bean.TrackResBean;
 import com.sunland.hzhc.modules.sfz_module.beans.TrackReqBean;
+import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
 import com.sunlandgroup.Global;
 import com.sunlandgroup.def.bean.result.ResultBase;
 import com.sunlandgroup.network.OnRequestCallback;
@@ -49,6 +50,7 @@ public class Frg_track extends Frg_base implements OnRequestCallback {
         LinearLayoutManager manager = new LinearLayoutManager(context);
         rv_track_infos.setAdapter(adapter);
         rv_track_infos.setLayoutManager(manager);
+        rv_track_infos.addItemDecoration(new Rv_Item_decoration(context));
         queryYdjwData(Dictionary.PERSON_LOCUS_INFOS);
 
 

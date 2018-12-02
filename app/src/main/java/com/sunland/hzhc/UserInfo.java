@@ -5,6 +5,7 @@ import android.os.Build;
 public class UserInfo {
     //本机信息
     public static String hc_address = "";
+    public static String jhdm = "115576";
     public static String imei = "";
     public static String imsi1 = " ";
     public static String imsi2 = "";

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/form_margin_left"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_height"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/wanted_str"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:maxEms="5"
+            android:paddingLeft="@dimen/form_text_margin_left"
+            android:text="公安部在逃人员" />
+
+        <TextView
+            android:id="@+id/wanted"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/info_display_item_height"
+            android:layout_toRightOf="@id/wanted_str"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/form_text_margin_left" />
+
+        <Button
+            android:id="@+id/focus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="人员关注" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/form_text_margin_left"
+        android:layout_marginRight="@dimen/form_text_margin_left"
+        android:background="@color/divider_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/input_height"
+            android:gravity="center_vertical"
+            android:maxEms="5"
+            android:paddingLeft="@dimen/form_text_margin_left"
+            android:text="省情报中心路面核查" />
+
+        <TextView
+            android:id="@+id/road_check"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/form_text_margin_left" />
+    </LinearLayout>
+</LinearLayout>
+

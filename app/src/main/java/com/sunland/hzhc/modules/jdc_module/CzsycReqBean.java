@@ -1,6 +1,6 @@
 package com.sunland.hzhc.modules.jdc_module;
 
-import com.sunland.hzhc.modules.BaseRequestBean;
+import com.sunland.hzhc.bean.BaseRequestBean;
 
 public class CzsycReqBean extends BaseRequestBean {
     private String sfzh;

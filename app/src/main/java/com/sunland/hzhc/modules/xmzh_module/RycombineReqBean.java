@@ -1,6 +1,6 @@
 package com.sunland.hzhc.modules.xmzh_module;
 
-import com.sunland.hzhc.modules.BaseRequestBean;
+import com.sunland.hzhc.bean.BaseRequestBean;
 
 public class RycombineReqBean extends BaseRequestBean {
     private PersonJoinDto personJoinDto;

@@ -5,12 +5,14 @@
     android:orientation="horizontal">
 
     <android.support.v7.widget.RecyclerView
+        android:layout_marginLeft="20dp"
         android:id="@+id/district_list"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/hotel_list"
+        android:layout_marginLeft="20dp"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 

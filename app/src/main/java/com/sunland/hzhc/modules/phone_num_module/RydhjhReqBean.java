@@ -1,6 +1,6 @@
 package com.sunland.hzhc.modules.phone_num_module;
 
-import com.sunland.hzhc.modules.BaseRequestBean;
+import com.sunland.hzhc.bean.BaseRequestBean;
 
 public class RydhjhReqBean extends BaseRequestBean {
     private String dhhm;

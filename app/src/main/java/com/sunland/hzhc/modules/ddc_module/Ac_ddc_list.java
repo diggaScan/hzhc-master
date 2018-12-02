@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.sunland.hzhc.Ac_base;
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.R;
-import com.sunland.hzhc.modules.BaseRequestBean;
+import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.ddc_module.bean.DdcListResBean;
 import com.sunland.hzhc.modules.ddc_module.bean.InfoDDCXQs;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
@@ -158,6 +158,7 @@ public class Ac_ddc_list extends Ac_base implements OnRequestCallback {
         }
 
         class MyViewHolder extends RecyclerView.ViewHolder {
+
             TextView tv_cph;
             TextView tv_name;
             TextView tv_brand;

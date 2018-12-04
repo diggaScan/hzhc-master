@@ -78,18 +78,31 @@ public class Ac_location extends Ac_base {
     private String result_j;
     private String result_s;
 
+    private int req_location = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.ac_location);
+        handleIntent();
         getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        iv_nav.setImageResource(R.drawable.ic_arrow_blue_24dp);
         showTollbar(false);
         initView();
         initMap();
     }
 
+    private void handleIntent() {
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle bundle = intent.getBundleExtra("bundle");
+            if (bundle != null) {
+                req_location = bundle.getInt("req_location");
+            }
+        }
+    }
+
     private void initView() {
+
         allList = new ArrayList<>();
         adapter = new Location_rv_adapter(this, allList);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -105,9 +118,16 @@ public class Ac_location extends Ac_base {
         tv_enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserInfo.hc_address = et_address.getText().toString();
-                Intent intent = new Intent(Ac_location.this, Ac_main.class);
-                startActivity(intent);
+                if (req_location == UserInfo.REQ_LOCATION) {
+                    UserInfo.hc_address = UserInfo.hc_address = et_address.getText().toString();
+                    setResult(RESULT_OK);
+                    finish();
+                } else {
+                    UserInfo.hc_address = et_address.getText().toString();
+                    Intent intent = new Intent(Ac_location.this, Ac_main.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 

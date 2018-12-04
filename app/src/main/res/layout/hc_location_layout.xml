@@ -2,6 +2,7 @@
 
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/location_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -9,16 +10,28 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/info_display_item_height"
+        android:layout_height="50dp"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/form_text_margin_left"
-        android:text="核查地点" />
+        android:text="核查地点"
+        android:textColor="@color/str_color"
+        android:textSize="@dimen/str_text_size" />
 
     <TextView
         android:id="@+id/hc_location"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:drawableRight="@drawable/ic_spinner_arrow"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:gravity="center_vertical"
-        android:paddingLeft="@dimen/form_text_margin_left" />
+        android:marqueeRepeatLimit="marquee_forever"
+        android:paddingLeft="@dimen/form_text_margin_left"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textColor="@color/content_color"
+        android:textSize="@dimen/content_text_size" />
 </LinearLayout>
 

@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.sunland.hzhc.Ac_location;
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.UserInfo;
@@ -34,6 +37,7 @@ import com.sunlandgroup.def.bean.result.ResultBase;
 import com.sunlandgroup.utils.JsonUtils;
 
 import java.net.URLEncoder;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -46,7 +50,7 @@ public class Ac_clcx extends Ac_base_info {
     private String clsbh;
 
     @BindView(R.id.hc_location)
-    public TextView tv_location;
+    public TextView tv_hc_location;
     @BindView(R.id.wanted)
     public TextView tv_wanted;
     @BindView(R.id.road_check)
@@ -104,7 +108,7 @@ public class Ac_clcx extends Ac_base_info {
     }
 
     private void initView() {
-        tv_location.setText(UserInfo.hc_address);
+        tv_hc_location.setText(UserInfo.hc_address);
     }
 
     @Override
@@ -146,7 +150,7 @@ public class Ac_clcx extends Ac_base_info {
     }
 
 
-    @OnClick({R.id.sfzh_check, R.id.focus})
+    @OnClick({R.id.sfzh_check, R.id.focus, R.id.location_container})
     public void onClick(View view) {
         int id = view.getId();
         Bundle bundle = new Bundle();
@@ -160,6 +164,10 @@ public class Ac_clcx extends Ac_base_info {
                 bundle.putInt("tab_id", 1);
                 hop2Activity(Ac_archive.class, bundle);
                 break;
+            case R.id.location_container:
+                bundle.putInt("req_location", UserInfo.REQ_LOCATION);
+                hop2ActivityForResult(Ac_location.class, bundle, UserInfo.REQ_LOCATION);
+                break;
         }
     }
 
@@ -168,23 +176,31 @@ public class Ac_clcx extends Ac_base_info {
         switch (reqName) {
             case Dictionary.CAR_INFO_JOIN:
                 ClxxzhResponseBean resBean = (ClxxzhResponseBean) resultBase;
-                InfoJDCXQs infoJDCXQs = resBean.getInfoJDCXQs().get(0);
-                sfzh = infoJDCXQs.getZjh();
-                if (sfzh != null || !sfzh.isEmpty()) {
-                    btn_sfzh.setVisibility(View.VISIBLE);
+                if (resBean != null) {
+                    List<InfoJDCXQs> infoJDCXQ_list = resBean.getInfoJDCXQs();
+                    if (infoJDCXQ_list != null && !infoJDCXQ_list.isEmpty()) {
+                        InfoJDCXQs infoJDCXQs = infoJDCXQ_list.get(0);
+                        sfzh = infoJDCXQs.getZjh();
+                        if (sfzh != null || !sfzh.isEmpty()) {
+                            btn_sfzh.setVisibility(View.VISIBLE);
+                        }
+                        setText(tv_id_num, sfzh);
+                        setText(tv_name, infoJDCXQs.getClsyr());
+                        setText(tv_plateform_num, infoJDCXQs.getCphm());
+                        setText(tv_car_type, infoJDCXQs.getCllx());
+                        setText(tv_car_brand, infoJDCXQs.getClpp());
+                        setText(tv_type_num, infoJDCXQs.getClxh());
+                        setText(tv_car_color, infoJDCXQs.getClys());
+                        setText(tv_sbdm, infoJDCXQs.getClsbdh());
+                        setText(tv_fdjh, infoJDCXQs.getFdjh());
+                        setText(tv_fdj_sequence, infoJDCXQs.getFdjxh());
+                        queryWanted();
+                        queryYdjwDataNoDialog(Dictionary.COUNTRY_PERSON);
+                    } else {
+                        Toast.makeText(this, "异常", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
-                setText(tv_id_num, sfzh);
-                setText(tv_name, infoJDCXQs.getClsyr());
-                setText(tv_plateform_num, infoJDCXQs.getCphm());
-                setText(tv_car_type, infoJDCXQs.getCllx());
-                setText(tv_car_brand, infoJDCXQs.getClpp());
-                setText(tv_type_num, infoJDCXQs.getClxh());
-                setText(tv_car_color, infoJDCXQs.getClys());
-                setText(tv_sbdm, infoJDCXQs.getClsbdh());
-                setText(tv_fdjh, infoJDCXQs.getFdjh());
-                setText(tv_fdj_sequence, infoJDCXQs.getFdjxh());
-                queryWanted();
-                queryYdjwDataNoDialog(Dictionary.COUNTRY_PERSON);
                 break;
             case Dictionary.COUNTRY_PERSON:
                 PersonOfCountryJsonRet personOfCountry = (PersonOfCountryJsonRet) resultBase;
@@ -211,8 +227,8 @@ public class Ac_clcx extends Ac_base_info {
                 InspectCarResBean inspectCarResBean = (InspectCarResBean) resultBase;
                 tv_road_check.setText(inspectCarResBean.getMessage());
                 break;
-
         }
+
     }
 
     private void queryWanted() {
@@ -247,6 +263,16 @@ public class Ac_clcx extends Ac_base_info {
             textView.setText("无");
         } else {
             textView.setText(content);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == UserInfo.REQ_LOCATION) {
+            if (resultCode == RESULT_OK) {
+                tv_hc_location.setText(UserInfo.hc_address);
+            }
         }
     }
 }

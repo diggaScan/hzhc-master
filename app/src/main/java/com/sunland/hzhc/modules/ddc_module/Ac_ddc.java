@@ -179,22 +179,25 @@ public class Ac_ddc extends Ac_base_info {
         switch (reqName) {
             case Dictionary.COUNTRY_PERSON:
                 PersonOfCountryJsonRet personOfCountry = (PersonOfCountryJsonRet) resultBase;
-                final String xp = personOfCountry.getXP();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (xp != null) {
-                            byte[] bitmapArray = Base64.decode(xp, Base64.DEFAULT);
-                            final Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    iv_xp.setImageBitmap(bitmap);
-                                }
-                            });
+                if (personOfCountry != null) {
+                    final String xp = personOfCountry.getXP();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (xp != null) {
+                                byte[] bitmapArray = Base64.decode(xp, Base64.DEFAULT);
+                                final Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        iv_xp.setImageBitmap(bitmap);
+                                    }
+                                });
+                            }
                         }
-                    }
-                }).start();
+                    }).start();
+                }
+
                 break;
             case Dictionary.INSPECT_PERSON:
                 InspectPersonJsonRet inspectPersonJsonRet = (InspectPersonJsonRet) resultBase;

@@ -1,6 +1,8 @@
 package com.sunland.hzhc.modules.p_archive_module;
 
 import android.graphics.Color;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.sunland.hzhc.Dictionary;
@@ -35,10 +37,13 @@ public class Frg_focus extends Frg_base implements OnRequestCallback {
 
     @BindView(R.id.wanted)
     public TextView tv_wanted;
-    @BindView(R.id.hcjg)
+    @BindView(R.id.road_check)
     public TextView tv_hcjg;
-    @BindView(R.id.bjxx)
-    public TextView tv_bjxx;
+
+    @BindView(R.id.focus)
+    public Button btn_focus;
+    @BindView(R.id.retry)
+    public Button btn_retry;
 
     private String sfzh;//身份证号码
 
@@ -53,6 +58,8 @@ public class Frg_focus extends Frg_base implements OnRequestCallback {
     @Override
     public void initView() {
         mRequestManager = new RequestManager(context, this);
+        btn_focus.setVisibility(View.GONE);
+        btn_retry.setVisibility(View.GONE);
         sfzh = ((Ac_archive) context).identity_num;
 //        queryYdjwData(Dictionary.PERSON_FOCUS_INFO);
         queryYdjwData(Dictionary.INSPECT_PERSON);
@@ -128,8 +135,7 @@ public class Frg_focus extends Frg_base implements OnRequestCallback {
                 InspectPersonJsonRet inspectPersonJsonRet = (InspectPersonJsonRet) bean;
                 RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
                 if (ryxxRes != null) {
-                    tv_hcjg.setText(ryxxRes.getHcjg());
-                    tv_bjxx.setText(ryxxRes.getBjxx());
+                    tv_hcjg.setText(ryxxRes.getHcjg()+ryxxRes.getBjxx());
                     if (ryxxRes.getFhm().equals("000")) {
                         tv_hcjg.setTextColor(Color.GREEN);
                     } else {

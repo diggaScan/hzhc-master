@@ -27,4 +27,9 @@
     <color name="dot_color">#497e766b</color>
 
     <color name="app_background">#123456</color>
+
+    <!--表单样式-->
+    <color name="str_color">#000000</color>
+    <color name="content_color">#585858</color>
+
 </resources>

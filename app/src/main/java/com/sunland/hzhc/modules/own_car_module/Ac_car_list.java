@@ -61,8 +61,6 @@ public class Ac_car_list extends Ac_base implements OnRequestCallback {
     }
 
     private void initView() {
-
-
         car_list = new ArrayList<>();
         adapter = new MyRvAdapter(car_list);
         LinearLayoutManager manager = new LinearLayoutManager(this);

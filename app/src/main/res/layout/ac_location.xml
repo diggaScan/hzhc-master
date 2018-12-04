@@ -21,10 +21,9 @@
             android:layout_width="@dimen/division_tab_height"
             android:layout_height="@dimen/division_tab_height"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_arrow_back_24dp" />
+            android:src="@drawable/ic_arrow_blue_24dp" />
 
         <EditText
-
             android:id="@+id/address"
             android:layout_width="match_parent"
             android:layout_height="@dimen/location_address_height"

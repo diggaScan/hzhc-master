@@ -2,17 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/car_container"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="56dp"
     android:orientation="horizontal">
 
     <TextView
         android:id="@+id/cphm"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_gravity="center_vertical" />
 
     <TextView
         android:id="@+id/cllx"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="20dp" />
 </LinearLayout>

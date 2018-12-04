@@ -34,6 +34,7 @@ public class Frg_name extends Frg_base {
 
     private String code;
 
+    // TODO: 2018/12/4/004  NFC与ocr识别后数据也要走到Frg_name中
     @Override
     public int setLayoutId() {
         return R.layout.frg_name;
@@ -52,7 +53,7 @@ public class Frg_name extends Frg_base {
         switch (id) {
             case R.id.query:
                 String xm = et_name.getText().toString();
-                int xb = sb_gender.getSelectedItemPosition()+1;
+                int xb = sb_gender.getSelectedItemPosition() + 1;
                 String csrq = tv_birth.getText().toString();
                 Bundle bundle = new Bundle();
                 bundle.putString("xm", xm);
@@ -79,5 +80,11 @@ public class Frg_name extends Frg_base {
                 tv_territory.setText(data.getStringExtra("name"));
             }
         }
+    }
+
+    public void unbpdateView(String name, String gender, String birth) {
+        et_name.setText(name);
+        tv_birth.setText(birth);
+
     }
 }

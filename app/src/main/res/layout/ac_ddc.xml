@@ -36,20 +36,28 @@
                         android:layout_height="@dimen/info_display_item_height"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="身份证号码" />
+                        android:text="身份证号码"
+                        android:textColor="@color/str_color"
+                        android:textSize="@dimen/str_text_size" />
 
                     <TextView
                         android:id="@+id/id_num"
                         android:layout_width="220dp"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left" />
+                        android:paddingLeft="@dimen/form_text_margin_left"
+                        android:textColor="@color/content_color"
+                        android:textSize="@dimen/content_text_size" />
 
                     <Button
                         android:id="@+id/ddc_check"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/input_height"
-                        android:text="核查" />
+                        android:layout_height="32dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@null"
+                        android:text="核查"
+                        android:textColor="@color/light_blue"
+                        android:textStyle="bold" />
                 </TableRow>
 
                 <TableRow
@@ -62,14 +70,18 @@
                         android:layout_height="@dimen/info_display_item_height"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="姓名" />
+                        android:text="姓名"
+                        android:textColor="@color/str_color"
+                        android:textSize="@dimen/str_text_size" />
 
                     <TextView
                         android:id="@+id/name"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left"/>
+                        android:paddingLeft="@dimen/form_text_margin_left"
+                        android:textColor="@color/content_color"
+                        android:textSize="@dimen/content_text_size" />
                 </TableRow>
 
                 <TableRow
@@ -82,14 +94,18 @@
                         android:layout_height="@dimen/info_display_item_height"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="电动车牌号" />
+                        android:text="电动车牌号"
+                        android:textColor="@color/str_color"
+                        android:textSize="@dimen/str_text_size" />
 
                     <TextView
                         android:id="@+id/plateform_num"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left" />
+                        android:paddingLeft="@dimen/form_text_margin_left"
+                        android:textColor="@color/content_color"
+                        android:textSize="@dimen/content_text_size" />
                 </TableRow>
 
                 <TableRow
@@ -102,14 +118,18 @@
                         android:layout_height="@dimen/info_display_item_height"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="品牌" />
+                        android:text="品牌"
+                        android:textColor="@color/str_color"
+                        android:textSize="@dimen/str_text_size" />
 
                     <TextView
                         android:id="@+id/car_brand"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left"/>
+                        android:paddingLeft="@dimen/form_text_margin_left"
+                        android:textColor="@color/content_color"
+                        android:textSize="@dimen/content_text_size" />
                 </TableRow>
 
                 <TableRow
@@ -122,14 +142,18 @@
                         android:layout_height="@dimen/info_display_item_height"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="车架号" />
+                        android:text="车架号"
+                        android:textColor="@color/str_color"
+                        android:textSize="@dimen/str_text_size" />
 
                     <TextView
                         android:id="@+id/cjh"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left" />
+                        android:paddingLeft="@dimen/form_text_margin_left"
+                        android:textColor="@color/content_color"
+                        android:textSize="@dimen/content_text_size" />
                 </TableRow>
 
                 <TableRow
@@ -142,14 +166,18 @@
                         android:layout_height="@dimen/info_display_item_height"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="发动机号" />
+                        android:text="发动机号"
+                        android:textColor="@color/str_color"
+                        android:textSize="@dimen/str_text_size" />
 
                     <TextView
                         android:id="@+id/fdjh"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left" />
+                        android:paddingLeft="@dimen/form_text_margin_left"
+                        android:textColor="@color/content_color"
+                        android:textSize="@dimen/content_text_size" />
                 </TableRow>
 
                 <TableRow
@@ -162,23 +190,29 @@
                         android:layout_height="@dimen/info_display_item_height"
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="非机动车序列号" />
+                        android:text="非机动车序列号"
+                        android:textColor="@color/str_color"
+                        android:textSize="@dimen/str_text_size" />
 
                     <TextView
                         android:id="@+id/fdj_sequence"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left" />
+                        android:paddingLeft="@dimen/form_text_margin_left"
+                        android:text="无"
+                        android:textColor="@color/content_color"
+                        android:textSize="@dimen/content_text_size" />
                 </TableRow>
 
             </TableLayout>
+
             <ImageView
                 android:id="@+id/xp"
-                android:layout_marginTop="@dimen/input_height"
                 android:layout_width="@dimen/input_heightx3d2"
                 android:layout_height="@dimen/input_heightx4"
-                android:layout_gravity="right|top" />
+                android:layout_gravity="right|top"
+                android:layout_marginTop="@dimen/input_height" />
         </FrameLayout>
     </LinearLayout>
 

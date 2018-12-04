@@ -1,16 +1,19 @@
 package com.sunland.hzhc.modules.jdc_module;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.concretejungle.spinbutton.SpinButton;
 import com.sunland.hzhc.Ac_main;
+import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.Frg_base;
 import com.sunland.hzhc.R;
-import com.sunland.hzhc.Dictionary;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import butterknife.BindView;
@@ -40,7 +43,7 @@ public class Frg_vehicle extends Frg_base {
         sb_vehicle.setSelection(0);
     }
 
-    @OnClick(R.id.query)
+    @OnClick({R.id.query, R.id.scan})
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
@@ -57,6 +60,51 @@ public class Frg_vehicle extends Frg_base {
                 bundle.putString("clsbh", clsbh);
                 ((Ac_main) context).hop2Activity(Ac_clcx.class, bundle);
                 break;
+            case R.id.scan:
+                Intent mIntent = new Intent();
+                mIntent.setClassName("cn.com.cybertech.ocr", "cn.com.cybertech.RecognitionActivity");
+                mIntent.putExtra("camera", true);    // true为视频识别，false为拍照识别。如果不加此参数默认为true，使用视频识别的方式。
+                startActivityForResult(mIntent, 111);
+                break;
+        }
+    }
+
+//    号牌 和
+//    身份证
+//    //车牌
+
+//                    Intent mIntent = new Intent();
+//                    mIntent.setClassName("cn.com.cybertech.ocr", "cn.com.cybertech.RecognitionActivity");
+//                    mIntent.putExtra("camera", false);    // true为视频识别，false为拍照识别。如果不加此参数默认为true，使用视频识别的方式。
+//                    startActivityForResult(mIntent, 111);
+    //证件识别
+//        Intent mIntent = new Intent();
+//        mIntent.putExtra("ZJSB", true);
+//        mIntent.putExtra("nMainID", 2); // 识别类型，如不加此参数，默认2 识别二代身份证，  具体对应的类型在下面可以按需设置。
+//        mIntent.setClassName("cn.com.cybertech.ocr", "cn.com.cybertech.RecognitionActivity");
+//        startActivityForResult(mIntent, 222);
+
+//}
+
+    //
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (111 == requestCode) {
+            if (resultCode == 2) {
+                ArrayList<String> hphms = data.getStringArrayListExtra("HPHMS");
+                if (hphms == null) {
+                    Toast.makeText(context, "识别异常", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (hphms.size() > 0)
+                    Toast.makeText(context, hphms.get(0), Toast.LENGTH_SHORT).show();
+
+                if (hphms.size() > 1) {
+                    String path = hphms.get(0); // 返回的图片地址，有可能没有
+                    et_number.setText(path);
+                }
+            }
         }
     }
 }

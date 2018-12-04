@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="8dp">
 
     <TextView
+        android:textSize="15sp"
+        android:textColor="@color/light_blue"
+    android:layout_marginBottom="8dp"
         android:id="@+id/gjlb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -11,11 +15,13 @@
 
     <TextView
         android:id="@+id/gjnr"
+        android:layout_marginBottom="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/gjlb" />
 
     <TextView
+
         android:id="@+id/gjsj"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

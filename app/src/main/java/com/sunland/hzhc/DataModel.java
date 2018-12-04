@@ -1,8 +1,8 @@
 package com.sunland.hzhc;
 
 public class DataModel {
-
-    public static final String[] MODULE_NAMES = {"身份证", "机动车", "电动车", "姓名组合", "批量核查", "旅馆", "网吧", "电话"
+    // TODO: 2018/12/4/004  那些数据访datamodel,那些数据放字典要整理
+    public static final String[] MODULE_NAMES = {"身份证", "机动车", "电动车", "姓名组合", "旅馆", "网吧", "电话"
             , "案件", "境外人员"};
 
     public static final String[] VEHICLE_CATEGORIES = {"无数据"};
@@ -19,4 +19,11 @@ public class DataModel {
     public static final String[] NATIONS = {"无数据"};
 
     public static final String[] PAPER_CATES = {"无数据"};
+
+
+    public static final String ACTION_NFC_READ_IDCARD_SUCCESS  =
+            "cybertech.pstore.intent.action.NFC_READ_IDCARD_SUCCESS";
+
+    public static final String ACTION_NFC_READ_IDCARD_FAILURE  =
+            "cybertech.pstore.intent.action.NFC_READ_IDCARD_FAILURE";
 }

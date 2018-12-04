@@ -1,36 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     android:id="@+id/info_container"
-    android:layout_height="48dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/form_margin_left">
 
-    <TextView
-        android:layout_alignRight="@id/identity"
-        android:layout_alignBaseline="@id/brand"
-        android:id="@+id/cph"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/name"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_alignBaseline="@id/name"
-        android:id="@+id/brand"
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@id/name"
+        android:textColor="@color/str_color"
+        android:textStyle="bold"
+        android:layout_marginBottom="@dimen/form_margin_left"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true" />
 
     <TextView
-        android:layout_below="@id/brand"
-        android:layout_alignLeft="@id/brand"
         android:id="@+id/identity"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/brand"
+        android:layout_alignBaseline="@id/name"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/name" />
+
+    <TextView
+        android:id="@+id/brand_str"
+        android:layout_marginBottom="@dimen/form_margin_left"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:text="品牌" />
+
+    <TextView
+        android:id="@+id/brand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/brand_str"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/brand_str" />
+
+    <TextView
+        android:id="@+id/cph_str"
+        android:layout_marginBottom="@dimen/form_margin_left"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/brand_str"
+        android:text="号牌" />
+
+    <TextView
+        android:id="@+id/cph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/cph_str"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/cph_str" />
+
 
 </RelativeLayout>

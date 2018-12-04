@@ -32,14 +32,6 @@
             android:gravity="center"
             android:textColor="@color/white" />
 
-        <ImageView
-            android:id="@+id/scan"
-            android:layout_width="@dimen/input_height"
-            android:layout_height="@dimen/input_height"
-            android:layout_alignBottom="@id/vehicle"
-            android:layout_toRightOf="@id/vehicle"
-
-            android:src="@drawable/ic_videocam_24dp" />
 
         <!--<com.concretejungle.spinbutton.SpinButton-->
         <!--android:textColor="@color/white"-->
@@ -69,19 +61,34 @@
 
         <EditText
             android:id="@+id/number"
-
-            android:layout_width="@dimen/input_width"
+            android:layout_width="200dp"
             android:layout_height="@dimen/input_height"
-            android:layout_above="@id/engine_num"
-            android:layout_alignRight="@id/vehicle"
-            android:layout_marginLeft="8dp"
-            android:layout_marginBottom="@dimen/input_margin_bot"
-            android:background="@drawable/palteform_underline"
+            android:layout_above="@id/divider"
+            android:layout_alignLeft="@id/vehicle"
+            android:background="@null"
             android:gravity="center"
             android:hint="机动车号牌"
             android:maxLength="10"
             android:textColor="@color/white"
             android:textColorHint="@color/hint_color" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_above="@id/engine_num"
+            android:layout_alignLeft="@id/vehicle"
+            android:layout_alignRight="@id/vehicle"
+            android:layout_marginBottom="@dimen/input_margin_bot"
+            android:background="@color/white" />
+
+        <ImageView
+            android:id="@+id/scan"
+            android:layout_width="30dp"
+            android:layout_height="36dp"
+            android:layout_alignTop="@id/number"
+            android:layout_toRightOf="@id/number"
+            android:src="@drawable/ic_car_num_scan" />
 
         <EditText
             android:id="@+id/engine_num"

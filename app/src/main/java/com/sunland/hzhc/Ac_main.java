@@ -2,11 +2,13 @@ package com.sunland.hzhc;
 
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -18,8 +20,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.sunland.hzhc.fragments.Frg_batch_check;
 import com.sunland.hzhc.fragments.Vp_main_adapter;
 import com.sunland.hzhc.modules.Hotel_module.Frg_hotel;
 import com.sunland.hzhc.modules.Internet_cafe_module.Frg_internet_cafe;
@@ -29,6 +31,7 @@ import com.sunland.hzhc.modules.ddc_module.Frg_e_vehicle;
 import com.sunland.hzhc.modules.jdc_module.Frg_vehicle;
 import com.sunland.hzhc.modules.phone_num_module.Frg_phone_num;
 import com.sunland.hzhc.modules.sfz_module.Frg_id;
+import com.sunland.hzhc.modules.sfz_module.NfcReceiver;
 import com.sunland.hzhc.modules.xmzh_module.Frg_name;
 import com.sunland.hzhc.utils.WindowInfoUtils;
 
@@ -40,8 +43,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class Ac_main extends CheckSelfPermissionActivity {
+public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.OnGetNfcDataListener {
 
+    private final int REQ_MODULE = 0;
     @BindView(R.id.frg_container)
     public ViewPager vp_frg_container;
     @BindView(R.id.frg_tabs)
@@ -52,11 +56,14 @@ public class Ac_main extends CheckSelfPermissionActivity {
     public Toolbar toolbar;
     @BindView(R.id.position_indicator)
     public BannerIndicator bannerIndicator;
-
-
-    private final int REQ_MODULE = 0;
+    private int backPressed_num = 0;
     private List<Fragment> dataSet;
     private Resources mRes;
+
+    private NfcReceiver rec;
+
+    private Frg_id frg_id;
+    private Frg_name frg_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +73,16 @@ public class Ac_main extends CheckSelfPermissionActivity {
         mRes = getResources();
         initWindowStyle();
         initView();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        rec = new NfcReceiver();
+        IntentFilter filter = new IntentFilter();//创建IntentFilter对象
+        filter.addAction(DataModel.ACTION_NFC_READ_IDCARD_SUCCESS);
+        filter.addAction(DataModel.ACTION_NFC_READ_IDCARD_FAILURE);
+        registerReceiver(rec, filter);
     }
 
     private void initWindowStyle() {
@@ -92,11 +109,12 @@ public class Ac_main extends CheckSelfPermissionActivity {
         bannerIndicator.setMovingDotColor(mRes.getColor(R.color.colorAccent));
 
         dataSet = new ArrayList<>();
-        dataSet.add(new Frg_id());
+        frg_id = new Frg_id();
+        dataSet.add(frg_id);
         dataSet.add(new Frg_vehicle());
         dataSet.add(new Frg_e_vehicle());
-        dataSet.add(new Frg_name());
-        dataSet.add(new Frg_batch_check());
+        frg_name = new Frg_name();
+        dataSet.add(frg_name);
         dataSet.add(new Frg_hotel());
         dataSet.add(new Frg_internet_cafe());
         dataSet.add(new Frg_phone_num());
@@ -158,13 +176,16 @@ public class Ac_main extends CheckSelfPermissionActivity {
         });
     }
 
-    @OnClick(R.id.menu_btn)
+    @OnClick({R.id.menu_btn, R.id.nav_back})
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
             case R.id.menu_btn:
                 Intent intent = new Intent(this, Ac_module_list.class);
                 startActivityForResult(intent, REQ_MODULE);
+                break;
+            case R.id.nav_back:
+                backPress();
                 break;
         }
     }
@@ -186,11 +207,85 @@ public class Ac_main extends CheckSelfPermissionActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_MODULE) {
             if (resultCode == RESULT_OK) {
-                int position=data.getIntExtra("position",-1);
-                if(position!=-1){
+                int position = data.getIntExtra("position", -1);
+                if (position != -1) {
                     vp_frg_container.setCurrentItem(position);
                 }
             }
+        } else if (222 == requestCode) {
+            if (resultCode == 3) {
+                ArrayList<String> zjsbname = data.getStringArrayListExtra("ZJSB_NAME");                    //  识别出来的NAME：[保留, 姓名, 性别, 民族, 出生, 住址, 公民身份号码]  顺序不变  从0开始第6位是身份证，如果识别的不是二代身份证，对应的参数及位置，请自行debug查看。
+                ArrayList<String> zjsbvalue = data.getStringArrayListExtra("ZJSB_VALUE");                //  识别出来的VALUE：顺序对应于上面的NAME   第6位是身份证，如果识别的不是二代身份证，对应的参数及位置，请自行debug查看。
+                Toast.makeText(this, zjsbvalue.get(6), Toast.LENGTH_SHORT).show();
+                frg_id.updateViews(zjsbvalue.get(6));
+
+
+            }
         }
     }
+
+
+    @Override
+    public void onReceiveDate(Intent intent) {
+        if (DataModel.ACTION_NFC_READ_IDCARD_SUCCESS.equals(intent.getAction())) {
+            Toast.makeText(this, "读取成功! ", Toast.LENGTH_SHORT).show();
+            if (!frg_id.isHidden()) {
+                frg_id.updateViews(intent);
+            }
+        } else if (DataModel.ACTION_NFC_READ_IDCARD_FAILURE.equals(intent.getAction())) {
+            Toast.makeText(this, "读取失败!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        unregisterReceiver(rec);
+    }
+
+    //NFC 扫描和身份证识别
+    public void onChoose(int which) {
+        switch (which) {
+            case 0:
+                Intent intent = new Intent("cybertech.pstore.intent.action.NFC_READER");
+                intent.setPackage("cn.com.cybertech.nfc.reader");
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, "请安装相应NFC模块", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case 1:
+
+                Intent mIntent = new Intent();
+                mIntent.putExtra("ZJSB", true);
+                mIntent.putExtra("nMainID", 2); // 识别类型，如不加此参数，默认2 识别二代身份证，  具体对应的类型在下面可以按需设置。
+                mIntent.setClassName("cn.com.cybertech.ocr", "cn.com.cybertech.RecognitionActivity");
+                startActivityForResult(mIntent, 222);
+                break;
+
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        backPress();
+    }
+
+    private void backPress() {
+        if (backPressed_num != 1) {
+            backPressed_num++;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    backPressed_num--;
+                }
+            }, 2500);
+            Toast.makeText(this, "再按一次，退出应用", Toast.LENGTH_SHORT).show();
+        } else {
+            finish();
+        }
+    }
+
+
 }

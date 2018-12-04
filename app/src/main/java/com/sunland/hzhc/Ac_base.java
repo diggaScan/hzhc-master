@@ -92,5 +92,11 @@ public class Ac_base extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void hop2ActivityForResult(Class<? extends Ac_base> clazz, Bundle bundle, int flag) {
+        Intent intent = new Intent(this, clazz);
+        intent.putExtra("bundle", bundle);
+        startActivityForResult(intent, flag);
+    }
+
 
 }

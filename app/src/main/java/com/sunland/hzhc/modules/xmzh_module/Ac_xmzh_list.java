@@ -8,12 +8,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.Ac_base_info;
+import com.sunland.hzhc.modules.sfz_module.Ac_rycx;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
 import com.sunlandgroup.def.bean.result.ResultBase;
 
@@ -54,7 +56,6 @@ public class Ac_xmzh_list extends Ac_base_info {
                 xb = bundle.getInt("xb");
                 csrq = bundle.getString("csrq");
                 hjqh = bundle.getString("hjqh");
-
             }
         }
     }
@@ -88,9 +89,11 @@ public class Ac_xmzh_list extends Ac_base_info {
         switch (reqName) {
             case Dictionary.GET_PERSON_JOIN_INFO:
                 XmzhResBean xmzhResBean = (XmzhResBean) resultBase;
-                dataSet.clear();
-                dataSet.addAll(xmzhResBean.getPersonList());
-                adapter.notifyDataSetChanged();
+                if (xmzhResBean != null) {
+                    dataSet.clear();
+                    dataSet.addAll(xmzhResBean.getPersonList());
+                    adapter.notifyDataSetChanged();
+                }
                 break;
         }
     }
@@ -115,13 +118,21 @@ public class Ac_xmzh_list extends Ac_base_info {
 
         @Override
         public void onBindViewHolder(@NonNull MyRvAdapter.MyViewHolder myViewHolder, int i) {
-            PersonInfo info = dataSet.get(i);
+            final PersonInfo info = dataSet.get(i);
             myViewHolder.tv_address.setText(info.getHjxz());
             myViewHolder.tv_age.setText(info.getNl());
             myViewHolder.tv_identity.setText(info.getSfzh());
             myViewHolder.tv_name.setText(info.getXm());
             myViewHolder.tv_gender.setText(info.getXb());
             myViewHolder.tv_src.setText(info.getSjly());
+            myViewHolder.tv_container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id", info.getSfzh());
+                    hop2Activity(Ac_rycx.class, bundle);
+                }
+            });
         }
 
         @Override
@@ -136,6 +147,7 @@ public class Ac_xmzh_list extends Ac_base_info {
             TextView tv_age;
             TextView tv_address;
             TextView tv_src;
+            RelativeLayout tv_container;
 
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -145,6 +157,7 @@ public class Ac_xmzh_list extends Ac_base_info {
                 tv_age = itemView.findViewById(R.id.age);
                 tv_address = itemView.findViewById(R.id.address);
                 tv_src = itemView.findViewById(R.id.src);
+                tv_container = itemView.findViewById(R.id.container);
 
             }
         }

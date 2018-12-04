@@ -14,4 +14,7 @@ public class UserInfo {
     public static String gpsinfo = gpsX + gpsY;
     public static String brand = Build.BRAND;
     public static String model = Build.MODEL + " " + Build.VERSION.SDK_INT;
+
+    //
+    public final static int REQ_LOCATION = 1;
 }

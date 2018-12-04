@@ -16,15 +16,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="姓名" />
+                android:text="姓名"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -34,15 +45,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="英文姓名" />
+                android:text="英文姓名"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/eng_name"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -52,15 +74,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="性别" />
+                android:text="性别"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/gender"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -70,15 +103,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="国籍" />
+                android:text="国籍"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/nation"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -88,15 +132,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="出生日期" />
+                android:text="出生日期"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/birth"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -106,15 +161,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="出生地" />
+                android:text="出生地"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/birth_place"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -124,15 +190,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="籍贯" />
+                android:text="籍贯"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/origin_place"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -142,15 +219,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="身份证" />
+                android:text="身份证"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/id_num"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -160,15 +248,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="护照" />
+                android:text="护照"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/passport"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -178,15 +277,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="港澳通行证" />
+                android:text="港澳通行证"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/ga_passport"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -196,15 +306,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="台湾同行证" />
+                android:text="台湾同行证"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/taiwan_passport"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -214,15 +335,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="居住证" />
+                android:text="居住证"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/live_cert"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -232,16 +364,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="民族" />
+                android:text="民族"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/ethnic_group"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -251,15 +393,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="驾驶证" />
+                android:text="驾驶证"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/driver_license"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -269,15 +422,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="杭州市民卡" />
+                android:text="杭州市民卡"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/citizen_card"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -287,15 +451,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="电话" />
+                android:text="电话"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/phone_num"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -305,15 +480,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="婚姻登记" />
+                android:text="婚姻登记"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/marriage_reg"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -323,9 +509,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="工作单位" />
+                android:text="工作单位"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/gzdw"
@@ -333,6 +522,10 @@
                 android:layout_height="@dimen/info_display_item_height" />
         </TableRow>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -342,14 +535,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
                 android:gravity="center_vertical"
                 android:maxEms="5"
-                android:text="车船登记" />
+                android:text="车船登记"
+                android:textColor="@color/str_color"
+                android:textSize="@dimen/str_text_size" />
 
             <TextView
                 android:id="@+id/car_reg"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/info_display_item_height" />
+                android:layout_height="@dimen/info_display_item_height"
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
         </TableRow>
 
     </TableLayout>

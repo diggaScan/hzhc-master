@@ -94,7 +94,6 @@ public class Ac_case extends Ac_base_info {
                 } else {
                     Toast.makeText(this, "未找到相应案件", Toast.LENGTH_SHORT).show();
                 }
-
                 break;
         }
     }

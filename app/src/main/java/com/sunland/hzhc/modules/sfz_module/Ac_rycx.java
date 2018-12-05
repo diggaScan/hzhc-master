@@ -1,11 +1,12 @@
 package com.sunland.hzhc.modules.sfz_module;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.sunland.hzhc.Ac_location;
+import com.sunland.hzhc.DataModel;
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.UserInfo;
@@ -25,6 +28,7 @@ import com.sunland.hzhc.bean.i_inspect_person.InspectPersonReqBean;
 import com.sunland.hzhc.bean.i_inspect_person.Request;
 import com.sunland.hzhc.bean.i_inspect_person.RyxxReq;
 import com.sunland.hzhc.bean.i_inspect_person.RyxxRes;
+import com.sunland.hzhc.bean.ssjBean.PersonInfo;
 import com.sunland.hzhc.modules.Ac_base_info;
 import com.sunland.hzhc.modules.ddc_module.Ac_ddc_list;
 import com.sunland.hzhc.modules.jdc_module.Ac_clcx;
@@ -93,7 +97,7 @@ public class Ac_rycx extends Ac_base_info {
     @BindView(R.id.phone_check)
     public TextView btn_phone_check;
 
-    private String sfzh;
+    private String sfzh = "";//身份证号
 
     private int jdc_num;
     private int fjdc_num;
@@ -105,6 +109,20 @@ public class Ac_rycx extends Ac_base_info {
     private String tp_fjdc_hp;
     private String tp_dh_str;
 
+    private Resources resources;
+    private String gj = "";// 国籍
+    private String zjlx = "";//证件类型
+    private String xm = "";//姓名
+    private String xb = "";//性别
+    private String hjqh = "";//户籍区划
+    private String ztry = "";//是否在逃人员
+    private String zdry = "";//是否重点人员
+    private String wffz = "";//是否违法犯罪
+    private String mz = "";//民族
+    private String returncode = "";//情报核录入接口返回代码
+    private StringBuilder ryxx = new StringBuilder();//在逃接口+关注信息+情报接口 返回的描述信息
+
+    public boolean isFromssj;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,16 +130,16 @@ public class Ac_rycx extends Ac_base_info {
         setContentLayout(R.layout.ac_info_detail_test);
         showNavIcon(true);
         setToolbarTitle("个人信息");
+        resources = getResources();
         initView();
         queryYdjwData(Dictionary.PERSON_COMPLEX);
         queryYdjwDataNoDialog(Dictionary.COUNTRY_PERSON);
         queryYdjwDataNoDialog(Dictionary.INSPECT_PERSON);
+        queryYdjwDataX("");
     }
 
     public void initView() {
-
         tv_hc_location.setText(UserInfo.hc_address);
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -138,7 +156,18 @@ public class Ac_rycx extends Ac_base_info {
                         @Override
                         public void run() {
                             LmhcResBean lmhcResBean = JsonUtils.fromJson(result, LmhcResBean.class);
-                            tv_wanted.setText(lmhcResBean.getMessage());
+                            if (lmhcResBean != null) {
+                                tv_wanted.setText(lmhcResBean.getMessage());
+                                if (lmhcResBean.getStatus().equals("-1")) {
+                                    tv_wanted.setTextColor(resources.getColor(R.color.non_warning_color));
+                                    ztry = "0";//未在逃
+                                } else {
+                                    startVibrate();
+                                    tv_wanted.setTextColor(resources.getColor(R.color.warning_color));
+                                    ztry = "1";//在逃
+                                }
+                                ryxx.append(lmhcResBean.getMessage());
+                            }
                         }
                     });
                 } catch (Exception e) {
@@ -155,6 +184,7 @@ public class Ac_rycx extends Ac_base_info {
             Bundle bundle = intent.getBundleExtra("bundle");
             if (bundle != null) {
                 sfzh = bundle.getString("id");
+                isFromssj = bundle.getBoolean("fromRandomRecord");
             }
         }
     }
@@ -203,6 +233,7 @@ public class Ac_rycx extends Ac_base_info {
                 hop2Activity(Ac_archive.class, bundle);
                 break;
             case R.id.jdc_check:
+
                 if (jdc_num == 1) {
                     String cphm = tp_jdc_hp.split(",")[0];
                     bundle.putString("cphm", cphm);
@@ -254,6 +285,13 @@ public class Ac_rycx extends Ac_base_info {
                     setText(tv_driver_license, ryzhxxResBean.getZjcx());
                     setText(tv_og_address, ryzhxxResBean.getHjdz());
                     List<InfoRYXXForJDC> jdcs = ryzhxxResBean.getJdc_list();
+
+
+                    xm = ryzhxxResBean.getXm();
+                    xb = ryzhxxResBean.getXb();
+                    hjqh = ryzhxxResBean.getHjqh();
+                    mz = ryzhxxResBean.getMz();
+
                     if (jdcs != null && !jdcs.isEmpty()) {
                         jdc_num = jdcs.size();
                         StringBuilder hphms = new StringBuilder();
@@ -359,7 +397,7 @@ public class Ac_rycx extends Ac_base_info {
                         for (InfoFCXX infoFcxx : fcxxes) {
                             fcxx.append(infoFcxx.getFcsj()).append(infoFcxx.getFcdz()).append(",");
                         }
-                        setText(tv_fcxx, fcxx.substring(0,fcxx.length()-1));
+                        setText(tv_fcxx, fcxx.substring(0, fcxx.length() - 1));
                     } else {
                         setText(tv_fcxx, "");
                     }
@@ -369,6 +407,7 @@ public class Ac_rycx extends Ac_base_info {
                 PersonOfCountryJsonRet personOfCountry = (PersonOfCountryJsonRet) resultBase;
                 if (personOfCountry != null) {
                     final String xp = personOfCountry.getXP();
+                    gj = personOfCountry.getJGGJ();
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -394,11 +433,17 @@ public class Ac_rycx extends Ac_base_info {
                     RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
                     if (ryxxRes != null) {
                         tv_road_check.setText(ryxxRes.getHcjg() + "  " + ryxxRes.getBjxx());
+                        String result;
                         if (ryxxRes.getFhm().equals("000")) {
-                            tv_road_check.setTextColor(Color.GREEN);
+                            result = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
+                            zdry = "0";//非重点
                         } else {
-                            tv_road_check.setTextColor(Color.RED);
+                            result = "<font color=\"#d13931\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
+                            zdry = "1";//重点人员
                         }
+                        tv_road_check.setText(Html.fromHtml(result));
+                        returncode = ryxxRes.getFhm();
+                        ryxx.append(ryxxRes.getHcjg()).append(ryxxRes.getBjxx());
                     }
                 } else {
                     Toast.makeText(this, "异常", Toast.LENGTH_SHORT).show();
@@ -428,6 +473,32 @@ public class Ac_rycx extends Ac_base_info {
                 bundle.putInt("tab_id", 2);
                 hop2Activity(Ac_archive.class, bundle);
                 break;
+            case R.id.ssj:
+                Intent intent = new Intent();
+
+                PersonInfo personInfo = new PersonInfo();
+                initPersonInfo(personInfo);
+                if (isFromssj) {
+                    bundle.putInt(DataModel.RECORD_BUNDLE_TYPE, 0);
+                    bundle.putString(DataModel.RECORD_BUNDLE_ADDR, UserInfo.hc_address);
+                    bundle.putString(DataModel.RECORD_BUNDLE_DATA, new Gson().toJson(personInfo));
+                    intent.putExtra("bundle", bundle);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else {
+                    intent.setAction("com.sunland.action.record");
+                    bundle.putInt(DataModel.RECORD_BUNDLE_TYPE, 0);
+                    bundle.putString(DataModel.RECORD_BUNDLE_ADDR, UserInfo.hc_address);
+                    bundle.putString(DataModel.RECORD_BUNDLE_DATA, new Gson().toJson(personInfo));
+                    intent.putExtras(bundle);
+                    try {
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -456,5 +527,20 @@ public class Ac_rycx extends Ac_base_info {
                 tv_hc_location.setText(UserInfo.hc_address);
             }
         }
+    }
+
+    private void initPersonInfo(PersonInfo personInfo) {
+        personInfo.setGj(gj);
+        personInfo.setZjlx(zjlx);
+        personInfo.setXm(xm);
+        personInfo.setXb(xb);
+        personInfo.setSfzh(sfzh);
+        personInfo.setHjqh(hjqh);
+        personInfo.setZtry(ztry);
+        personInfo.setZdry(zdry);
+        personInfo.setWffz(wffz);
+        personInfo.setMz(mz);
+        personInfo.setReturncode(returncode);
+        personInfo.setRyxx(ryxx.toString());
     }
 }

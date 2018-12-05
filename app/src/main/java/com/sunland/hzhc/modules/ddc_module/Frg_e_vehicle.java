@@ -5,9 +5,9 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.sunland.hzhc.Ac_main;
+import com.sunland.hzhc.DataModel;
 import com.sunland.hzhc.Frg_base;
 import com.sunland.hzhc.R;
-import com.sunland.hzhc.modules.jdc_module.Ac_clcx;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -45,7 +45,13 @@ public class Frg_e_vehicle extends Frg_base {
                 bundle.putString("hphm", hphm);
                 bundle.putString("fdjh", fdjh);
                 bundle.putString("cjh", cjh);
-                ((Ac_main) context).hop2Activity(Ac_ddc_list.class, bundle);
+                if (((Ac_main) context).isFromSsj) {
+                    bundle.putBoolean(DataModel.FROM_SSJ_FLAG, true);
+                    ((Ac_main) context).hopWithssj(Ac_ddc_list.class, bundle);
+                } else {
+                    ((Ac_main) context).hop2Activity(Ac_ddc_list.class, bundle);
+                }
+
                 break;
         }
     }

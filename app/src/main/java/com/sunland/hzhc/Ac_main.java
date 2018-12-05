@@ -46,6 +46,7 @@ import butterknife.OnClick;
 public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.OnGetNfcDataListener {
 
     private final int REQ_MODULE = 0;
+    public final int REQ_SSJ = 1;//请求随手记内容
     @BindView(R.id.frg_container)
     public ViewPager vp_frg_container;
     @BindView(R.id.frg_tabs)
@@ -65,11 +66,15 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
     private Frg_id frg_id;
     private Frg_name frg_name;
 
+    public boolean isFromSsj;//是否由随手记应用跳入
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_main);
         ButterKnife.bind(this);
+        handleIntent();
         mRes = getResources();
         initWindowStyle();
         initView();
@@ -83,6 +88,13 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
         filter.addAction(DataModel.ACTION_NFC_READ_IDCARD_SUCCESS);
         filter.addAction(DataModel.ACTION_NFC_READ_IDCARD_FAILURE);
         registerReceiver(rec, filter);
+    }
+
+    private void handleIntent() {
+        Intent intent = getIntent();
+        if (intent != null) {
+            isFromSsj = intent.getBooleanExtra(DataModel.FROM_SSJ_FLAG, false);
+        }
     }
 
     private void initWindowStyle() {
@@ -202,6 +214,12 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
         startActivity(intent);
     }
 
+    public void hopWithssj(Class<? extends Ac_base> clazz, Bundle bundle) {
+        Intent intent = new Intent(this, clazz);
+        intent.putExtra("bundle", bundle);
+        startActivityForResult(intent, REQ_SSJ);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -218,8 +236,14 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
                 ArrayList<String> zjsbvalue = data.getStringArrayListExtra("ZJSB_VALUE");                //  识别出来的VALUE：顺序对应于上面的NAME   第6位是身份证，如果识别的不是二代身份证，对应的参数及位置，请自行debug查看。
                 Toast.makeText(this, zjsbvalue.get(6), Toast.LENGTH_SHORT).show();
                 frg_id.updateViews(zjsbvalue.get(6));
-
-
+            }
+        } else if (requestCode == REQ_SSJ) {
+            if (resultCode == RESULT_OK) {
+                Bundle bundle = data.getBundleExtra("bundle");
+                Intent intent = new Intent();
+                intent.putExtras(bundle);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         }
     }

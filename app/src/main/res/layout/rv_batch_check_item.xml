@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/form_margin_left"
+    android:background="@color/white"
+    android:padding="@dimen/form_margin_left">
+
+    <TextView
+        android:id="@+id/xm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/form_margin_left" />
+
+    <TextView
+        android:id="@+id/xb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/xm"
+        android:layout_marginLeft="@dimen/form_margin_left" />
+
+    <TextView
+        android:id="@+id/nl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/xb"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:layout_toRightOf="@id/xb" />
+
+    <TextView
+        android:id="@+id/hjd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/nl"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:layout_toRightOf="@id/nl" />
+
+    <TextView
+        android:id="@+id/mz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/xb"
+        android:layout_marginLeft="@dimen/form_margin_left" />
+
+    <TextView
+        android:id="@+id/sfzh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/mz"
+
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:layout_toRightOf="@id/mz" />
+
+    <TextView
+        android:id="@+id/hl_str"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mz"
+        android:layout_marginLeft="@dimen/form_margin_left"
+
+        android:text="厅核录" />
+
+    <TextView
+        android:id="@+id/hc_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/hl_str"
+        android:layout_marginLeft="@dimen/form_margin_left"
+        android:layout_toRightOf="@id/hl_str" />
+
+    <Button
+        android:id="@+id/retry"
+        android:visibility="gone"
+        android:layout_width="36dp"
+        android:layout_height="32dp"
+        android:layout_alignBaseline="@id/hl_str"
+        android:layout_gravity="right"
+        android:layout_margin="5dp"
+        android:layout_toLeftOf="@id/check"
+        android:background="@null"
+        android:gravity="center"
+        android:text="重试"
+        android:textColor="@color/light_blue"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/check"
+        android:layout_width="36dp"
+        android:layout_height="32dp"
+        android:layout_alignBaseline="@id/hl_str"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="right"
+        android:layout_margin="5dp"
+        android:background="@null"
+        android:gravity="center"
+        android:text="核查"
+        android:textColor="@color/light_blue"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

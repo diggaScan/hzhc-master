@@ -3,6 +3,7 @@ package com.sunland.hzhc.modules.ddc_module;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sunland.hzhc.Ac_base;
+import com.sunland.hzhc.DataModel;
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.bean.BaseRequestBean;
@@ -41,6 +43,8 @@ public class Ac_ddc_list extends Ac_base implements OnRequestCallback {
     private List<InfoDDCXQs> dataSet;
     private MyRvAdapter adapter;
 
+    private boolean isFromSsj;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +64,7 @@ public class Ac_ddc_list extends Ac_base implements OnRequestCallback {
                 hphm = bundle.getString("hphm");
                 fdjh = bundle.getString("fdjh");
                 cjh = bundle.getString("cjh");
+                isFromSsj = bundle.getBoolean(DataModel.FROM_SSJ_FLAG, false);
             }
         }
     }
@@ -100,11 +105,25 @@ public class Ac_ddc_list extends Ac_base implements OnRequestCallback {
         switch (reqName) {
             case Dictionary.GET_ELECTRIC_CAR_INFO:
                 DdcListResBean ddcListResBean = (DdcListResBean) bean;
+                if (ddcListResBean == null) {
+                    return;
+                }
+                List<InfoDDCXQs> infoDDCXQs = ddcListResBean.getInfoDDCXQs();
+                if (infoDDCXQs == null || infoDDCXQs.isEmpty()) {
+                    return;
+                }
                 dataSet.clear();
-                dataSet.addAll(ddcListResBean.getInfoDDCXQs());
+                dataSet.addAll(infoDDCXQs);
                 adapter.notifyDataSetChanged();
                 break;
         }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     @Override
@@ -147,7 +166,13 @@ public class Ac_ddc_list extends Ac_base implements OnRequestCallback {
                     bundle.putString("clpp", info.getClpp());
                     bundle.putString("cjh", info.getCjh());
                     bundle.putString("fdjh", info.getFdjh());
-                    hop2Activity(Ac_ddc.class, bundle);
+                    if (isFromSsj) {
+                        hopWithssj(Ac_ddc.class, bundle);
+                    } else {
+
+                        hop2Activity(Ac_ddc.class, bundle);
+                    }
+
                 }
             });
         }
@@ -175,4 +200,5 @@ public class Ac_ddc_list extends Ac_base implements OnRequestCallback {
             }
         }
     }
+
 }

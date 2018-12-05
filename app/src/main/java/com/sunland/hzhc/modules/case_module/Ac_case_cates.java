@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sunland.hzhc.Ac_base;
 import com.sunland.hzhc.Dictionary;
@@ -75,6 +76,9 @@ public class Ac_case_cates extends Ac_base implements OnRequestCallback {
         baseRequestBean.setYhdm("test");
         baseRequestBean.setImei(Global.imei);
         baseRequestBean.setImsi(Global.imsi1);
+        baseRequestBean.setLbr("02");
+        baseRequestBean.setGpsx("");
+        baseRequestBean.setGpsY("");
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String pda_time = simpleDateFormat.format(date);
@@ -87,8 +91,16 @@ public class Ac_case_cates extends Ac_base implements OnRequestCallback {
         switch (reqName) {
             case Dictionary.QUERY_ALL_CASE_CATEGORY:
                 CaseCateResBean caseCateResBean = (CaseCateResBean) bean;
+                if (caseCateResBean == null) {
+                    return;
+                }
+                List<LbList> lbList = caseCateResBean.getLbList();
+                if (lbList == null || lbList.isEmpty()) {
+                    Toast.makeText(this, "数据返回为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 dataSet.clear();
-                dataSet.addAll(caseCateResBean.getLbList());
+                dataSet.addAll(lbList);
                 adapter.notifyDataSetChanged();
                 break;
         }

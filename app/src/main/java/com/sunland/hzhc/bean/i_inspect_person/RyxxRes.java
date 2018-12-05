@@ -1,7 +1,7 @@
 package com.sunland.hzhc.bean.i_inspect_person;
 
-public class RyxxRes {
-    /**
+     public class RyxxRes {
+     /**
      * ryxxReq	人员信息
      * fhm	返回码	代码项，000：正常，101：异常
      * fhmbc	返回码备注	返回码备注

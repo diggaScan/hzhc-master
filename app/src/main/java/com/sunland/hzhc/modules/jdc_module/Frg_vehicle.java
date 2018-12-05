@@ -9,9 +9,11 @@ import android.widget.Toast;
 
 import com.concretejungle.spinbutton.SpinButton;
 import com.sunland.hzhc.Ac_main;
+import com.sunland.hzhc.DataModel;
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.Frg_base;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.modules.sfz_module.Ac_rycx;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +60,13 @@ public class Frg_vehicle extends Frg_base {
                 bundle.putString("hpzl", hpzl_num);
                 bundle.putString("fdjh", fdjh);
                 bundle.putString("clsbh", clsbh);
-                ((Ac_main) context).hop2Activity(Ac_clcx.class, bundle);
+                if (((Ac_main) context).isFromSsj) {
+                    bundle.putBoolean(DataModel.FROM_SSJ_FLAG, true);
+                    ((Ac_main) context).hopWithssj(Ac_clcx.class, bundle);
+                } else {
+
+                    ((Ac_main) context).hop2Activity(Ac_clcx.class, bundle);
+                }
                 break;
             case R.id.scan:
                 Intent mIntent = new Intent();

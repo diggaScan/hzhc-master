@@ -21,9 +21,17 @@ public class DataModel {
     public static final String[] PAPER_CATES = {"无数据"};
 
 
-    public static final String ACTION_NFC_READ_IDCARD_SUCCESS  =
+    public static final String ACTION_NFC_READ_IDCARD_SUCCESS =
             "cybertech.pstore.intent.action.NFC_READ_IDCARD_SUCCESS";
 
-    public static final String ACTION_NFC_READ_IDCARD_FAILURE  =
+    public static final String ACTION_NFC_READ_IDCARD_FAILURE =
             "cybertech.pstore.intent.action.NFC_READ_IDCARD_FAILURE";
+
+
+    public final static String RECORD_BUNDLE_TYPE = "RECORD_BUNDLE_TYPE"; //0人员  1 车辆 2非机动车
+    public final static String RECORD_BUNDLE_DATA = "RECORD_BUNDLE_DATA";
+    public final static String RECORD_BUNDLE_ADDR = "RECORD_BUNDLE_ADDR";//核查地点
+
+    public final static String FROM_SSJ_FLAG = "fromRandomRecord";
+
 }

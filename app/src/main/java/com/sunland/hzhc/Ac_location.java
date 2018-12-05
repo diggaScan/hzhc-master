@@ -118,8 +118,20 @@ public class Ac_location extends Ac_base {
         tv_enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String loc = et_address.getText().toString();
+                int chinese_num = 0;
+                for (char a : loc.toCharArray()) {
+                    if (isChinese(a)) {
+                        chinese_num++;
+                    }
+                }
+                if (chinese_num < 5) {
+                    Toast.makeText(Ac_location.this, "核查地址至少要有5个汉字", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (req_location == UserInfo.REQ_LOCATION) {
-                    UserInfo.hc_address = UserInfo.hc_address = et_address.getText().toString();
+                    UserInfo.hc_address = et_address.getText().toString();
                     setResult(RESULT_OK);
                     finish();
                 } else {

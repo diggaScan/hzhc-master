@@ -1,10 +1,11 @@
 package com.sunland.hzhc.modules.p_archive_module;
 
-import android.graphics.Color;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.sunland.hzhc.Ac_base;
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.Frg_base;
 import com.sunland.hzhc.R;
@@ -81,6 +82,12 @@ public class Frg_focus extends Frg_base implements OnRequestCallback {
                         public void run() {
                             LmhcResBean lmhcResBean = JsonUtils.fromJson(result, LmhcResBean.class);
                             tv_wanted.setText(lmhcResBean.getMessage());
+                            if (lmhcResBean.getStatus().equals("-1")) {
+                                tv_wanted.setTextColor(getResources().getColor(R.color.non_warning_color));
+                            } else {
+                                ((Ac_base) context).startVibrate();
+                                tv_wanted.setTextColor(getResources().getColor(R.color.warning_color));
+                            }
                         }
                     });
                 } catch (Exception e) {
@@ -135,12 +142,13 @@ public class Frg_focus extends Frg_base implements OnRequestCallback {
                 InspectPersonJsonRet inspectPersonJsonRet = (InspectPersonJsonRet) bean;
                 RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
                 if (ryxxRes != null) {
-                    tv_hcjg.setText(ryxxRes.getHcjg()+ryxxRes.getBjxx());
-                    if (ryxxRes.getFhm().equals("000")) {
-                        tv_hcjg.setTextColor(Color.GREEN);
+                    String result;
+                    if (ryxxRes.getHcjg().equals("000")) {
+                        result = "<font color=\"#d13931\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
                     } else {
-                        tv_hcjg.setTextColor(Color.RED);
+                        result = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
                     }
+                    tv_hcjg.setText(Html.fromHtml(result));
                 }
                 break;
         }

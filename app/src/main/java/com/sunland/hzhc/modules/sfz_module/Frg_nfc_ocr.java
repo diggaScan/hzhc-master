@@ -16,12 +16,11 @@ public class Frg_nfc_ocr extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("身份证识别")
-                .setItems(new String[]{"NFC扫描", "身份证扫描"}, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        ((Ac_main) getContext()).onChoose(which);
-                    }
-                });
+        builder.setItems(new String[]{"NFC扫描", "身份证扫描"}, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                ((Ac_main) getContext()).onChoose(which);
+            }
+        });
         return builder.create();
 
     }

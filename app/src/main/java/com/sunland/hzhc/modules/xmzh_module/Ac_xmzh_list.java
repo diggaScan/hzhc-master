@@ -90,9 +90,12 @@ public class Ac_xmzh_list extends Ac_base_info {
             case Dictionary.GET_PERSON_JOIN_INFO:
                 XmzhResBean xmzhResBean = (XmzhResBean) resultBase;
                 if (xmzhResBean != null) {
-                    dataSet.clear();
-                    dataSet.addAll(xmzhResBean.getPersonList());
-                    adapter.notifyDataSetChanged();
+                    List<PersonInfo> personInfos = xmzhResBean.getPersonList();
+                    if (personInfos != null && !personInfos.isEmpty()) {
+                        dataSet.clear();
+                        dataSet.addAll(personInfos);
+                        adapter.notifyDataSetChanged();
+                    }
                 }
                 break;
         }
@@ -158,7 +161,6 @@ public class Ac_xmzh_list extends Ac_base_info {
                 tv_address = itemView.findViewById(R.id.address);
                 tv_src = itemView.findViewById(R.id.src);
                 tv_container = itemView.findViewById(R.id.container);
-
             }
         }
     }

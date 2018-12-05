@@ -55,6 +55,7 @@ public class Ac_internet_cafe_names extends Ac_base implements OnRequestCallback
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.ac_internet_cafe_names);
         showNavIcon(true);
+        setToolbarTitle("网吧列表");
         readZdDb();
         showDistrict();
         mRequestManager = new RequestManager(this, this);
@@ -182,6 +183,9 @@ public class Ac_internet_cafe_names extends Ac_base implements OnRequestCallback
         baseRequestBean.setYhdm("test");
         baseRequestBean.setImei(Global.imei);
         baseRequestBean.setImsi(Global.imsi1);
+        baseRequestBean.setLbr("02");
+        baseRequestBean.setGpsx("");
+        baseRequestBean.setGpsY("");
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String pda_time = simpleDateFormat.format(date);
@@ -192,6 +196,13 @@ public class Ac_internet_cafe_names extends Ac_base implements OnRequestCallback
     @Override
     public <T> void onRequestFinish(String reqId, String reqName, T bean) {
         WbListResBean wbListResBean = (WbListResBean) bean;
+        if (wbListResBean == null) {
+            return;
+        }
+        List<WbBaseInfo> wbBaseInfos = wbListResBean.getResps();
+        if (wbBaseInfos == null || wbBaseInfos.isEmpty()) {
+            return;
+        }
         wbmcs.clear();
         wbbh.clear();
         for (WbBaseInfo info : wbListResBean.getResps()) {

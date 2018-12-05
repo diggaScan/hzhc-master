@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.sunland.hzhc.DataModel;
 import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.UserInfo;
@@ -19,6 +21,7 @@ import com.sunland.hzhc.bean.i_inspect_person.InspectPersonReqBean;
 import com.sunland.hzhc.bean.i_inspect_person.Request;
 import com.sunland.hzhc.bean.i_inspect_person.RyxxReq;
 import com.sunland.hzhc.bean.i_inspect_person.RyxxRes;
+import com.sunland.hzhc.bean.ssjBean.NonVehicleInfo;
 import com.sunland.hzhc.modules.Ac_base_info;
 import com.sunland.hzhc.modules.lmhc_module.LmhcResBean;
 import com.sunland.hzhc.modules.lmhc_module.MyTaskParams;
@@ -61,12 +64,15 @@ public class Ac_ddc extends Ac_base_info {
     public TextView tv_fdj_sequence;
     @BindView(R.id.xp)
     public ImageView iv_xp;
+
     private String sfzh;
     private String czxm;
     private String hphm;
     private String clpp;
     private String cjh;
     private String fdjh;
+
+    private boolean isFromSsj;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +98,7 @@ public class Ac_ddc extends Ac_base_info {
                 clpp = bundle.getString("clpp");
                 cjh = bundle.getString("cjh");
                 fdjh = bundle.getString("fdjh");
+                isFromSsj = bundle.getBoolean(DataModel.FROM_SSJ_FLAG, false);
             }
         }
     }
@@ -223,7 +230,7 @@ public class Ac_ddc extends Ac_base_info {
         }
     }
 
-    @OnClick({R.id.ddc_check, R.id.focus})
+    @OnClick({R.id.ddc_check, R.id.focus, R.id.ssj})
     public void onClick(View view) {
         int id = view.getId();
         Bundle bundle = new Bundle();
@@ -237,7 +244,43 @@ public class Ac_ddc extends Ac_base_info {
                 bundle.putInt("tab_id", 1);
                 hop2Activity(Ac_archive.class, bundle);
                 break;
+            case R.id.ssj:
+                Intent intent = new Intent();
+                NonVehicleInfo nonVehicleInfo = new NonVehicleInfo();
+                initNonVehicleInfo(nonVehicleInfo);
+                if (isFromSsj) {
+                    bundle.putInt(DataModel.RECORD_BUNDLE_TYPE, 2);
+                    bundle.putString(DataModel.RECORD_BUNDLE_ADDR, UserInfo.hc_address);
+                    bundle.putString(DataModel.RECORD_BUNDLE_DATA, new Gson().toJson(nonVehicleInfo));
+                    intent.putExtra("bundle", bundle);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else {
+                    intent.setAction("com.sunland.action.record");
+                    bundle.putInt(DataModel.RECORD_BUNDLE_TYPE, 2);
+                    bundle.putString(DataModel.RECORD_BUNDLE_ADDR, UserInfo.hc_address);
+                    bundle.putString(DataModel.RECORD_BUNDLE_DATA, new Gson().toJson(nonVehicleInfo));
+                    intent.putExtras(bundle);
+                    try {
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                break;
         }
+    }
+
+    private void initNonVehicleInfo(NonVehicleInfo nonVehicleInfo) {
+        nonVehicleInfo.setCph(hphm);
+        nonVehicleInfo.setSfzh(sfzh);
+        nonVehicleInfo.setXm(czxm);
+        nonVehicleInfo.setPp(clpp);
+        nonVehicleInfo.setCjh(cjh);
+        nonVehicleInfo.setFdjh(fdjh);
+//        nonVehicleInfo.setFjdcxlh(fjdcxlh);无该参数字段
+
     }
 
 }

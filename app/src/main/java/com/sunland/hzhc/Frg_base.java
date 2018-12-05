@@ -78,6 +78,9 @@ public abstract class Frg_base extends Fragment {
         baseRequestBean.setYhdm("test");
         baseRequestBean.setImei(Global.imei);
         baseRequestBean.setImsi(Global.imsi1);
+        baseRequestBean.setLbr("02");
+        baseRequestBean.setGpsx("");
+        baseRequestBean.setGpsY("");
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String pda_time = simpleDateFormat.format(date);

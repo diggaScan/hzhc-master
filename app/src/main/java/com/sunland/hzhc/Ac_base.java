@@ -2,6 +2,7 @@ package com.sunland.hzhc;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +16,8 @@ import com.sunlandgroup.Global;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
 
@@ -25,6 +28,9 @@ public class Ac_base extends AppCompatActivity {
     public TextView tb_title;
     public ImageView iv_nav;
     public FrameLayout container;
+    public Vibrator vibrator;
+
+    public final int REQ_SSJ = 1;//请求随手记内容
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +49,9 @@ public class Ac_base extends AppCompatActivity {
             }
         });
         setSupportActionBar(toolbar);
+
+
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
     }
 
     public void setContentLayout(int layout) {
@@ -74,11 +83,13 @@ public class Ac_base extends AppCompatActivity {
         baseRequestBean.setYhdm("test");
         baseRequestBean.setImei(Global.imei);
         baseRequestBean.setImsi(Global.imsi1);
+        baseRequestBean.setLbr("02");
+        baseRequestBean.setGpsx("");
+        baseRequestBean.setGpsY("");
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String pda_time = simpleDateFormat.format(date);
         baseRequestBean.setPdaTime(pda_time);
-
     }
 
     public void hop2Activity(Class<? extends Ac_base> clazz) {
@@ -96,6 +107,30 @@ public class Ac_base extends AppCompatActivity {
         Intent intent = new Intent(this, clazz);
         intent.putExtra("bundle", bundle);
         startActivityForResult(intent, flag);
+    }
+
+    public void hopWithssj(Class<? extends Ac_base> clazz, Bundle bundle) {
+        Intent intent = new Intent(this, clazz);
+        intent.putExtra("bundle", bundle);
+        startActivityForResult(intent, REQ_SSJ);
+    }
+
+    public void startVibrate() {
+        vibrator.vibrate(new long[]{500, 1000, 500, 1000}, -1);
+    }
+
+    public void stopVibrate() {
+        vibrator.cancel();
+    }
+
+    public static boolean isChinese(char str) {
+        String regEx = "[\u4e00-\u9fa5]";
+        Pattern pat = Pattern.compile(regEx);
+        Matcher matcher = pat.matcher(String.valueOf(str));
+        boolean flg = false;
+        if (matcher.find())
+            flg = true;
+        return flg;
     }
 
 

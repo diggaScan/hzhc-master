@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -30,7 +31,13 @@
         </activity>
         <activity
             android:name=".Ac_main"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden">
+            <intent-filter>
+                <action android:name="com.sunland.hzhc.intent.action.QUERY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".Ac_module_list" />
         <activity android:name=".modules.sfz_module.Ac_rycx" />
         <activity android:name=".modules.jdc_module.Ac_clcx" />
@@ -51,7 +58,8 @@
         <activity android:name=".modules.case_module.Ac_case_detail" />
         <activity android:name=".modules.own_car_module.Ac_car_list" />
         <activity android:name=".modules.sfz_module.Ac_reg_fdjc" />
-        <activity android:name=".modules.sfz_module.Ac_dh"></activity>
+        <activity android:name=".modules.sfz_module.Ac_dh" />
+        <activity android:name=".modules.batch_check.Ac_batch_check"></activity>
     </application>
 
 </manifest>

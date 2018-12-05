@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.sunland.hzhc.modules.batch_check.Ac_batch_check;
 import com.sunland.hzhc.utils.WindowInfoUtils;
 
 import java.util.Arrays;
@@ -49,6 +50,7 @@ public class Ac_module_list extends Ac_base {
             toolbar.setLayoutParams(lp);
             toolbar.setBackgroundColor(getResources().getColor(R.color.app_background));
         }
+
         MyModuleListAdapter adapter = new MyModuleListAdapter(Arrays.asList(Dictionary.MODULES_ICON)
                 , Arrays.asList(Dictionary.MODULE_NAMES));
         GridLayoutManager manager = new GridLayoutManager(this, 5);
@@ -81,13 +83,16 @@ public class Ac_module_list extends Ac_base {
             myViewHolder.rl_container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (i <= 9) {
+                    if (i <= 8) {
                         Intent intent = new Intent();
                         intent.putExtra("position", i);
                         setResult(RESULT_OK, intent);
                         finish();
                     }
+                    if (i == 9) {
+                        hop2Activity(Ac_batch_check.class);
 
+                    }
                 }
             });
             myViewHolder.tv_name.setText(names.get(i));

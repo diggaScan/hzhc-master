@@ -32,4 +32,8 @@
     <color name="str_color">#000000</color>
     <color name="content_color">#585858</color>
 
+
+    <!--警告颜色 -->
+    <color name="warning_color">#d13931</color>
+    <color name="non_warning_color">#05b163</color>
 </resources>

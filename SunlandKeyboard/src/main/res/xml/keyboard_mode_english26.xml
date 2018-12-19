@@ -20,8 +20,8 @@
 
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
     android:horizontalGap="0px"
-    android:keyHeight="10%p"
     android:keyWidth="10%p"
+    android:keyHeight="10%p"
     android:verticalGap="0px">
 
     <Row>
@@ -131,9 +131,9 @@
             android:codes="@integer/KEYBORD_SHIFT"
             android:isModifier="true"
             android:isSticky="false"
+            android:keyWidth="15%p"
             android:keyEdgeFlags="left"
-            android:keyLabel="大写"
-            android:keyWidth="15%p" />
+            android:keyLabel="大写" />
         <Key
             android:codes="@integer/KEYBORD_ENGLISH_z"
             android:keyLabel="z" />
@@ -158,35 +158,35 @@
         <Key
             android:codes="@integer/KEYBORD_DEL"
             android:isRepeatable="true"
+            android:keyWidth="15%p"
             android:keyEdgeFlags="right"
-            android:keyIcon="@drawable/del"
-            android:keyWidth="15%p" />
+            android:keyIcon="@drawable/delete" />
     </Row>
     <Row android:rowEdgeFlags="bottom">
         <Key
             android:codes="@integer/KEYBORD_CHINESE"
+            android:keyWidth="20%p"
             android:keyEdgeFlags="left"
-            android:keyLabel="中文"
-            android:keyWidth="20%p" />
+            android:keyLabel="中文" />
         <Key
             android:codes="@integer/KEYBORD_NUM"
-            android:keyLabel="123"
-            android:keyWidth="15%p" />
+            android:keyWidth="15%p"
+            android:keyLabel="123" />
         <Key
             android:codes="@integer/KEYBORD_BLANK"
             android:isRepeatable="true"
-            android:keyIcon="@drawable/backspace"
-            android:keyWidth="30%p" />
+            android:keyWidth="30%p"
+            android:keyIcon="@drawable/backspace" />
         <Key
             android:codes="@integer/KEYBORD_SYMBOLS"
-            android:keyLabel="符号"
-            android:keyWidth="15%p" />
+            android:keyWidth="15%p"
+            android:keyLabel="符号" />
 
         <Key
             android:codes="@integer/KEYBORD_DONE"
+            android:keyWidth="20%p"
             android:keyEdgeFlags="right"
-            android:keyLabel="完成"
-            android:keyWidth="20%p" />
+            android:keyLabel="完成" />
     </Row>
 
 </Keyboard>

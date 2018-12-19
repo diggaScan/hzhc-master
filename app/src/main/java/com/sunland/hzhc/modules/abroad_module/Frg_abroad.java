@@ -2,15 +2,11 @@ package com.sunland.hzhc.modules.abroad_module;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.CursorJoiner;
-import android.graphics.Interpolator;
 import android.view.View;
 import android.widget.TextView;
 
 import com.concretejungle.spinbutton.SpinButton;
-import com.sunland.hzhc.Ac_base;
-import com.sunland.hzhc.Ac_main;
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.Frg_base;
 import com.sunland.hzhc.R;
 
@@ -38,7 +34,7 @@ public class Frg_abroad extends Frg_base {
     @Override
     public void initView() {
         sb_paper_cate.setHeaderTitle("选择文件类型");
-        sb_paper_cate.setDataSet(Arrays.asList(Dictionary.PAPER_CATEGORIES));
+        sb_paper_cate.setDataSet(Arrays.asList(V_config.PAPER_CATEGORIES));
     }
 
     @OnClick(R.id.nation)

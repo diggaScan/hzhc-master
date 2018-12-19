@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.sunland.hzhc.Ac_main;
@@ -11,6 +13,7 @@ import com.sunland.hzhc.DataModel;
 import com.sunland.hzhc.Frg_base;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.utils.UtilsString;
+import com.sunland.sunlandkeyboard.SunlandKeyBoardManager;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -19,6 +22,10 @@ public class Frg_id extends Frg_base {
 
     @BindView(R.id.id_input)
     public EditText et_id;
+    @BindView(R.id.relativeLayout)
+    public RelativeLayout rl_relativeLayout;
+    @BindView(R.id.scrollView)
+    public ScrollView scrollView;
 
     @Override
     public int setLayoutId() {
@@ -27,7 +34,8 @@ public class Frg_id extends Frg_base {
 
     @Override
     public void initView() {
-
+        ((Ac_main) context).sunlandKeyBoardManager.addTarget(((Ac_main) context).myKeyBoardView, et_id,
+                SunlandKeyBoardManager.KeyboardMode.IDENTITY);
     }
 
     @OnClick({R.id.query, R.id.nfc_scan})
@@ -49,7 +57,6 @@ public class Frg_id extends Frg_base {
                     bundle.putString("id", identity);
                     ((Ac_main) context).hop2Activity(Ac_rycx.class, bundle);
                 }
-
                 break;
             case R.id.nfc_scan:
                 Frg_nfc_ocr frg_nfc_ocr = new Frg_nfc_ocr();
@@ -66,4 +73,6 @@ public class Frg_id extends Frg_base {
     public void updateViews(String num) {
         et_id.setText(num);
     }
+
+
 }

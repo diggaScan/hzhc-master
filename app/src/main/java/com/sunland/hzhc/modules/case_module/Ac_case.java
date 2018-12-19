@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.Ac_base_info;
@@ -48,7 +48,7 @@ public class Ac_case extends Ac_base_info {
         showNavIcon(true);
         setToolbarTitle("案件列表");
         dataSet = new ArrayList<>();
-        queryYdjwData(Dictionary.CASE_INFO);
+        queryYdjwData(V_config.CASE_INFO);
     }
 
 
@@ -84,7 +84,7 @@ public class Ac_case extends Ac_base_info {
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
         switch (reqName) {
-            case Dictionary.CASE_INFO:
+            case V_config.CASE_INFO:
                 CaseListResBean caseListResBean = (CaseListResBean) resultBase;
                 dataSet.clear();
                 List<InfoAJLB> infoAJLBS = caseListResBean.getInfoAJLBs();

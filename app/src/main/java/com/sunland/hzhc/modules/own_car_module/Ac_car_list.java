@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sunland.hzhc.Ac_base;
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.jdc_module.CzsycReqBean;
@@ -47,7 +47,7 @@ public class Ac_car_list extends Ac_base implements OnRequestCallback {
         setToolbarTitle("名下机动车");
         handleIntent();
         initView();
-        queryYdjwData(Dictionary.GET_CAR_INFO_BY_SFZH);
+        queryYdjwData(V_config.GET_CAR_INFO_BY_SFZH);
     }
 
     private void handleIntent() {

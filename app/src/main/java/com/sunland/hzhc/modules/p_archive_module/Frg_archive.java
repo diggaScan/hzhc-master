@@ -2,7 +2,7 @@ package com.sunland.hzhc.modules.p_archive_module;
 
 import android.widget.TextView;
 
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.Frg_base;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.bean.BaseRequestBean;
@@ -72,7 +72,7 @@ public class Frg_archive extends Frg_base implements OnRequestCallback {
     @Override
     public void initView() {
         mRequestManager = new RequestManager(context, this);
-        queryYdjwData(Dictionary.GET_PERSON_INFO_BY_SFZH);
+        queryYdjwData(V_config.GET_PERSON_INFO_BY_SFZH);
     }
 
     public void queryYdjwData(String method_name) {

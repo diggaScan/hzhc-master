@@ -21,9 +21,9 @@ public class WindowInfoUtils {
     }
 
 
-    public static int getActionBarHeight(Context context){
-        if(context instanceof AppCompatActivity){
-            return ((AppCompatActivity)context).getSupportActionBar().getHeight();
+    public static int getActionBarHeight(Context context) {
+        if (context instanceof AppCompatActivity) {
+            return ((AppCompatActivity) context).getSupportActionBar().getHeight();
         }
         return -1;
     }

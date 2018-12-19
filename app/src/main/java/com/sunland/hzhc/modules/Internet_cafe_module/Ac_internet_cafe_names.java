@@ -8,7 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.sunland.hzhc.Ac_base;
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.Internet_cafe_module.bean.WbBaseInfo;
@@ -59,7 +59,7 @@ public class Ac_internet_cafe_names extends Ac_base implements OnRequestCallback
         readZdDb();
         showDistrict();
         mRequestManager = new RequestManager(this, this);
-        queryNames(Dictionary.GET_INTERNET_CAFE_INFO);
+        queryNames(V_config.GET_INTERNET_CAFE_INFO);
     }
 
     private void readZdDb() {
@@ -169,7 +169,7 @@ public class Ac_internet_cafe_names extends Ac_base implements OnRequestCallback
 
     private BaseRequestBean assembleRequestObj(String reqName) {
         switch (reqName) {
-            case Dictionary.GET_INTERNET_CAFE_INFO:
+            case V_config.GET_INTERNET_CAFE_INFO:
                 WbListReqBean bean = new WbListReqBean();
                 assembleBasicObj(bean);
                 bean.setCurrentPage(1);
@@ -184,7 +184,7 @@ public class Ac_internet_cafe_names extends Ac_base implements OnRequestCallback
         baseRequestBean.setImei(Global.imei);
         baseRequestBean.setImsi(Global.imsi1);
         baseRequestBean.setLbr("02");
-        baseRequestBean.setGpsx("");
+        baseRequestBean.setGpsX("");
         baseRequestBean.setGpsY("");
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

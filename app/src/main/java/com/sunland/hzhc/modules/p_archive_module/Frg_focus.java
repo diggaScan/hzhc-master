@@ -6,7 +6,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.sunland.hzhc.Ac_base;
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.Frg_base;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.UserInfo;
@@ -62,8 +62,8 @@ public class Frg_focus extends Frg_base implements OnRequestCallback {
         btn_focus.setVisibility(View.GONE);
         btn_retry.setVisibility(View.GONE);
         sfzh = ((Ac_archive) context).identity_num;
-//        queryYdjwData(Dictionary.PERSON_FOCUS_INFO);
-        queryYdjwData(Dictionary.INSPECT_PERSON);
+//        queryYdjwData(V_config.PERSON_FOCUS_INFO);
+        queryYdjwData(V_config.INSPECT_PERSON);
 
         new Thread(new Runnable() {
             @Override
@@ -106,12 +106,12 @@ public class Frg_focus extends Frg_base implements OnRequestCallback {
 
     public BaseRequestBean assembleRequestObj(String reqName) {
         switch (reqName) {
-            case Dictionary.PERSON_FOCUS_INFO:
+            case V_config.PERSON_FOCUS_INFO:
                 FocusReqBean focusReqBean = new FocusReqBean();
                 assembleBasicObj(focusReqBean);
                 focusReqBean.setSfzh(sfzh);
                 return focusReqBean;
-            case Dictionary.INSPECT_PERSON:
+            case V_config.INSPECT_PERSON:
                 InspectPersonReqBean inspectPersonReqBean = new InspectPersonReqBean();
                 assembleBasicObj(inspectPersonReqBean);
                 Request request = new Request();
@@ -134,11 +134,11 @@ public class Frg_focus extends Frg_base implements OnRequestCallback {
     @Override
     public <T> void onRequestFinish(String reqId, String reqName, T bean) {
         switch (reqName) {
-            case Dictionary.PERSON_FOCUS_INFO:
+            case V_config.PERSON_FOCUS_INFO:
                 PeopleFocusResBean peopleFocusResBean = (PeopleFocusResBean) bean;
                 gzxx_list = peopleFocusResBean.getGzxxList();
                 break;
-            case Dictionary.INSPECT_PERSON:
+            case V_config.INSPECT_PERSON:
                 InspectPersonJsonRet inspectPersonJsonRet = (InspectPersonJsonRet) bean;
                 RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
                 if (ryxxRes != null) {
@@ -157,9 +157,9 @@ public class Frg_focus extends Frg_base implements OnRequestCallback {
     @Override
     public <T extends ResultBase> Class<?> getBeanClass(String reqId, String reqName) {
         switch (reqName) {
-            case Dictionary.PERSON_FOCUS_INFO:
+            case V_config.PERSON_FOCUS_INFO:
                 return PeopleFocusResBean.class;
-            case Dictionary.INSPECT_PERSON:
+            case V_config.INSPECT_PERSON:
                 return InspectPersonJsonRet.class;
         }
         return null;

@@ -1,88 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="3dp">
+        android:fillViewport="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/module_title_shape"
-            android:padding="@dimen/module_title_padding"
-            android:text="身份证查询"
-            android:textColor="@color/white"
-            android:textSize="@dimen/module_title_size"
-            android:textStyle="bold" />
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="3dp">
 
-        <EditText
-            android:id="@+id/id_input"
-            android:layout_width="200dp"
-            android:layout_height="@dimen/input_height"
-            android:layout_alignLeft="@id/query"
-            android:layout_centerInParent="true"
-            android:background="@null"
-            android:digits="1234567890xX"
-            android:ems="10"
-            android:gravity="center"
-            android:hint="输入身份证号码"
-            android:inputType="number"
-            android:maxLength="18"
-            android:paddingLeft="10dp"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textColorHint="@color/hint_color" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/module_title_shape"
+                android:padding="@dimen/module_title_padding"
+                android:text="身份证查询"
+                android:textColor="@color/white"
+                android:textSize="@dimen/module_title_size"
+                android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/nfc_scan"
-            android:layout_width="33dp"
-            android:layout_height="33dp"
-            android:layout_alignRight="@id/query"
-            android:layout_alignBottom="@id/id_input"
-            android:layout_toRightOf="@id/id_input"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_nfc_scan" />
+            <EditText
+                android:id="@+id/id_input"
+                android:layout_width="200dp"
+                android:layout_height="@dimen/input_height"
+                android:layout_alignLeft="@id/query"
+                android:layout_centerInParent="true"
+                android:background="@null"
+                android:digits="1234567890xX"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="输入身份证号码"
+                android:inputType="number"
+                android:maxLength="18"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/hint_color" />
 
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_below="@id/id_input"
-            android:layout_alignLeft="@id/id_input"
-            android:layout_alignRight="@id/nfc_scan"
-            android:layout_marginTop="3dp"
-            android:background="@color/white" />
+            <ImageView
+                android:id="@+id/nfc_scan"
+                android:layout_width="33dp"
+                android:layout_height="33dp"
+                android:layout_alignRight="@id/query"
+                android:layout_alignBottom="@id/id_input"
+                android:layout_toRightOf="@id/id_input"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_nfc_scan" />
 
 
-        <TextView
-            android:id="@+id/tip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/id_input"
-            android:layout_alignLeft="@+id/id_input"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:text="注：输入15或18位身份证号码"
-            android:textColor="@color/white"
-            android:textSize="10sp" />
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_below="@id/id_input"
+                android:layout_alignLeft="@id/id_input"
+                android:layout_alignRight="@id/nfc_scan"
+                android:layout_marginTop="3dp"
+                android:background="@color/white" />
 
 
-        <Button
-            android:id="@+id/query"
-            android:layout_width="@dimen/input_width"
-            android:layout_height="@dimen/input_height"
-            android:layout_below="@id/tip"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/round_location_enter_bkg"
-            android:text="查询"
-            android:textColor="@color/white" />
+            <TextView
+                android:id="@+id/tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/id_input"
+                android:layout_alignLeft="@+id/id_input"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:text="注：输入15或18位身份证号码"
+                android:textColor="@color/white"
+                android:textSize="10sp" />
 
 
-    </RelativeLayout>
-
-</ScrollView>
+            <Button
+                android:id="@+id/query"
+                android:layout_width="@dimen/input_width"
+                android:layout_height="@dimen/input_height"
+                android:layout_below="@id/tip"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/round_location_enter_bkg"
+                android:text="查询"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+    </ScrollView>
+</FrameLayout>

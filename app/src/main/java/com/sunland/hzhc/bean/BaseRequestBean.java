@@ -10,7 +10,7 @@ public class BaseRequestBean {
     public String imsi;
     public String pdaTime;
     public String Lbr;//版本号
-    public String gpsx;//经度
+    public String gpsX;//经度
     public String gpsY;//纬度
 
     public String getYhdm() {
@@ -53,12 +53,12 @@ public class BaseRequestBean {
         Lbr = lbr;
     }
 
-    public String getGpsx() {
-        return gpsx;
+    public String getGpsX() {
+        return gpsX;
     }
 
-    public void setGpsx(String gpsx) {
-        this.gpsx = gpsx;
+    public void setGpsX(String gpsX) {
+        this.gpsX = gpsX;
     }
 
     public String getGpsY() {

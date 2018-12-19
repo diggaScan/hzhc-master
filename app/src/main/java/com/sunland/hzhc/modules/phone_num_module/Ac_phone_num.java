@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.Ac_base_info;
@@ -44,7 +44,7 @@ public class Ac_phone_num extends Ac_base_info {
         setToolbarTitle("人员列表");
 
         dataSet = new ArrayList<>();
-        queryYdjwData(Dictionary.GET_PERSON_MOBILE_JOIN_INFO);
+        queryYdjwData(V_config.GET_PERSON_MOBILE_JOIN_INFO);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class Ac_phone_num extends Ac_base_info {
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
         switch (reqName) {
-            case Dictionary.GET_PERSON_MOBILE_JOIN_INFO:
+            case V_config.GET_PERSON_MOBILE_JOIN_INFO:
                 RyPhoneResBean ryPhoneResBean = (RyPhoneResBean) resultBase;
                 dataSet.clear();
                 dataSet.addAll(ryPhoneResBean.getRyInfos());

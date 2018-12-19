@@ -2,7 +2,7 @@ package com.sunland.hzhc;
 
 import java.util.LinkedHashMap;
 
-public class Dictionary {
+public class V_config {
 
     public final static String[] VEHICLEMODELS = {
             "小型汽车", "大型汽车", "使馆汽车", "领馆汽车", "境外汽车",
@@ -22,7 +22,8 @@ public class Dictionary {
 
     public final static String[] GENDER = {"男", "女"};
 
-
+    //    0. 登录接口
+    public final static String USER_LOGIN = "queryUsermessage";
     //    1.查询案件蓑鲉管辖单位
     public static final String QUERY_ALL_CASE_INFO = "queryAllCaseInfo";
     //    2.查询案件所有类别信息

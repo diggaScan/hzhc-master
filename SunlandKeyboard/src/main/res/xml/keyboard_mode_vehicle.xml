@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
     android:horizontalGap="0px"
-    android:keyHeight="10%p"
     android:keyWidth="14.28%p"
+    android:keyHeight="10%p"
     android:verticalGap="0px">
 
     <Row>
@@ -94,9 +94,15 @@
         <Key
             android:codes="@integer/KEYBORD_VEHICLE_FJ"
             android:keyLabel="闽" />
+        <Key
+            android:codes="@integer/KEYBORD_DEL"
+            android:isRepeatable="true"
+            android:keyWidth="15%p"
+            android:keyEdgeFlags="right"
+            android:keyIcon="@drawable/delete" />
         <!--<Key-->
-            <!--android:codes="@integer/KEYBORD_VEHICLE_SHANX"-->
-            <!--android:keyLabel="陕" />-->
+        <!--android:codes="@integer/KEYBORD_VEHICLE_SHANX"-->
+        <!--android:keyLabel="陕" />-->
     </Row>
     <Row>
         <Key
@@ -118,8 +124,8 @@
             android:codes="@integer/KEYBORD_CHINESE"
             android:keyLabel="中文" />
         <!--<Key-->
-            <!--android:codes="@integer/KEYBORD_CHARACTER_NONE"-->
-            <!--android:keyLabel="无" />-->
+        <!--android:codes="@integer/KEYBORD_CHARACTER_NONE"-->
+        <!--android:keyLabel="无" />-->
         <Key
             android:codes="@integer/KEYBORD_DONE"
             android:keyLabel="完成" />

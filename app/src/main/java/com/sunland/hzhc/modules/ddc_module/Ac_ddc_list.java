@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.sunland.hzhc.Ac_base;
 import com.sunland.hzhc.DataModel;
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.ddc_module.bean.DdcListResBean;
@@ -77,7 +77,7 @@ public class Ac_ddc_list extends Ac_base implements OnRequestCallback {
         rv_ddc_list.setLayoutManager(manager);
         rv_ddc_list.addItemDecoration(new Rv_Item_decoration(this));
         mRequestManager = new RequestManager(this, this);
-        queryYdjwData(Dictionary.GET_ELECTRIC_CAR_INFO);
+        queryYdjwData(V_config.GET_ELECTRIC_CAR_INFO);
     }
 
     public void queryYdjwData(String method_name) {
@@ -88,7 +88,7 @@ public class Ac_ddc_list extends Ac_base implements OnRequestCallback {
 
     public BaseRequestBean assembleRequestObj(String reqName) {
         switch (reqName) {
-            case Dictionary.GET_ELECTRIC_CAR_INFO:
+            case V_config.GET_ELECTRIC_CAR_INFO:
                 DdcxxplReqBean ddcxxplReqBean = new DdcxxplReqBean();
                 ddcxxplReqBean.setCurrentPage(1);
                 ddcxxplReqBean.setTotalCount(50);
@@ -103,7 +103,7 @@ public class Ac_ddc_list extends Ac_base implements OnRequestCallback {
     @Override
     public <T> void onRequestFinish(String reqId, String reqName, T bean) {
         switch (reqName) {
-            case Dictionary.GET_ELECTRIC_CAR_INFO:
+            case V_config.GET_ELECTRIC_CAR_INFO:
                 DdcListResBean ddcListResBean = (DdcListResBean) bean;
                 if (ddcListResBean == null) {
                     return;
@@ -123,6 +123,15 @@ public class Ac_ddc_list extends Ac_base implements OnRequestCallback {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_SSJ) {
+            if (resultCode == RESULT_OK) {
+                Bundle bundle = data.getBundleExtra("bundle");
+                Intent intent = new Intent();
+                intent.putExtras(bundle);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        }
 
     }
 
@@ -167,6 +176,7 @@ public class Ac_ddc_list extends Ac_base implements OnRequestCallback {
                     bundle.putString("cjh", info.getCjh());
                     bundle.putString("fdjh", info.getFdjh());
                     if (isFromSsj) {
+                        bundle.putBoolean(DataModel.FROM_SSJ_FLAG, true);
                         hopWithssj(Ac_ddc.class, bundle);
                     } else {
 

@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.Frg_base;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.bean.BaseRequestBean;
@@ -51,7 +51,7 @@ public class Frg_track extends Frg_base implements OnRequestCallback {
         rv_track_infos.setAdapter(adapter);
         rv_track_infos.setLayoutManager(manager);
         rv_track_infos.addItemDecoration(new Rv_Item_decoration(context));
-        queryYdjwData(Dictionary.PERSON_LOCUS_INFOS);
+        queryYdjwData(V_config.PERSON_LOCUS_INFOS);
 
 
     }

@@ -8,7 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.sunland.hzhc.Ac_base;
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.case_module.bean.DwBaseInfo;
@@ -59,7 +59,7 @@ public class Ac_case_gxdw extends Ac_base implements OnRequestCallback {
         mRequestManager = new RequestManager(this, this);
         readDb();
         showDistricts();
-        queryCaseGxdw(Dictionary.QUERY_ALL_CASE_INFO);
+        queryCaseGxdw(V_config.QUERY_ALL_CASE_INFO);
     }
 
     private void readDb() {
@@ -152,7 +152,7 @@ public class Ac_case_gxdw extends Ac_base implements OnRequestCallback {
         baseRequestBean.setImei(Global.imei);
         baseRequestBean.setImsi(Global.imsi1);
         baseRequestBean.setLbr("02");
-        baseRequestBean.setGpsx("");
+        baseRequestBean.setGpsX("");
         baseRequestBean.setGpsY("");
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

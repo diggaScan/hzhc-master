@@ -8,7 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.sunland.hzhc.Ac_base;
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.Hotel_module.bean.LgBaseInfo;
@@ -58,7 +58,7 @@ public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
         initView();
         readDb();
         mRequestManager = new RequestManager(this, this);
-        queryHotelNames(Dictionary.GET_ALL_HOTELS);
+        queryHotelNames(V_config.GET_ALL_HOTELS);
 
     }
 
@@ -69,7 +69,7 @@ public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
         all_lg_code = new ArrayList<>();
 
 
-        d_adapter = new Rv_Jg_adapter(this, Arrays.asList(Dictionary.HANGZHOU_DISTRICTS));
+        d_adapter = new Rv_Jg_adapter(this, Arrays.asList(V_config.HANGZHOU_DISTRICTS));
         h_adapter = new Rv_Jg_adapter(this, dataSet_hotels);
 
         d_adapter.setOnItemClickedListener(new Rv_Jg_adapter.OnItemClickedListener() {
@@ -82,7 +82,7 @@ public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
                     lgdm.addAll(all_lg_code);
                     h_adapter.notifyDataSetChanged();
                 } else {
-                    showLglb(Dictionary.HANGZHOU_DISTRICT_CODE[position] + "%");
+                    showLglb(V_config.HANGZHOU_DISTRICT_CODE[position] + "%");
                 }
             }
         });
@@ -141,7 +141,7 @@ public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
 
     private BaseRequestBean assembleRequestObj(String reqName) {
         switch (reqName) {
-            case Dictionary.GET_ALL_HOTELS:
+            case V_config.GET_ALL_HOTELS:
                 BaseRequestBean bean = new BaseRequestBean();
                 assembleBasicObj(bean);
                 return bean;
@@ -154,7 +154,7 @@ public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
         baseRequestBean.setImei(Global.imei);
         baseRequestBean.setImsi(Global.imsi1);
         baseRequestBean.setLbr("02");
-        baseRequestBean.setGpsx("");
+        baseRequestBean.setGpsX("");
         baseRequestBean.setGpsY("");
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

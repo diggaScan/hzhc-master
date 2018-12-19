@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.sunland.hzhc.Ac_location;
 import com.sunland.hzhc.DataModel;
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.UserInfo;
 import com.sunland.hzhc.bean.BaseRequestBean;
@@ -103,8 +103,8 @@ public class Ac_clcx extends Ac_base_info {
         setContentLayout(R.layout.ac_clcx);
         showNavIcon(true);
         setToolbarTitle("机动车信息");
-        queryYdjwData(Dictionary.CAR_INFO_JOIN);
-        queryYdjwData(Dictionary.INSPECT_CAR);
+        queryYdjwData(V_config.CAR_INFO_JOIN);
+        queryYdjwData(V_config.INSPECT_CAR);
         initView();
     }
 
@@ -130,7 +130,7 @@ public class Ac_clcx extends Ac_base_info {
     @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
         switch (reqName) {
-            case Dictionary.CAR_INFO_JOIN:
+            case V_config.CAR_INFO_JOIN:
                 ClxxzhReqBean bean = new ClxxzhReqBean();
                 assembleBasicObj(bean);
                 CarInfoJoinDto carInfoJoinJson = new CarInfoJoinDto();
@@ -142,12 +142,12 @@ public class Ac_clcx extends Ac_base_info {
                 bean.setPageNum(1);
                 bean.setCount(10);
                 return bean;
-            case Dictionary.COUNTRY_PERSON:
+            case V_config.COUNTRY_PERSON:
                 CountryPersonReqBean countryPersonReqBean = new CountryPersonReqBean();
                 assembleBasicObj(countryPersonReqBean);
                 countryPersonReqBean.setSfzh(sfzh);
                 return countryPersonReqBean;
-            case Dictionary.INSPECT_CAR:
+            case V_config.INSPECT_CAR:
                 InspectCarReqBean inspectCarReqBean = new InspectCarReqBean();
                 assembleBasicObj(inspectCarReqBean);
                 inspectCarReqBean.setYhdm("115576");
@@ -215,7 +215,7 @@ public class Ac_clcx extends Ac_base_info {
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
         switch (reqName) {
-            case Dictionary.CAR_INFO_JOIN:
+            case V_config.CAR_INFO_JOIN:
                 ClxxzhResponseBean resBean = (ClxxzhResponseBean) resultBase;
                 if (resBean != null) {
                     List<InfoJDCXQs> infoJDCXQ_list = resBean.getInfoJDCXQs();
@@ -246,7 +246,7 @@ public class Ac_clcx extends Ac_base_info {
                         ys = infoJDCXQs.getClys();
 
                         queryWanted();
-                        queryYdjwDataNoDialog(Dictionary.COUNTRY_PERSON);
+                        queryYdjwDataNoDialog(V_config.COUNTRY_PERSON);
                         queryYdjwDataX("");
                     } else {
                         Toast.makeText(this, "异常", Toast.LENGTH_SHORT).show();
@@ -254,7 +254,7 @@ public class Ac_clcx extends Ac_base_info {
 
                 }
                 break;
-            case Dictionary.COUNTRY_PERSON:
+            case V_config.COUNTRY_PERSON:
                 PersonOfCountryJsonRet personOfCountry = (PersonOfCountryJsonRet) resultBase;
                 final String xp = personOfCountry.getXP();
                 if (xp != null) {
@@ -275,7 +275,7 @@ public class Ac_clcx extends Ac_base_info {
                     }).start();
                 }
                 break;
-            case Dictionary.INSPECT_CAR:
+            case V_config.INSPECT_CAR:
                 InspectCarResBean inspectCarResBean = (InspectCarResBean) resultBase;
                 if (inspectCarResBean == null) {
                     return;

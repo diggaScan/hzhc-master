@@ -1,11 +1,13 @@
 package com.sunland.hzhc;
 
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.inputmethodservice.KeyboardView;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +36,7 @@ import com.sunland.hzhc.modules.sfz_module.Frg_id;
 import com.sunland.hzhc.modules.sfz_module.NfcReceiver;
 import com.sunland.hzhc.modules.xmzh_module.Frg_name;
 import com.sunland.hzhc.utils.WindowInfoUtils;
+import com.sunland.sunlandkeyboard.SunlandKeyBoardManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,6 +60,9 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
     public Toolbar toolbar;
     @BindView(R.id.position_indicator)
     public BannerIndicator bannerIndicator;
+    @BindView(R.id.myKeyb)
+    public KeyboardView myKeyBoardView;
+
     private int backPressed_num = 0;
     private List<Fragment> dataSet;
     private Resources mRes;
@@ -68,6 +74,7 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
 
     public boolean isFromSsj;//是否由随手记应用跳入
 
+    public SunlandKeyBoardManager sunlandKeyBoardManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,8 +121,10 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
     }
 
     private void initView() {
+        ComponentName componentName = new ComponentName("com.sunland.sunlandkeyboard", "com.sunland.sunlandkeyboard.目标activity"); //用于获取该activity的softInputMode
+        sunlandKeyBoardManager = new SunlandKeyBoardManager(this, componentName);
 
-        bannerIndicator.setItem_nums(10);
+        bannerIndicator.setItem_nums(9);
         bannerIndicator.setRadius(WindowInfoUtils.dp2px(this, 3));
         bannerIndicator.setDotsColor(mRes.getColor(R.color.dot_color));
         bannerIndicator.setMovingDotColor(mRes.getColor(R.color.colorAccent));
@@ -141,7 +150,7 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
             View view = inflater.inflate(R.layout.custom_main_bot_tab, null);
             TextView tv_name = view.findViewById(R.id.tab_name);
             ImageView iv_icon = view.findViewById(R.id.tab_icon);
-            iv_icon.setImageResource(Dictionary.TAB_ICONS_UNCLICKED[i]);
+            iv_icon.setImageResource(V_config.TAB_ICONS_UNCLICKED[i]);
             tv_name.setText(DataModel.MODULE_NAMES[i]);
             tl_frg_tabs.getTabAt(i).setTag(i);
             tl_frg_tabs.getTabAt(i).setCustomView(view);
@@ -154,7 +163,7 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
                 int position = (int) tab.getTag();
                 View view = tab.getCustomView();
                 ImageView iv_icon = view.findViewById(R.id.tab_icon);
-                iv_icon.setImageResource(Dictionary.TAB_ICONS_CLICKED[position]);
+                iv_icon.setImageResource(V_config.TAB_ICONS_CLICKED[position]);
             }
 
             @Override
@@ -162,7 +171,7 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
                 int position = (int) tab.getTag();
                 View view = tab.getCustomView();
                 ImageView iv_icon = view.findViewById(R.id.tab_icon);
-                iv_icon.setImageResource(Dictionary.TAB_ICONS_UNCLICKED[position]);
+                iv_icon.setImageResource(V_config.TAB_ICONS_UNCLICKED[position]);
             }
 
             @Override
@@ -280,14 +289,12 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
                 }
                 break;
             case 1:
-
                 Intent mIntent = new Intent();
                 mIntent.putExtra("ZJSB", true);
                 mIntent.putExtra("nMainID", 2); // 识别类型，如不加此参数，默认2 识别二代身份证，  具体对应的类型在下面可以按需设置。
                 mIntent.setClassName("cn.com.cybertech.ocr", "cn.com.cybertech.RecognitionActivity");
                 startActivityForResult(mIntent, 222);
                 break;
-
         }
     }
 
@@ -310,6 +317,4 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
             finish();
         }
     }
-
-
 }

@@ -60,4 +60,16 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp" />
+
+    <android.inputmethodservice.KeyboardView
+        android:id="@+id/myKeyb"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:elevation="16dp"
+        android:keyBackground="@drawable/selector_key"
+        android:keyTextColor="@color/black"
+        android:shadowRadius="0"
+        android:visibility="gone" />
 </RelativeLayout>

@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
     android:horizontalGap="0px"
-    android:keyHeight="10%p"
     android:keyWidth="33%p"
+    android:keyHeight="10%p"
     android:verticalGap="0px">
 
     <Row>
         <Key
             android:codes="@integer/KEYBORD_ENGLISH"
-            android:keyLabel="英文"
-            android:keyWidth="25%p" />
+            android:keyWidth="25%p"
+            android:keyLabel="英文" />
         <Key
             android:codes="@integer/KEYBORD_SYMBOLS"
-            android:keyLabel="符号"
-            android:keyWidth="25%p" />
+            android:keyWidth="25%p"
+            android:keyLabel="符号" />
         <Key
             android:codes="@integer/KEYBORD_CHINESE"
-            android:keyLabel="中文"
-            android:keyWidth="25%p" />
+            android:keyWidth="25%p"
+            android:keyLabel="中文" />
         <Key
             android:codes="@integer/KEYBORD_DEL"
             android:isRepeatable="true"
-            android:keyIcon="@drawable/del"
-            android:keyWidth="25%p" />
+            android:keyWidth="25%p"
+            android:keyIcon="@drawable/delete" />
     </Row>
     <Row>
         <Key

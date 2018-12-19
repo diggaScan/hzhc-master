@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.sunland.hzhc.DataModel;
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.UserInfo;
 import com.sunland.hzhc.bean.BaseRequestBean;
@@ -80,8 +80,8 @@ public class Ac_ddc extends Ac_base_info {
         setContentLayout(R.layout.ac_ddc);
         showNavIcon(true);
         setToolbarTitle("电动车详情");
-        queryYdjwDataNoDialog(Dictionary.COUNTRY_PERSON);
-        queryYdjwData(Dictionary.INSPECT_PERSON);
+        queryYdjwDataNoDialog(V_config.COUNTRY_PERSON);
+        queryYdjwData(V_config.INSPECT_PERSON);
         initView();
     }
 
@@ -139,7 +139,7 @@ public class Ac_ddc extends Ac_base_info {
     @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
         switch (reqName) {
-            case Dictionary.GET_ELECTRIC_CAR_INFO:
+            case V_config.GET_ELECTRIC_CAR_INFO:
                 DdcxxplReqBean bean = new DdcxxplReqBean();
                 assembleBasicObj(bean);
                 bean.setHphm(hphm);
@@ -148,19 +148,19 @@ public class Ac_ddc extends Ac_base_info {
                 bean.setCurrentPage(1);
                 bean.setTotalCount(2);
                 return bean;
-            case Dictionary.GET_ELECTRIC_CAR_FOCUS_INFO:
+            case V_config.GET_ELECTRIC_CAR_FOCUS_INFO:
                 EVehicleFocusReqBean eVehicleFocusReqBean = new EVehicleFocusReqBean();
                 assembleBasicObj(eVehicleFocusReqBean);
                 eVehicleFocusReqBean.setHphm("Y101549");
                 eVehicleFocusReqBean.setCjh("");
                 eVehicleFocusReqBean.setFdjh("");
                 return eVehicleFocusReqBean;
-            case Dictionary.COUNTRY_PERSON:
+            case V_config.COUNTRY_PERSON:
                 CountryPersonReqBean countryPersonReqBean = new CountryPersonReqBean();
                 assembleBasicObj(countryPersonReqBean);
                 countryPersonReqBean.setSfzh(sfzh);
                 return countryPersonReqBean;
-            case Dictionary.INSPECT_PERSON:
+            case V_config.INSPECT_PERSON:
                 InspectPersonReqBean inspectPersonReqBean = new InspectPersonReqBean();
                 assembleBasicObj(inspectPersonReqBean);
                 Request request = new Request();
@@ -184,7 +184,7 @@ public class Ac_ddc extends Ac_base_info {
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
         switch (reqName) {
-            case Dictionary.COUNTRY_PERSON:
+            case V_config.COUNTRY_PERSON:
                 PersonOfCountryJsonRet personOfCountry = (PersonOfCountryJsonRet) resultBase;
                 if (personOfCountry != null) {
                     final String xp = personOfCountry.getXP();
@@ -206,7 +206,7 @@ public class Ac_ddc extends Ac_base_info {
                 }
 
                 break;
-            case Dictionary.INSPECT_PERSON:
+            case V_config.INSPECT_PERSON:
                 InspectPersonJsonRet inspectPersonJsonRet = (InspectPersonJsonRet) resultBase;
                 RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
                 if (ryxxRes != null) {

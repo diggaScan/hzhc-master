@@ -13,8 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sunland.hzhc.Ac_base;
-import com.sunland.hzhc.Dictionary;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.case_module.bean.CaseCateResBean;
 import com.sunland.hzhc.modules.case_module.bean.LbList;
@@ -48,7 +48,7 @@ public class Ac_case_cates extends Ac_base implements OnRequestCallback {
         setToolbarTitle("案件类型列表");
         initView();
         mRequestManager = new RequestManager(this, this);
-        queryCaseCates(Dictionary.QUERY_ALL_CASE_CATEGORY);
+        queryCaseCates(V_config.QUERY_ALL_CASE_CATEGORY);
     }
 
     private void initView() {
@@ -77,19 +77,18 @@ public class Ac_case_cates extends Ac_base implements OnRequestCallback {
         baseRequestBean.setImei(Global.imei);
         baseRequestBean.setImsi(Global.imsi1);
         baseRequestBean.setLbr("02");
-        baseRequestBean.setGpsx("");
+        baseRequestBean.setGpsX("");
         baseRequestBean.setGpsY("");
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String pda_time = simpleDateFormat.format(date);
         baseRequestBean.setPdaTime(pda_time);
-
     }
 
     @Override
     public <T> void onRequestFinish(String reqId, String reqName, T bean) {
         switch (reqName) {
-            case Dictionary.QUERY_ALL_CASE_CATEGORY:
+            case V_config.QUERY_ALL_CASE_CATEGORY:
                 CaseCateResBean caseCateResBean = (CaseCateResBean) bean;
                 if (caseCateResBean == null) {
                     return;

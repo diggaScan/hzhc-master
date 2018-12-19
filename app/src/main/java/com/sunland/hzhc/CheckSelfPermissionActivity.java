@@ -17,7 +17,8 @@ public abstract class CheckSelfPermissionActivity extends AppCompatActivity {
             Manifest.permission.INTERNET,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.CALL_PHONE
+            Manifest.permission.CALL_PHONE,
+            Manifest.permission.READ_PHONE_STATE
     };
 
     private List<String> permission_ungranted = new ArrayList<>();

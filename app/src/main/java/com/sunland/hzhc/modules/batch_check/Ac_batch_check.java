@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.UserInfo;
 import com.sunland.hzhc.bean.BaseRequestBean;
@@ -92,8 +92,8 @@ public class Ac_batch_check extends Ac_base_info {
                     Toast.makeText(this, "已核查过该人员", Toast.LENGTH_SHORT).show();
                     break;
                 }
-                queryYdjwDataNoDialog(Dictionary.PERSON_COMPLEX);
-                queryYdjwDataNoDialog(Dictionary.INSPECT_PERSON);
+                queryYdjwDataNoDialog(V_config.PERSON_COMPLEX);
+                queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
                 queryYdjwDataX("");
 
                 et_id_input.setText("");
@@ -125,12 +125,12 @@ public class Ac_batch_check extends Ac_base_info {
     @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
         switch (reqName) {
-            case Dictionary.PERSON_COMPLEX:
+            case V_config.PERSON_COMPLEX:
                 RyzhxxReqBean bean = new RyzhxxReqBean();
                 assembleBasicObj(bean);
                 bean.setSfzh(sfzh);
                 return bean;
-            case Dictionary.INSPECT_PERSON:
+            case V_config.INSPECT_PERSON:
                 InspectPersonReqBean inspectPersonReqBean = new InspectPersonReqBean();
                 assembleBasicObj(inspectPersonReqBean);
                 Request request = new Request();
@@ -153,12 +153,12 @@ public class Ac_batch_check extends Ac_base_info {
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
         switch (reqName) {
-            case Dictionary.PERSON_COMPLEX:
+            case V_config.PERSON_COMPLEX:
                 ryzhxxResBean = (RyzhxxResBean) resultBase;
                 i_one_ok = true;
                 inflateView();
                 break;
-            case Dictionary.INSPECT_PERSON:
+            case V_config.INSPECT_PERSON:
                 inspectPersonJsonRet = (InspectPersonJsonRet) resultBase;
                 i_two_ok = true;
                 inflateView();

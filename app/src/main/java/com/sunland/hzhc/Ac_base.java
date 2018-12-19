@@ -42,6 +42,7 @@ public class Ac_base extends AppCompatActivity {
         iv_nav = findViewById(R.id.nav_back);
         container = findViewById(R.id.container);
 
+
         iv_nav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +85,7 @@ public class Ac_base extends AppCompatActivity {
         baseRequestBean.setImei(Global.imei);
         baseRequestBean.setImsi(Global.imsi1);
         baseRequestBean.setLbr("02");
-        baseRequestBean.setGpsx("");
+        baseRequestBean.setGpsX("");
         baseRequestBean.setGpsY("");
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

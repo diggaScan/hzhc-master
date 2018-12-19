@@ -5,15 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.concretejungle.spinbutton.SpinButton;
 import com.sunland.hzhc.Ac_main;
 import com.sunland.hzhc.DataModel;
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.Frg_base;
 import com.sunland.hzhc.R;
-import com.sunland.hzhc.modules.sfz_module.Ac_rycx;
+import com.sunland.sunlandkeyboard.SunlandKeyBoardManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +33,10 @@ public class Frg_vehicle extends Frg_base {
     public EditText et_vehivle_id;
     @BindView(R.id.number)
     public EditText et_number;
+    @BindView(R.id.relativeLayout)
+    public RelativeLayout relativeLayout;
+    @BindView(R.id.scrollView)
+    public ScrollView scrollView;
 
     @Override
     public int setLayoutId() {
@@ -39,9 +45,10 @@ public class Frg_vehicle extends Frg_base {
 
     @Override
     public void initView() {
-
+        ((Ac_main) context).sunlandKeyBoardManager.addTarget(((Ac_main) context).myKeyBoardView, et_number,
+                SunlandKeyBoardManager.KeyboardMode.VEHICLE_PLATE);
         sb_vehicle.setHeaderTitle("选择车辆类型");
-        sb_vehicle.setDataSet(Arrays.asList(Dictionary.VEHICLEMODELS));
+        sb_vehicle.setDataSet(Arrays.asList(V_config.VEHICLEMODELS));
         sb_vehicle.setSelection(0);
     }
 
@@ -52,7 +59,7 @@ public class Frg_vehicle extends Frg_base {
             case R.id.query:
                 String cphm = et_number.getText().toString();
                 String hpzl_str = sb_vehicle.getSelectedItem();
-                String hpzl_num = Dictionary.VEHICLEMODLES.get(hpzl_str);
+                String hpzl_num = V_config.VEHICLEMODLES.get(hpzl_str);
                 String fdjh = et_engine_num.getText().toString();
                 String clsbh = et_vehivle_id.getText().toString();
                 Bundle bundle = new Bundle();
@@ -115,4 +122,6 @@ public class Frg_vehicle extends Frg_base {
             }
         }
     }
+
+
 }

@@ -1,21 +1,16 @@
 package com.sunland.sunlandkeyboard;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Rect;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -26,9 +21,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ScrollView;
-import android.widget.Scroller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -50,15 +45,16 @@ import java.util.regex.Pattern;
  * sunlandKeyBoard.bindTarget(keyboardView, editText8, SunlandKeyBoard.KeyboardMode.ENGLISH, componentName);
  */
 
-public class SunlandKeyBoard {
+
+public class SunlandKeyBoardManager {
 
 
     private Context mContext;
     private KeyboardView mKeyboardView;
     private Keyboard mKeyboard;
     private EditText mEditText;
-    private KeyboardMode mMode;
 
+    private ComponentName mComponentName;
 
     private InputMethodManager imManager;
 
@@ -71,43 +67,42 @@ public class SunlandKeyBoard {
 
     private ScrollView scrollView;
 
+    private List<EditText> targets; //存放目标EditText
     private boolean reset_flag = true;//用于防止onGlobalLayout()因布局变化无限循环
 
-    enum KeyboardMode {
-        ENGLISH,
-        IDENTITY,
-        NUMBER,
-        SYMBOL,
-        VEHICLE_PLATE
+    private EditText cur_target;
+    private KeyboardMode cur_mode;
+    private HashMap<EditText, KeyboardMode> modes;
+
+
+    public SunlandKeyBoardManager(Context context, ComponentName componentName) {
+        this.mContext = context;
+        this.imManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        this.mComponentName = componentName;
+        targets = new ArrayList<>();
+        modes = new HashMap<>();
     }
 
-    public SunlandKeyBoard(Context context) {
-        mContext = context;
+//    public void bindMainLayout(View view, @Nullable ScrollView scrollView) {
+//        this.mainLayout = view;
+//        this.scrollView = scrollView;
+//    }
 
-        imManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-    }
-
-    public void bindMainLayout(View view, @Nullable ScrollView scrollView) {
-        mainLayout = view;
-        this.scrollView = scrollView;
-    }
-
-    public void bindTarget(KeyboardView keyboardView,
-                           EditText editText, KeyboardMode mode, ComponentName componentName) {
+    public void addTarget(KeyboardView keyboardView, EditText editText, KeyboardMode mode) {
         mKeyboardView = keyboardView;
-        mEditText = editText;
-        mMode = mode;
+        targets.add(editText);
+        modes.put(editText, mode);
 
         initKeyboardView();
-        configEditText(editText);
 
-        try {
-            softInputState = getSoftInputModeState(componentName);
-            softInputAdjust = getSoftInputModeAdjust(componentName);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        initGlobalLayoutListener();
+        configEditText(editText);
+//        try {
+//            softInputState = getSoftInputModeState(mComponentName);
+//            softInputAdjust = getSoftInputModeAdjust(mComponentName);
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        initGlobalLayoutListener();
     }
 
     private void initGlobalLayoutListener() {
@@ -126,7 +121,6 @@ public class SunlandKeyBoard {
         observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-
                 if (focusedView == null)
                     return;
 
@@ -144,7 +138,6 @@ public class SunlandKeyBoard {
                     } else {
                         scrollView.setLayoutParams(lp);
                     }
-
                 } else {
                     FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                     if (scrollView == null) {
@@ -158,17 +151,16 @@ public class SunlandKeyBoard {
         });
     }
 
-    private void configEditText(EditText editText) {
+    private void configEditText(final EditText editText) {
 
-        editText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                v.requestFocus();
-                mEditText = (EditText) v;
-                return false;
-            }
-        });
+//        editText.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                v.requestFocus();
+//                mEditText = (EditText) v;
+//                return false;
+//            }
+//        });
 
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -179,8 +171,7 @@ public class SunlandKeyBoard {
                 } else {
                     mEditText = (EditText) v;
                 }
-                if (softInputState == WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED ||
-                        softInputState == WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE ||
+                if (softInputState == WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE ||
                         softInputState == WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE) {
                     showKeyboard();
                 } else {
@@ -204,6 +195,9 @@ public class SunlandKeyBoard {
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                cur_mode = modes.get(editText);//获取当前点击目标的键盘类型
+                cur_target = editText;
+                inflateKeyboard();
                 hideSystemSoftInput(v);
                 if (!isActivated)
                     showKeyboard();
@@ -228,45 +222,35 @@ public class SunlandKeyBoard {
         });
     }
 
-    private void initKeyboardView() {
-        switch (mMode) {
-            case NUMBER:
-                mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_number);
-                break;
-            case SYMBOL:
-                mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_symbols);
-                break;
-            case ENGLISH:
-                mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_english26);
-                break;
-            case IDENTITY:
-                mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_id);
-                break;
-            case VEHICLE_PLATE:
-                mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_vehicle);
-                break;
-            default:
-                mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_english);
-        }
 
-        mKeyboardView.setKeyboard(mKeyboard);
+    public enum KeyboardMode {
+        ENGLISH,
+        IDENTITY,
+        NUMBER,
+        SYMBOL,
+        VEHICLE_PLATE
+    }
+
+    private void initKeyboardView() {
+
         mKeyboardView.setEnabled(true);
+
         mKeyboardView.setPreviewEnabled(false);
 
         mKeyboardView.setOnKeyboardActionListener(new KeyboardView.OnKeyboardActionListener() {
             @Override
             public void onPress(int primaryCode) {
-
             }
 
             @Override
             public void onRelease(int primaryCode) {
-
             }
 
             @Override
             public void onKey(int primaryCode, int[] keyCodes) {
-                Editable editable = mEditText.getText();
+                int index = targets.indexOf(cur_target);
+                EditText mEditText = targets.get(index);
+                Editable editable = mEditText.getEditableText();
                 int start = mEditText.getSelectionStart();
                 int end = mEditText.getSelectionEnd();
 
@@ -309,6 +293,11 @@ public class SunlandKeyBoard {
                     hideKeyboard();
                 } else {
                     editable.insert(start, getKeyLabel(primaryCode));
+                    if (cur_mode == KeyboardMode.VEHICLE_PLATE) {
+                        mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_english26);
+                        mKeyboardView.setKeyboard(mKeyboard);
+                        refreshKey();
+                    }
                 }
             }
 
@@ -339,8 +328,30 @@ public class SunlandKeyBoard {
         });
     }
 
+    private void inflateKeyboard() {
+        switch (cur_mode) {
+            case NUMBER:
+                mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_number);
+                break;
+            case SYMBOL:
+                mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_symbols);
+                break;
+            case ENGLISH:
+                mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_english26);
+                break;
+            case IDENTITY:
+                mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_id);
+                break;
+            case VEHICLE_PLATE:
+                mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_vehicle);
+                break;
+            default:
+                mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_english);
+        }
+        mKeyboardView.setKeyboard(mKeyboard);
+    }
 
-    private void showKeyboard() {
+    public void showKeyboard() {
         if (isActivated)
             return;
         if (mKeyboardView != null) {

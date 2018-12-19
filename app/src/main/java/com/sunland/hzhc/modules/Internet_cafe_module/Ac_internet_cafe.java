@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.Ac_base_info;
@@ -45,7 +45,7 @@ public class Ac_internet_cafe extends Ac_base_info {
         setContentLayout(R.layout.ac_internet_cafe);
         showNavIcon(true);
         setToolbarTitle("上网人员列表");
-        queryYdjwData(Dictionary.GET_INTERNET_CAFE_PERSON_INFO);
+        queryYdjwData(V_config.GET_INTERNET_CAFE_PERSON_INFO);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class Ac_internet_cafe extends Ac_base_info {
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
         switch (reqName) {
-            case Dictionary.GET_INTERNET_CAFE_PERSON_INFO:
+            case V_config.GET_INTERNET_CAFE_PERSON_INFO:
                 RyResBean ryResBean = (RyResBean) resultBase;
                 dataSet = ryResBean.getInfoWBSWRYs();
                 initRv();

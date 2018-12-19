@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.sunland.hzhc.Ac_base;
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.bean.i_inspect_car.InspectCarResBean;
 import com.sunland.hzhc.bean.i_inspect_person.InspectPersonJsonRet;
@@ -67,7 +67,7 @@ public abstract class Ac_base_info extends Ac_base implements OnRequestCallback 
         baseRequestBean.setImei(Global.imei);
         baseRequestBean.setImsi(Global.imsi1);
         baseRequestBean.setLbr("02");
-        baseRequestBean.setGpsx("");
+        baseRequestBean.setGpsX("");
         baseRequestBean.setGpsY("");
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -83,25 +83,25 @@ public abstract class Ac_base_info extends Ac_base implements OnRequestCallback 
     @Override
     public <T extends ResultBase> Class<?> getBeanClass(String reqId, String reqName) {
         switch (reqName) {
-            case Dictionary.CAR_INFO_JOIN:
+            case V_config.CAR_INFO_JOIN:
                 return ClxxzhResponseBean.class;
-            case Dictionary.PERSON_COMPLEX:
+            case V_config.PERSON_COMPLEX:
                 return RyzhxxResBean.class;
-            case Dictionary.GET_PERSON_JOIN_INFO:
+            case V_config.GET_PERSON_JOIN_INFO:
                 return XmzhResBean.class;
-            case Dictionary.GET_PERSON_IN_HOTEL_INFO:
+            case V_config.GET_PERSON_IN_HOTEL_INFO:
                 return LGResBean.class;
-            case Dictionary.GET_INTERNET_CAFE_PERSON_INFO:
+            case V_config.GET_INTERNET_CAFE_PERSON_INFO:
                 return RyResBean.class;
-            case Dictionary.CASE_INFO:
+            case V_config.CASE_INFO:
                 return CaseListResBean.class;
-            case Dictionary.GET_PERSON_MOBILE_JOIN_INFO:
+            case V_config.GET_PERSON_MOBILE_JOIN_INFO:
                 return RyPhoneResBean.class;
-            case Dictionary.COUNTRY_PERSON:
+            case V_config.COUNTRY_PERSON:
                 return PersonOfCountryJsonRet.class;
-            case Dictionary.INSPECT_PERSON:
+            case V_config.INSPECT_PERSON:
                 return InspectPersonJsonRet.class;
-            case Dictionary.INSPECT_CAR:
+            case V_config.INSPECT_CAR:
                 return InspectCarResBean.class;
         }
         return null;

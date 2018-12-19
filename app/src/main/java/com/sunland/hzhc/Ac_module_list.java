@@ -51,8 +51,8 @@ public class Ac_module_list extends Ac_base {
             toolbar.setBackgroundColor(getResources().getColor(R.color.app_background));
         }
 
-        MyModuleListAdapter adapter = new MyModuleListAdapter(Arrays.asList(Dictionary.MODULES_ICON)
-                , Arrays.asList(Dictionary.MODULE_NAMES));
+        MyModuleListAdapter adapter = new MyModuleListAdapter(Arrays.asList(V_config.MODULES_ICON)
+                , Arrays.asList(V_config.MODULE_NAMES));
         GridLayoutManager manager = new GridLayoutManager(this, 5);
         rv_module_list.setLayoutManager(manager);
         rv_module_list.setAdapter(adapter);

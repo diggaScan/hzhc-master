@@ -8,30 +8,41 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_app"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="flavour"
+            android:value="${FLAVOUR_VALUE}" />
+        <meta-data
+            android:name="category"
+            android:value="${CATEGORY_VALUE}" />
+        <meta-data
+            android:name="plateform"
+            android:value="${PLATEFORM_VALUE}" />
+
         <activity
             android:name=".Ac_location"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="${PLATEFORM_VALUE}.intent.action.MAIN" />
+                <category android:name="${PLATEFORM_VALUE}.intent.category.${CATEGORY_VALUE}" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Ac_main"
-            android:windowSoftInputMode="stateAlwaysHidden">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="com.sunland.hzhc.intent.action.QUERY" />
 
@@ -39,7 +50,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".Ac_module_list" />
-        <activity android:name=".modules.sfz_module.Ac_rycx" />
+        <activity android:name=".modules.sfz_module.Ac_rycx">
+            <intent-filter>
+                <action android:name="com.sunland.intent.action.QUERY_ID" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Ac_login"/>
         <activity android:name=".modules.jdc_module.Ac_clcx" />
         <activity android:name=".modules.ddc_module.Ac_ddc" />
         <activity android:name=".modules.xmzh_module.Ac_xmzh_list" />

@@ -23,15 +23,31 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-
-
     useLibrary 'org.apache.http.legacy'
 
+    flavorDimensions "hzhc"
+    productFlavors {
+        //独立app版
+        app {
+            manifestPlaceholders = [FLAVOUR_VALUE: "app", CATEGORY_VALUE: "LAUNCHER", PLATEFORM_VALUE: "android"]
+            dimension = "hzhc"
+        }
+        //演示版本
+        demo {
+            manifestPlaceholders = [FLAVOUR_VALUE: "demo", CATEGORY_VALUE: "LAUNCHER", PLATEFORM_VALUE: "android"]
+            dimension "hzhc"
+        }
+        //广达市场版
+        appCyber {
+            manifestPlaceholders = [FLAVOUR_VALUE: "appCyber", CATEGORY_VALUE: "APP", PLATEFORM_VALUE: "pstore"]
+            dimension "hzhc"
+        }
+    }
 
 }
 
 dependencies {
+    implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.jakewharton:butterknife:8.8.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'

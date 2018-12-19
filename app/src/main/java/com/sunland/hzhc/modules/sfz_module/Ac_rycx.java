@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.sunland.hzhc.Ac_location;
 import com.sunland.hzhc.DataModel;
-import com.sunland.hzhc.Dictionary;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.UserInfo;
 import com.sunland.hzhc.bean.BaseRequestBean;
@@ -132,9 +132,9 @@ public class Ac_rycx extends Ac_base_info {
         setToolbarTitle("个人信息");
         resources = getResources();
         initView();
-        queryYdjwData(Dictionary.PERSON_COMPLEX);
-        queryYdjwDataNoDialog(Dictionary.COUNTRY_PERSON);
-        queryYdjwDataNoDialog(Dictionary.INSPECT_PERSON);
+        queryYdjwData(V_config.PERSON_COMPLEX);
+        queryYdjwDataNoDialog(V_config.COUNTRY_PERSON);
+        queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
         queryYdjwDataX("");
     }
 
@@ -192,17 +192,17 @@ public class Ac_rycx extends Ac_base_info {
     @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
         switch (reqName) {
-            case Dictionary.PERSON_COMPLEX:
+            case V_config.PERSON_COMPLEX:
                 RyzhxxReqBean bean = new RyzhxxReqBean();
                 assembleBasicObj(bean);
                 bean.setSfzh(sfzh);
                 return bean;
-            case Dictionary.COUNTRY_PERSON:
+            case V_config.COUNTRY_PERSON:
                 CountryPersonReqBean countryPersonReqBean = new CountryPersonReqBean();
                 assembleBasicObj(countryPersonReqBean);
                 countryPersonReqBean.setSfzh(sfzh);
                 return countryPersonReqBean;
-            case Dictionary.INSPECT_PERSON:
+            case V_config.INSPECT_PERSON:
                 InspectPersonReqBean inspectPersonReqBean = new InspectPersonReqBean();
                 assembleBasicObj(inspectPersonReqBean);
                 Request request = new Request();
@@ -273,7 +273,7 @@ public class Ac_rycx extends Ac_base_info {
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
         switch (reqName) {
-            case Dictionary.PERSON_COMPLEX:
+            case V_config.PERSON_COMPLEX:
                 RyzhxxResBean ryzhxxResBean = (RyzhxxResBean) resultBase;
                 if (ryzhxxResBean != null) {
                     setText(tv_id_num, ryzhxxResBean.getSfzh());
@@ -403,7 +403,7 @@ public class Ac_rycx extends Ac_base_info {
                     }
                 }
                 break;
-            case Dictionary.COUNTRY_PERSON:
+            case V_config.COUNTRY_PERSON:
                 PersonOfCountryJsonRet personOfCountry = (PersonOfCountryJsonRet) resultBase;
                 if (personOfCountry != null) {
                     final String xp = personOfCountry.getXP();
@@ -427,7 +427,7 @@ public class Ac_rycx extends Ac_base_info {
                     Toast.makeText(this, "异常", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case Dictionary.INSPECT_PERSON:
+            case V_config.INSPECT_PERSON:
                 InspectPersonJsonRet inspectPersonJsonRet = (InspectPersonJsonRet) resultBase;
                 if (inspectPersonJsonRet != null) {
                     RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();

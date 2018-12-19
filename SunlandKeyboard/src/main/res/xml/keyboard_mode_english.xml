@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
     android:horizontalGap="0px"
-    android:keyHeight="9%p"
     android:keyWidth="20%p"
+    android:keyHeight="9%p"
     android:verticalGap="0px">
 
     <Row>
         <Key
             android:codes="@integer/KEYBORD_ENGLISH_a"
-            android:keyLabel="a"
-            />
+            android:keyLabel="a" />
         <Key
             android:codes="@integer/KEYBORD_ENGLISH_b"
             android:keyLabel="b" />
@@ -106,7 +105,7 @@
         <Key
             android:codes="@integer/KEYBORD_DEL"
             android:isRepeatable="true"
-            android:keyIcon="@drawable/del" />
+            android:keyIcon="@drawable/delete" />
         <Key
             android:codes="@integer/KEYBORD_DONE"
             android:keyLabel="完成" />

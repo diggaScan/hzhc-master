@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/form_margin_left"
     android:orientation="vertical">
 
-   <include layout="@layout/check_status_layout"/>
+    <include layout="@layout/check_status_layout" />
 
-</LinearLayout>
+    <include layout="@layout/loading_layout" />
+
+</FrameLayout>

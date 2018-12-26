@@ -10,10 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
+import com.sunland.hzhc.bean.i_person_join_info.PersonInfo;
+import com.sunland.hzhc.bean.i_person_join_info.PersonJoinDto;
+import com.sunland.hzhc.bean.i_person_join_info.RycombineReqBean;
+import com.sunland.hzhc.bean.i_person_join_info.XmzhResBean;
 import com.sunland.hzhc.modules.Ac_base_info;
 import com.sunland.hzhc.modules.sfz_module.Ac_rycx;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
@@ -43,7 +48,9 @@ public class Ac_xmzh_list extends Ac_base_info {
         showNavIcon(true);
         setToolbarTitle("人员列表");
         initView();
-        queryYdjwData(V_config.GET_PERSON_JOIN_INFO);
+        showLoading_layout(true);
+        queryYdjwDataNoDialog(V_config.GET_PERSON_JOIN_INFO);
+        queryYdjwDataX("");
     }
 
     @Override
@@ -72,7 +79,7 @@ public class Ac_xmzh_list extends Ac_base_info {
     @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
         RycombineReqBean bean = new RycombineReqBean();
-        assembleBasicObj(bean);
+        assembleBasicRequest(bean);
         PersonJoinDto personJoinDto = new PersonJoinDto();
         personJoinDto.setCsrq(csrq);
         personJoinDto.setHjqh(hjqh);
@@ -80,7 +87,7 @@ public class Ac_xmzh_list extends Ac_base_info {
         personJoinDto.setXm(xm);
         bean.setPersonJoinDto(personJoinDto);
         bean.setCurrentPage(1);
-        bean.setTotalCount(10);
+        bean.setTotalCount(50);
         return bean;
     }
 
@@ -88,15 +95,20 @@ public class Ac_xmzh_list extends Ac_base_info {
     public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
         switch (reqName) {
             case V_config.GET_PERSON_JOIN_INFO:
+                showLoading_layout(false);
                 XmzhResBean xmzhResBean = (XmzhResBean) resultBase;
-                if (xmzhResBean != null) {
-                    List<PersonInfo> personInfos = xmzhResBean.getPersonList();
-                    if (personInfos != null && !personInfos.isEmpty()) {
-                        dataSet.clear();
-                        dataSet.addAll(personInfos);
-                        adapter.notifyDataSetChanged();
-                    }
+                if (xmzhResBean == null) {
+                    Toast.makeText(this, "人员姓名查询接口异常", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+                List<PersonInfo> personInfos = xmzhResBean.getPersonList();
+                if (personInfos == null || personInfos.isEmpty()) {
+                    Toast.makeText(this, "无相关人员数据", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                dataSet.clear();
+                dataSet.addAll(personInfos);
+                adapter.notifyDataSetChanged();
                 break;
         }
     }

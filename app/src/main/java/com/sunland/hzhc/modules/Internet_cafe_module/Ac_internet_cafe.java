@@ -12,12 +12,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
+import com.sunland.hzhc.bean.i_internet_cafe_people.InfoWBSWRY;
+import com.sunland.hzhc.bean.i_internet_cafe_people.RyResBean;
+import com.sunland.hzhc.bean.i_internet_cafe_people.SwryListReqBean;
 import com.sunland.hzhc.modules.Ac_base_info;
-import com.sunland.hzhc.modules.Internet_cafe_module.bean.InfoWBSWRY;
-import com.sunland.hzhc.modules.Internet_cafe_module.bean.RyResBean;
 import com.sunland.hzhc.modules.sfz_module.Ac_rycx;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
 import com.sunlandgroup.def.bean.result.ResultBase;
@@ -45,7 +46,9 @@ public class Ac_internet_cafe extends Ac_base_info {
         setContentLayout(R.layout.ac_internet_cafe);
         showNavIcon(true);
         setToolbarTitle("上网人员列表");
-        queryYdjwData(V_config.GET_INTERNET_CAFE_PERSON_INFO);
+        queryYdjwDataNoDialog(V_config.GET_INTERNET_CAFE_PERSON_INFO);
+        queryYdjwDataX("");
+        showLoading_layout(true);
     }
 
     @Override
@@ -63,11 +66,10 @@ public class Ac_internet_cafe extends Ac_base_info {
         }
     }
 
-
     @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
         SwryListReqBean bean = new SwryListReqBean();
-        assembleBasicObj(bean);
+        assembleBasicRequest(bean);
         bean.setWbmc(wbbh);
         bean.setZjbh(zjbh);
         bean.setSwsj_q(swsj_q);
@@ -77,13 +79,20 @@ public class Ac_internet_cafe extends Ac_base_info {
         return bean;
     }
 
-
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
         switch (reqName) {
             case V_config.GET_INTERNET_CAFE_PERSON_INFO:
                 RyResBean ryResBean = (RyResBean) resultBase;
+                if (ryResBean == null) {
+                    Toast.makeText(this, "网吧上网人员接口异常", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 dataSet = ryResBean.getInfoWBSWRYs();
+                if (dataSet == null || dataSet.isEmpty()) {
+                    Toast.makeText(this, "无相关人员信息", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 initRv();
         }
     }

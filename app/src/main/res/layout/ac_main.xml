@@ -53,7 +53,7 @@
         app:tabMode="scrollable" />
 
 
-    <com.sunland.hzhc.BannerIndicator
+    <com.sunland.hzhc.customView.BannerIndicator
         android:id="@+id/position_indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

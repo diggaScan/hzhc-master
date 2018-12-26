@@ -12,12 +12,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
+import com.sunland.hzhc.bean.i_case_info.AjxxReqbean;
+import com.sunland.hzhc.bean.i_case_info.CaseInfoDto;
+import com.sunland.hzhc.bean.i_case_info.CaseListResBean;
+import com.sunland.hzhc.bean.i_case_info.InfoAJLB;
 import com.sunland.hzhc.modules.Ac_base_info;
-import com.sunland.hzhc.modules.case_module.bean.CaseListResBean;
-import com.sunland.hzhc.modules.case_module.bean.InfoAJLB;
 import com.sunland.hzhc.modules.xmzh_module.Rv_Jg_adapter;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
 import com.sunlandgroup.def.bean.result.ResultBase;
@@ -29,14 +31,12 @@ import butterknife.BindView;
 
 public class Ac_case extends Ac_base_info {
 
+    @BindView(R.id.case_list)
+    public RecyclerView rv_case_list;
     private String ajbh;
     private String ajlb;
     private String afsj;
     private String gxdw;
-
-    @BindView(R.id.case_list)
-    public RecyclerView rv_case_list;
-
     private MyRvAdapter adapter;
     private List<InfoAJLB> dataSet;
 
@@ -48,9 +48,10 @@ public class Ac_case extends Ac_base_info {
         showNavIcon(true);
         setToolbarTitle("案件列表");
         dataSet = new ArrayList<>();
-        queryYdjwData(V_config.CASE_INFO);
+        queryYdjwDataNoDialog(V_config.CASE_INFO);
+        queryYdjwDataX("");
+        showLoading_layout(true);
     }
-
 
     @Override
     public void handleIntent() {
@@ -69,7 +70,7 @@ public class Ac_case extends Ac_base_info {
     @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
         AjxxReqbean ajxxReqbean = new AjxxReqbean();
-        assembleBasicObj(ajxxReqbean);
+        assembleBasicRequest(ajxxReqbean);
         CaseInfoDto caseInfoDto = new CaseInfoDto();
         caseInfoDto.setAjbh(ajbh);
         caseInfoDto.setAjlb(ajlb);

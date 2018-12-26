@@ -6,16 +6,19 @@ import android.support.annotation.Nullable;
 import com.sunland.hzhc.Ac_base;
 import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
+import com.sunland.hzhc.bean.i_car_info_joint.ClxxzhResponseBean;
+import com.sunland.hzhc.bean.i_case_cate.CaseCateResBean;
+import com.sunland.hzhc.bean.i_case_info.CaseListResBean;
+import com.sunland.hzhc.bean.i_country_people.PersonOfCountryJsonRet;
+import com.sunland.hzhc.bean.i_e_bike_info.DdcListResBean;
 import com.sunland.hzhc.bean.i_inspect_car.InspectCarResBean;
 import com.sunland.hzhc.bean.i_inspect_person.InspectPersonJsonRet;
+import com.sunland.hzhc.bean.i_internet_cafe_people.RyResBean;
+import com.sunland.hzhc.bean.i_mobile_join.RyPhoneResBean;
+import com.sunland.hzhc.bean.i_people_complex.RyzhxxResBean;
+import com.sunland.hzhc.bean.i_person_join_info.XmzhResBean;
 import com.sunland.hzhc.modules.Hotel_module.bean.LGResBean;
-import com.sunland.hzhc.modules.Internet_cafe_module.bean.RyResBean;
-import com.sunland.hzhc.modules.case_module.bean.CaseListResBean;
-import com.sunland.hzhc.modules.jdc_module.bean.ClxxzhResponseBean;
-import com.sunland.hzhc.modules.phone_num_module.bean.RyPhoneResBean;
-import com.sunland.hzhc.modules.sfz_module.beans.PersonOfCountryJsonRet;
-import com.sunland.hzhc.modules.sfz_module.beans.RyzhxxResBean;
-import com.sunland.hzhc.modules.xmzh_module.XmzhResBean;
+import com.sunland.hzhc.bean.i_owned_car.OwnedCarResBean;
 import com.sunlandgroup.Global;
 import com.sunlandgroup.def.bean.result.ResultBase;
 import com.sunlandgroup.network.OnRequestCallback;
@@ -62,17 +65,16 @@ public abstract class Ac_base_info extends Ac_base implements OnRequestCallback 
 
     public abstract BaseRequestBean assembleRequestObj(String reqName);
 
-    public void assembleBasicObj(BaseRequestBean baseRequestBean) {
-        baseRequestBean.setYhdm("test");
-        baseRequestBean.setImei(Global.imei);
-        baseRequestBean.setImsi(Global.imsi1);
-        baseRequestBean.setLbr("02");
-        baseRequestBean.setGpsX("");
-        baseRequestBean.setGpsY("");
+    public void assembleBasicRequest(BaseRequestBean requestBean) {
+        requestBean.setYhdm(V_config.YHDM);
+        requestBean.setImei(V_config.imei);
+        requestBean.setImsi(V_config.imsi1);
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String pda_time = simpleDateFormat.format(date);
-        baseRequestBean.setPdaTime(pda_time);
+        requestBean.setPdaTime(pda_time);
+        requestBean.setGpsX(V_config.gpsX);
+        requestBean.setGpsY(V_config.gpsY);
     }
 
     @Override
@@ -103,6 +105,12 @@ public abstract class Ac_base_info extends Ac_base implements OnRequestCallback 
                 return InspectPersonJsonRet.class;
             case V_config.INSPECT_CAR:
                 return InspectCarResBean.class;
+            case V_config.GET_ELECTRIC_CAR_INFO:
+                return DdcListResBean.class;
+            case V_config.QUERY_ALL_CASE_CATEGORY:
+                return CaseCateResBean.class;
+            case V_config.GET_CAR_INFO_BY_SFZH:
+                return OwnedCarResBean.class;
         }
         return null;
     }

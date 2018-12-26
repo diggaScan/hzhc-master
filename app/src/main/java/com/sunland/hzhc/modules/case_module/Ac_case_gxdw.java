@@ -8,11 +8,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.sunland.hzhc.Ac_base;
-import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
-import com.sunland.hzhc.modules.case_module.bean.DwBaseInfo;
-import com.sunland.hzhc.modules.case_module.bean.DwListResBean;
+import com.sunland.hzhc.bean.i_case_cate.DwBaseInfo;
+import com.sunland.hzhc.bean.i_charge_case.DwListResBean;
 import com.sunland.hzhc.modules.xmzh_module.Rv_Jg_adapter;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
 import com.sunland.hzhc.utils.AssetDBReader;
@@ -21,23 +21,20 @@ import com.sunlandgroup.def.bean.result.ResultBase;
 import com.sunlandgroup.network.OnRequestCallback;
 import com.sunlandgroup.network.RequestManager;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 
 public class Ac_case_gxdw extends Ac_base implements OnRequestCallback {
 
-    private RequestManager mRequestManager;
-    private AssetDBReader assetDBReader;
-    private SQLiteDatabase database;
     @BindView(R.id.district_list)
     public RecyclerView rv_district_list;
     @BindView(R.id.dw_list)
     public RecyclerView rv_dw_list;
-
+    private RequestManager mRequestManager;
+    private AssetDBReader assetDBReader;
+    private SQLiteDatabase database;
     private Rv_Jg_adapter d_adapter;
     private Rv_Jg_adapter dw_adapter;
 
@@ -143,23 +140,10 @@ public class Ac_case_gxdw extends Ac_base implements OnRequestCallback {
 
     private BaseRequestBean assembleRequestObj() {
         BaseRequestBean bean = new BaseRequestBean();
-        assembleBasicObj(bean);
+        assembleBasicRequest(bean);
         return bean;
     }
 
-    public void assembleBasicObj(BaseRequestBean baseRequestBean) {
-        baseRequestBean.setYhdm("test");
-        baseRequestBean.setImei(Global.imei);
-        baseRequestBean.setImsi(Global.imsi1);
-        baseRequestBean.setLbr("02");
-        baseRequestBean.setGpsX("");
-        baseRequestBean.setGpsY("");
-        Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String pda_time = simpleDateFormat.format(date);
-        baseRequestBean.setPdaTime(pda_time);
-
-    }
 
     private void showWbmc(String xzqh) {
         Cursor cursor = database.rawQuery("SELECT DWMC,DWDM FROM dwlb WHERE DWDM LIKE ?", new String[]{xzqh});

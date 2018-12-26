@@ -11,18 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.sunland.hzhc.Ac_base;
 import com.sunland.hzhc.DataModel;
-import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
-import com.sunland.hzhc.modules.ddc_module.bean.DdcListResBean;
-import com.sunland.hzhc.modules.ddc_module.bean.InfoDDCXQs;
+import com.sunland.hzhc.bean.i_e_bike_info.DdcListResBean;
+import com.sunland.hzhc.bean.i_e_bike_info.DdcxxplReqBean;
+import com.sunland.hzhc.bean.i_e_bike_info.InfoDDCXQs;
+import com.sunland.hzhc.modules.Ac_base_info;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
-import com.sunlandgroup.Global;
 import com.sunlandgroup.def.bean.result.ResultBase;
-import com.sunlandgroup.network.OnRequestCallback;
 import com.sunlandgroup.network.RequestManager;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class Ac_ddc_list extends Ac_base implements OnRequestCallback {
+public class Ac_ddc_list extends Ac_base_info {
 
 
     @BindView(R.id.ddc_list)
@@ -55,7 +55,6 @@ public class Ac_ddc_list extends Ac_base implements OnRequestCallback {
         initView();
     }
 
-
     public void handleIntent() {
         Intent intent = getIntent();
         if (intent != null) {
@@ -77,13 +76,9 @@ public class Ac_ddc_list extends Ac_base implements OnRequestCallback {
         rv_ddc_list.setLayoutManager(manager);
         rv_ddc_list.addItemDecoration(new Rv_Item_decoration(this));
         mRequestManager = new RequestManager(this, this);
-        queryYdjwData(V_config.GET_ELECTRIC_CAR_INFO);
-    }
-
-    public void queryYdjwData(String method_name) {
-        mRequestManager.addRequest(Global.ip, Global.port, Global.postfix, method_name
-                , assembleRequestObj(method_name), 15000);
-        mRequestManager.postRequest();
+        queryYdjwDataNoDialog(V_config.GET_ELECTRIC_CAR_INFO);
+        queryYdjwDataX("");
+        showLoading_layout(true);
     }
 
     public BaseRequestBean assembleRequestObj(String reqName) {
@@ -101,15 +96,18 @@ public class Ac_ddc_list extends Ac_base implements OnRequestCallback {
     }
 
     @Override
-    public <T> void onRequestFinish(String reqId, String reqName, T bean) {
+    public void onDataResponse(String reqId, String reqName, ResultBase bean) {
         switch (reqName) {
             case V_config.GET_ELECTRIC_CAR_INFO:
+                showLoading_layout(false);
                 DdcListResBean ddcListResBean = (DdcListResBean) bean;
                 if (ddcListResBean == null) {
+                    Toast.makeText(this, "电动车批量查询接口异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 List<InfoDDCXQs> infoDDCXQs = ddcListResBean.getInfoDDCXQs();
                 if (infoDDCXQs == null || infoDDCXQs.isEmpty()) {
+                    Toast.makeText(this, "无相关电动车信息返回", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 dataSet.clear();
@@ -132,12 +130,6 @@ public class Ac_ddc_list extends Ac_base implements OnRequestCallback {
                 finish();
             }
         }
-
-    }
-
-    @Override
-    public <T extends ResultBase> Class<?> getBeanClass(String reqId, String reqName) {
-        return DdcListResBean.class;
     }
 
     class MyRvAdapter extends RecyclerView.Adapter<MyRvAdapter.MyViewHolder> {

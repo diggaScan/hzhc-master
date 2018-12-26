@@ -1,1 +1,1 @@
-include ':app', ':SunlandKeyboard', ':buttonSpin', ':httpRequest'
+include ':app', ':SunlandKeyboard', ':buttonSpin', ':httpRequest', ':qrscan'

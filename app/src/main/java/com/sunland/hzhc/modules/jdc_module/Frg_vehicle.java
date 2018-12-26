@@ -3,6 +3,7 @@ package com.sunland.hzhc.modules.jdc_module;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -48,7 +49,7 @@ public class Frg_vehicle extends Frg_base {
         ((Ac_main) context).sunlandKeyBoardManager.addTarget(((Ac_main) context).myKeyBoardView, et_number,
                 SunlandKeyBoardManager.KeyboardMode.VEHICLE_PLATE);
         sb_vehicle.setHeaderTitle("选择车辆类型");
-        sb_vehicle.setDataSet(Arrays.asList(V_config.VEHICLEMODELS));
+        sb_vehicle.setDataSet(Arrays.asList(DataModel.VEHICLEMODELS));
         sb_vehicle.setSelection(0);
     }
 
@@ -59,7 +60,7 @@ public class Frg_vehicle extends Frg_base {
             case R.id.query:
                 String cphm = et_number.getText().toString();
                 String hpzl_str = sb_vehicle.getSelectedItem();
-                String hpzl_num = V_config.VEHICLEMODLES.get(hpzl_str);
+                String hpzl_num = DataModel.VEHICLEMODLES.get(hpzl_str);
                 String fdjh = et_engine_num.getText().toString();
                 String clsbh = et_vehivle_id.getText().toString();
                 Bundle bundle = new Bundle();

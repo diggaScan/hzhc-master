@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.sunland.hzhc.Ac_base;
+import com.sunland.hzhc.DataModel;
 import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.bean.BaseRequestBean;
@@ -69,7 +70,7 @@ public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
         all_lg_code = new ArrayList<>();
 
 
-        d_adapter = new Rv_Jg_adapter(this, Arrays.asList(V_config.HANGZHOU_DISTRICTS));
+        d_adapter = new Rv_Jg_adapter(this, Arrays.asList(DataModel.HANGZHOU_DISTRICTS));
         h_adapter = new Rv_Jg_adapter(this, dataSet_hotels);
 
         d_adapter.setOnItemClickedListener(new Rv_Jg_adapter.OnItemClickedListener() {
@@ -82,7 +83,7 @@ public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
                     lgdm.addAll(all_lg_code);
                     h_adapter.notifyDataSetChanged();
                 } else {
-                    showLglb(V_config.HANGZHOU_DISTRICT_CODE[position] + "%");
+                    showLglb(DataModel.HANGZHOU_DISTRICT_CODE[position] + "%");
                 }
             }
         });
@@ -143,24 +144,10 @@ public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
         switch (reqName) {
             case V_config.GET_ALL_HOTELS:
                 BaseRequestBean bean = new BaseRequestBean();
-                assembleBasicObj(bean);
+                assembleBasicRequest(bean);
                 return bean;
         }
         return null;
-    }
-
-    public void assembleBasicObj(BaseRequestBean baseRequestBean) {
-        baseRequestBean.setYhdm("test");
-        baseRequestBean.setImei(Global.imei);
-        baseRequestBean.setImsi(Global.imsi1);
-        baseRequestBean.setLbr("02");
-        baseRequestBean.setGpsX("");
-        baseRequestBean.setGpsY("");
-        Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String pda_time = simpleDateFormat.format(date);
-        baseRequestBean.setPdaTime(pda_time);
-
     }
 
     @Override

@@ -8,13 +8,17 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.sunland.hzhc.DataModel;
-import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
-import com.sunland.hzhc.UserInfo;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
+import com.sunland.hzhc.bean.i_country_people.CountryPersonReqBean;
+import com.sunland.hzhc.bean.i_country_people.PersonOfCountryJsonRet;
+import com.sunland.hzhc.bean.i_e_bike_focus.EVehicleFocusReqBean;
+import com.sunland.hzhc.bean.i_e_bike_info.DdcxxplReqBean;
 import com.sunland.hzhc.bean.i_inspect_person.Dlxx;
 import com.sunland.hzhc.bean.i_inspect_person.InspectPersonJsonRet;
 import com.sunland.hzhc.bean.i_inspect_person.InspectPersonReqBean;
@@ -28,8 +32,6 @@ import com.sunland.hzhc.modules.lmhc_module.MyTaskParams;
 import com.sunland.hzhc.modules.lmhc_module.QueryHttp;
 import com.sunland.hzhc.modules.p_archive_module.Ac_archive;
 import com.sunland.hzhc.modules.sfz_module.Ac_rycx;
-import com.sunland.hzhc.modules.sfz_module.beans.CountryPersonReqBean;
-import com.sunland.hzhc.modules.sfz_module.beans.PersonOfCountryJsonRet;
 import com.sunlandgroup.Global;
 import com.sunlandgroup.def.bean.result.ResultBase;
 import com.sunlandgroup.utils.JsonUtils;
@@ -40,7 +42,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class Ac_ddc extends Ac_base_info {
-
 
     @BindView(R.id.hc_location)
     public TextView tv_hc_loaciton;
@@ -80,11 +81,12 @@ public class Ac_ddc extends Ac_base_info {
         setContentLayout(R.layout.ac_ddc);
         showNavIcon(true);
         setToolbarTitle("电动车详情");
+        showLoading_layout(true);
         queryYdjwDataNoDialog(V_config.COUNTRY_PERSON);
-        queryYdjwData(V_config.INSPECT_PERSON);
+        queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
+        queryYdjwDataX("");
         initView();
     }
-
 
     @Override
     public void handleIntent() {
@@ -127,7 +129,7 @@ public class Ac_ddc extends Ac_base_info {
                 }
             }
         }).start();
-        setText(tv_hc_loaciton, UserInfo.hc_address);
+        setText(tv_hc_loaciton, V_config.hc_address);
         setText(tv_id_num, sfzh);
         setText(tv_name, czxm);
         setText(tv_plateform_num, hphm);
@@ -141,7 +143,7 @@ public class Ac_ddc extends Ac_base_info {
         switch (reqName) {
             case V_config.GET_ELECTRIC_CAR_INFO:
                 DdcxxplReqBean bean = new DdcxxplReqBean();
-                assembleBasicObj(bean);
+                assembleBasicRequest(bean);
                 bean.setHphm(hphm);
                 bean.setFdjh(fdjh);
                 bean.setCjh(cjh);
@@ -150,23 +152,23 @@ public class Ac_ddc extends Ac_base_info {
                 return bean;
             case V_config.GET_ELECTRIC_CAR_FOCUS_INFO:
                 EVehicleFocusReqBean eVehicleFocusReqBean = new EVehicleFocusReqBean();
-                assembleBasicObj(eVehicleFocusReqBean);
+                assembleBasicRequest(eVehicleFocusReqBean);
                 eVehicleFocusReqBean.setHphm("Y101549");
                 eVehicleFocusReqBean.setCjh("");
                 eVehicleFocusReqBean.setFdjh("");
                 return eVehicleFocusReqBean;
             case V_config.COUNTRY_PERSON:
                 CountryPersonReqBean countryPersonReqBean = new CountryPersonReqBean();
-                assembleBasicObj(countryPersonReqBean);
+                assembleBasicRequest(countryPersonReqBean);
                 countryPersonReqBean.setSfzh(sfzh);
                 return countryPersonReqBean;
             case V_config.INSPECT_PERSON:
                 InspectPersonReqBean inspectPersonReqBean = new InspectPersonReqBean();
-                assembleBasicObj(inspectPersonReqBean);
+                assembleBasicRequest(inspectPersonReqBean);
                 Request request = new Request();
                 inspectPersonReqBean.setYhdm("115576");
                 Dlxx dlxx = new Dlxx();
-                dlxx.setHCDZ(UserInfo.hc_address);
+                dlxx.setHCDZ(V_config.hc_address);
                 request.setDlxx(dlxx);
                 RyxxReq ryxxReq = new RyxxReq();
                 ryxxReq.setJNJW("01");
@@ -186,32 +188,37 @@ public class Ac_ddc extends Ac_base_info {
         switch (reqName) {
             case V_config.COUNTRY_PERSON:
                 PersonOfCountryJsonRet personOfCountry = (PersonOfCountryJsonRet) resultBase;
-                if (personOfCountry != null) {
-                    final String xp = personOfCountry.getXP();
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (xp != null) {
-                                byte[] bitmapArray = Base64.decode(xp, Base64.DEFAULT);
-                                final Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        iv_xp.setImageBitmap(bitmap);
-                                    }
-                                });
-                            }
-                        }
-                    }).start();
+                if (personOfCountry == null) {
+                    Toast.makeText(this, "全国库人员信息查询异常", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-
+                final String xp = personOfCountry.getXP();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (xp != null) {
+                            byte[] bitmapArray = Base64.decode(xp, Base64.DEFAULT);
+                            final Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    iv_xp.setImageBitmap(bitmap);
+                                }
+                            });
+                        }
+                    }
+                }).start();
                 break;
             case V_config.INSPECT_PERSON:
+                showLoading_layout(false);
                 InspectPersonJsonRet inspectPersonJsonRet = (InspectPersonJsonRet) resultBase;
+                if (inspectPersonJsonRet == null) {
+                    Toast.makeText(this, "杭州人核查接口异常", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
                 if (ryxxRes != null) {
                     tv_road_check.setText(ryxxRes.getHcjg() + " " + ryxxRes.getBjxx());
-
 //                    if (ryxxRes.getFhm().equals("000")) {
 //                        tv_road_check.setTextColor(Color.GREEN);
 //                    } else {
@@ -250,7 +257,7 @@ public class Ac_ddc extends Ac_base_info {
                 initNonVehicleInfo(nonVehicleInfo);
                 if (isFromSsj) {
                     bundle.putInt(DataModel.RECORD_BUNDLE_TYPE, 2);
-                    bundle.putString(DataModel.RECORD_BUNDLE_ADDR, UserInfo.hc_address);
+                    bundle.putString(DataModel.RECORD_BUNDLE_ADDR, V_config.hc_address);
                     bundle.putString(DataModel.RECORD_BUNDLE_DATA, new Gson().toJson(nonVehicleInfo));
                     intent.putExtra("bundle", bundle);
                     setResult(RESULT_OK, intent);
@@ -258,7 +265,7 @@ public class Ac_ddc extends Ac_base_info {
                 } else {
                     intent.setAction("com.sunland.action.record");
                     bundle.putInt(DataModel.RECORD_BUNDLE_TYPE, 2);
-                    bundle.putString(DataModel.RECORD_BUNDLE_ADDR, UserInfo.hc_address);
+                    bundle.putString(DataModel.RECORD_BUNDLE_ADDR, V_config.hc_address);
                     bundle.putString(DataModel.RECORD_BUNDLE_DATA, new Gson().toJson(nonVehicleInfo));
                     intent.putExtras(bundle);
                     try {

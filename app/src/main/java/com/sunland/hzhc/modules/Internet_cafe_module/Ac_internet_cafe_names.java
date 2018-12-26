@@ -8,8 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.sunland.hzhc.Ac_base;
-import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.Internet_cafe_module.bean.WbBaseInfo;
 import com.sunland.hzhc.modules.Internet_cafe_module.bean.WbListResBean;
@@ -21,9 +21,7 @@ import com.sunlandgroup.def.bean.result.ResultBase;
 import com.sunlandgroup.network.OnRequestCallback;
 import com.sunlandgroup.network.RequestManager;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -171,7 +169,7 @@ public class Ac_internet_cafe_names extends Ac_base implements OnRequestCallback
         switch (reqName) {
             case V_config.GET_INTERNET_CAFE_INFO:
                 WbListReqBean bean = new WbListReqBean();
-                assembleBasicObj(bean);
+                assembleBasicRequest(bean);
                 bean.setCurrentPage(1);
                 bean.setTotalCount(100);
                 return bean;
@@ -179,19 +177,6 @@ public class Ac_internet_cafe_names extends Ac_base implements OnRequestCallback
         return null;
     }
 
-    public void assembleBasicObj(BaseRequestBean baseRequestBean) {
-        baseRequestBean.setYhdm("test");
-        baseRequestBean.setImei(Global.imei);
-        baseRequestBean.setImsi(Global.imsi1);
-        baseRequestBean.setLbr("02");
-        baseRequestBean.setGpsX("");
-        baseRequestBean.setGpsY("");
-        Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String pda_time = simpleDateFormat.format(date);
-        baseRequestBean.setPdaTime(pda_time);
-
-    }
 
     @Override
     public <T> void onRequestFinish(String reqId, String reqName, T bean) {

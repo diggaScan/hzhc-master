@@ -10,34 +10,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.sunland.hzhc.Ac_base;
-import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
-import com.sunland.hzhc.modules.jdc_module.CzsycReqBean;
-import com.sunland.hzhc.modules.own_car_module.own_car_bean.CarBaseInfo;
-import com.sunland.hzhc.modules.own_car_module.own_car_bean.OwnedCarResBean;
+import com.sunland.hzhc.bean.i_owned_car.CarBaseInfo;
+import com.sunland.hzhc.bean.i_owned_car.CzsycReqBean;
+import com.sunland.hzhc.bean.i_owned_car.OwnedCarResBean;
+import com.sunland.hzhc.modules.Ac_base_info;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
-import com.sunlandgroup.Global;
 import com.sunlandgroup.def.bean.result.ResultBase;
-import com.sunlandgroup.network.OnRequestCallback;
-import com.sunlandgroup.network.RequestManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class Ac_car_list extends Ac_base implements OnRequestCallback {
+public class Ac_car_list extends Ac_base_info {
 
     @BindView(R.id.car_list)
     public RecyclerView rv_car_list;
-
     private List<CarBaseInfo> car_list;
     private MyRvAdapter adapter;
     private String sfzh;//身份证号码
-    private RequestManager mRequestManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +43,13 @@ public class Ac_car_list extends Ac_base implements OnRequestCallback {
         setToolbarTitle("名下机动车");
         handleIntent();
         initView();
-        queryYdjwData(V_config.GET_CAR_INFO_BY_SFZH);
+        queryYdjwDataNoDialog(V_config.GET_CAR_INFO_BY_SFZH);
+        queryYdjwDataX("");
+        showLoading_layout(true);
     }
 
-    private void handleIntent() {
+    @Override
+    public void handleIntent() {
         Intent intent = getIntent();
         if (intent != null) {
             Bundle bundle = intent.getBundleExtra("bundle");
@@ -69,40 +68,32 @@ public class Ac_car_list extends Ac_base implements OnRequestCallback {
         rv_car_list.addItemDecoration(new Rv_Item_decoration(this));
     }
 
-    public void queryYdjwData(String method_name) {
-        mRequestManager = new RequestManager(this, this);
-        mRequestManager.addRequest(Global.ip, Global.port, Global.postfix, method_name
-                , assembleRequestObj(method_name), 15000);
-        mRequestManager.postRequest();
-    }
-
     public BaseRequestBean assembleRequestObj(String reqName) {
         CzsycReqBean czsycReqBean = new CzsycReqBean();
-        assembleBasicObj(czsycReqBean);
+        assembleBasicRequest(czsycReqBean);
         czsycReqBean.setSfzh(sfzh);
         return czsycReqBean;
     }
 
     @Override
-    public <T> void onRequestFinish(String reqId, String reqName, T bean) {
-        OwnedCarResBean ownedCarResBean = (OwnedCarResBean) bean;
-        List<CarBaseInfo> temp_list = ownedCarResBean.getCarList();
-        if (temp_list == null) {
+    public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
+        OwnedCarResBean ownedCarResBean = (OwnedCarResBean) resultBase;
+        showLoading_layout(false);
+        if (ownedCarResBean == null) {
+            Toast.makeText(this, "车主名下车辆接口异常", Toast.LENGTH_SHORT).show();
             return;
-        } else {
-            car_list.clear();
-            car_list.addAll(temp_list);
-            adapter.notifyDataSetChanged();
         }
-    }
-
-    @Override
-    public <T extends ResultBase> Class<?> getBeanClass(String reqId, String reqName) {
-        return OwnedCarResBean.class;
+        List<CarBaseInfo> temp_list = ownedCarResBean.getCarList();
+        if (temp_list == null || temp_list.isEmpty()) {
+            Toast.makeText(this, "无相关车辆信息", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        car_list.clear();
+        car_list.addAll(temp_list);
+        adapter.notifyDataSetChanged();
     }
 
     class MyRvAdapter extends RecyclerView.Adapter<MyRvAdapter.MyViewHolder> {
-
         List<CarBaseInfo> dataSet;
         LayoutInflater inflater;
 
@@ -150,5 +141,5 @@ public class Ac_car_list extends Ac_base implements OnRequestCallback {
             }
         }
     }
-
 }
+

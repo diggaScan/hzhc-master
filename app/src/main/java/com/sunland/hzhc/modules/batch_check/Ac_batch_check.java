@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
-import com.sunland.hzhc.UserInfo;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.bean.i_inspect_person.Dlxx;
 import com.sunland.hzhc.bean.i_inspect_person.InspectPersonJsonRet;
@@ -21,8 +20,8 @@ import com.sunland.hzhc.bean.i_inspect_person.RyxxReq;
 import com.sunland.hzhc.bean.i_inspect_person.RyxxRes;
 import com.sunland.hzhc.modules.Ac_base_info;
 import com.sunland.hzhc.modules.sfz_module.Ac_rycx;
-import com.sunland.hzhc.modules.sfz_module.beans.RyzhxxReqBean;
-import com.sunland.hzhc.modules.sfz_module.beans.RyzhxxResBean;
+import com.sunland.hzhc.bean.i_people_complex.RyzhxxReqBean;
+import com.sunland.hzhc.bean.i_people_complex.RyzhxxResBean;
 import com.sunland.hzhc.utils.UtilsString;
 import com.sunlandgroup.def.bean.result.ResultBase;
 
@@ -75,7 +74,7 @@ public class Ac_batch_check extends Ac_base_info {
     }
 
     private void initView() {
-        tv_hc_loaction.setText(UserInfo.hc_address);
+        tv_hc_loaction.setText(V_config.hc_address);
     }
 
     @OnClick({R.id.query, R.id.filter})
@@ -127,16 +126,16 @@ public class Ac_batch_check extends Ac_base_info {
         switch (reqName) {
             case V_config.PERSON_COMPLEX:
                 RyzhxxReqBean bean = new RyzhxxReqBean();
-                assembleBasicObj(bean);
+                assembleBasicRequest(bean);
                 bean.setSfzh(sfzh);
                 return bean;
             case V_config.INSPECT_PERSON:
                 InspectPersonReqBean inspectPersonReqBean = new InspectPersonReqBean();
-                assembleBasicObj(inspectPersonReqBean);
+                assembleBasicRequest(inspectPersonReqBean);
                 Request request = new Request();
-                inspectPersonReqBean.setYhdm(UserInfo.jhdm);
+                inspectPersonReqBean.setYhdm(V_config.jhdm);
                 Dlxx dlxx = new Dlxx();
-                dlxx.setHCDZ(UserInfo.hc_address);
+                dlxx.setHCDZ(V_config.hc_address);
                 request.setDlxx(dlxx);
                 RyxxReq ryxxReq = new RyxxReq();
                 ryxxReq.setJNJW("01");

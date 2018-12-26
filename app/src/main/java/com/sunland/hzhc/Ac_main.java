@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sunland.hzhc.customView.BannerIndicator;
 import com.sunland.hzhc.fragments.Vp_main_adapter;
 import com.sunland.hzhc.modules.Hotel_module.Frg_hotel;
 import com.sunland.hzhc.modules.Internet_cafe_module.Frg_internet_cafe;
@@ -140,18 +141,18 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
         dataSet.add(new Frg_internet_cafe());
         dataSet.add(new Frg_phone_num());
         dataSet.add(new Frg_case());
-        dataSet.add(new Frg_abroad());
+//        dataSet.add(new Frg_abroad());
         Vp_main_adapter vp_main_adapter = new Vp_main_adapter(getSupportFragmentManager(), dataSet, Arrays.asList(DataModel.MODULE_NAMES));
         vp_frg_container.setAdapter(vp_main_adapter);
         vp_frg_container.setOffscreenPageLimit(10);
         tl_frg_tabs.setupWithViewPager(vp_frg_container);
         LayoutInflater inflater = getLayoutInflater();
-        for (int i = 0; i < DataModel.MODULE_NAMES.length; i++) {
+        for (int i = 0; i < DataModel.MAIN_MODULE_NAMES.length; i++) {
             View view = inflater.inflate(R.layout.custom_main_bot_tab, null);
             TextView tv_name = view.findViewById(R.id.tab_name);
             ImageView iv_icon = view.findViewById(R.id.tab_icon);
-            iv_icon.setImageResource(V_config.TAB_ICONS_UNCLICKED[i]);
-            tv_name.setText(DataModel.MODULE_NAMES[i]);
+            iv_icon.setImageResource(DataModel.TAB_ICONS_UNCLICKED[i]);
+            tv_name.setText(DataModel.MAIN_MODULE_NAMES[i]);
             tl_frg_tabs.getTabAt(i).setTag(i);
             tl_frg_tabs.getTabAt(i).setCustomView(view);
         }
@@ -163,7 +164,7 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
                 int position = (int) tab.getTag();
                 View view = tab.getCustomView();
                 ImageView iv_icon = view.findViewById(R.id.tab_icon);
-                iv_icon.setImageResource(V_config.TAB_ICONS_CLICKED[position]);
+                iv_icon.setImageResource(DataModel.TAB_ICONS_CLICKED[position]);
             }
 
             @Override
@@ -171,7 +172,7 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
                 int position = (int) tab.getTag();
                 View view = tab.getCustomView();
                 ImageView iv_icon = view.findViewById(R.id.tab_icon);
-                iv_icon.setImageResource(V_config.TAB_ICONS_UNCLICKED[position]);
+                iv_icon.setImageResource(DataModel.TAB_ICONS_UNCLICKED[position]);
             }
 
             @Override

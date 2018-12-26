@@ -17,6 +17,8 @@ import static android.app.Activity.RESULT_OK;
 
 public class Frg_case extends Frg_base {
 
+    private final int REQ_CASE_CATE = 0;
+    private final int REQ_DW = 1;
     @BindView(R.id.case_id)
     public EditText et_case_id;
     @BindView(R.id.case_cate)
@@ -25,11 +27,7 @@ public class Frg_case extends Frg_base {
     public TextView tv_case_time;
     @BindView(R.id.case_src)
     public TextView tv_case_src;
-
-    private final int REQ_CASE_CATE = 0;
-    private final int REQ_DW = 1;
     private String dwbh;
-
     private String lbbh;
 
 
@@ -64,7 +62,7 @@ public class Frg_case extends Frg_base {
                 hop2ActivityForResult(Ac_case_cates.class, REQ_CASE_CATE);
                 break;
             case R.id.case_src:
-                hop2ActivityForResult(Ac_case_gxdw.class,REQ_DW);
+                hop2ActivityForResult(Ac_case_gxdw.class, REQ_DW);
                 break;
 
         }

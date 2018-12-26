@@ -40,6 +40,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class Ac_location extends Ac_base {
 
@@ -54,6 +55,7 @@ public class Ac_location extends Ac_base {
     public TextView tv_enter;
     @BindView(R.id.address)
     public EditText et_address;
+    public final int QR_REQUEST_CODE = 0;
 
     private ArrayList<HashMap<String, String>> allList = null;
     private Location_rv_adapter adapter;
@@ -91,34 +93,19 @@ public class Ac_location extends Ac_base {
         initMap();
     }
 
-    private void handleIntent() {
-        Intent intent = getIntent();
-        if (intent != null) {
-            Bundle bundle = intent.getBundleExtra("bundle");
-            if (bundle != null) {
-                req_location = bundle.getInt("req_location");
-            }
-        }
-    }
-
-    private void initView() {
-
-        allList = new ArrayList<>();
-        adapter = new Location_rv_adapter(this, allList);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        rv_addr_list.setLayoutManager(llm);
-        rv_addr_list.setAdapter(adapter);
-        adapter.setOnRvItemClickedListener(new OnRvItemClickedListener() {
-            @Override
-            public void onClick(int i) {
-                et_address.setText(allList.get(i).get("dz"));
-            }
-        });
-
-        tv_enter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+    @OnClick({R.id.qrscan, R.id.metro, R.id.enter})
+    public void onClick(View view) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.qrscan:
+                Intent intent = new Intent();
+                intent.setAction("com.sunland.QR_SCAN");
+                startActivityForResult(intent, QR_REQUEST_CODE);
+                break;
+            case R.id.metro:
+                hop2ActivityForResult(Ac_metro_address.class, QR_REQUEST_CODE);
+                break;
+            case R.id.enter:
                 String loc = et_address.getText().toString();
                 int chinese_num = 0;
                 for (char a : loc.toCharArray()) {
@@ -130,19 +117,52 @@ public class Ac_location extends Ac_base {
                     Toast.makeText(Ac_location.this, "核查地址至少要有5个汉字", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (req_location == UserInfo.REQ_LOCATION) {
-                    UserInfo.hc_address = et_address.getText().toString();
+                if (req_location == V_config.REQ_LOCATION) {
+                    V_config.hc_address = et_address.getText().toString();
                     setResult(RESULT_OK);
                     finish();
                 } else {
-                    UserInfo.hc_address = et_address.getText().toString();
-                    Intent intent = new Intent(Ac_location.this, Ac_main.class);
-                    startActivity(intent);
+                    V_config.hc_address = et_address.getText().toString();
+                    Intent intent2 = new Intent(Ac_location.this, Ac_main.class);
+                    startActivity(intent2);
                     finish();
                 }
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == QR_REQUEST_CODE) {
+            if (data != null) {
+                //requestAddress
+            }
+        }
+    }
+
+    private void handleIntent() {
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle bundle = intent.getBundleExtra("bundle");
+            if (bundle != null) {
+                req_location = bundle.getInt("req_location");
+            }
+        }
+    }
+
+    private void initView() {
+        allList = new ArrayList<>();
+        adapter = new Location_rv_adapter(this, allList);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        rv_addr_list.setLayoutManager(llm);
+        rv_addr_list.setAdapter(adapter);
+        adapter.setOnRvItemClickedListener(new OnRvItemClickedListener() {
+            @Override
+            public void onClick(int i) {
+                et_address.setText(allList.get(i).get("dz"));
             }
         });
-
     }
 
     private void initMap() {
@@ -216,6 +236,8 @@ public class Ac_location extends Ac_base {
                 try {
                     move_jd = center.getX() + "";
                     move_wd = center.getY() + "";
+                    V_config.gpsX = move_jd;
+                    V_config.gpsY = move_wd;
                     MobilePoliceApp.move_jd = move_jd;
                     MobilePoliceApp.move_wd = move_wd;
                     // lx=120&ly=32&pagesize=10

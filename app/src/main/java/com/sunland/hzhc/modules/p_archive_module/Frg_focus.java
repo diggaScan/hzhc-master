@@ -3,13 +3,15 @@ package com.sunland.hzhc.modules.p_archive_module;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.sunland.hzhc.Ac_base;
-import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.Frg_base;
 import com.sunland.hzhc.R;
-import com.sunland.hzhc.UserInfo;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.bean.i_inspect_person.Dlxx;
 import com.sunland.hzhc.bean.i_inspect_person.InspectPersonJsonRet;
@@ -24,9 +26,6 @@ import com.sunland.hzhc.modules.lmhc_module.LmhcResBean;
 import com.sunland.hzhc.modules.lmhc_module.MyTaskParams;
 import com.sunland.hzhc.modules.lmhc_module.QueryHttp;
 import com.sunlandgroup.Global;
-import com.sunlandgroup.def.bean.result.ResultBase;
-import com.sunlandgroup.network.OnRequestCallback;
-import com.sunlandgroup.network.RequestManager;
 import com.sunlandgroup.utils.JsonUtils;
 
 import java.net.URLEncoder;
@@ -34,22 +33,25 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class Frg_focus extends Frg_base implements OnRequestCallback {
+public class Frg_focus extends Frg_base {
 
     @BindView(R.id.wanted)
     public TextView tv_wanted;
     @BindView(R.id.road_check)
     public TextView tv_hcjg;
-
     @BindView(R.id.focus)
     public Button btn_focus;
     @BindView(R.id.retry)
     public Button btn_retry;
+    @BindView(R.id.loading_layout)
+    public FrameLayout loading_layout;
+    @BindView(R.id.loading_icon)
+    public SpinKitView loading_icon;
 
     private String sfzh;//身份证号码
-
-    private RequestManager mRequestManager;
     private List<InfoGZXXResp> gzxx_list;//关注信息列表
+    private Thread thread;
+    private boolean hasLoaded;
 
     @Override
     public int setLayoutId() {
@@ -58,14 +60,11 @@ public class Frg_focus extends Frg_base implements OnRequestCallback {
 
     @Override
     public void initView() {
-        mRequestManager = new RequestManager(context, this);
+        loading_icon.setVisibility(View.GONE);
         btn_focus.setVisibility(View.GONE);
         btn_retry.setVisibility(View.GONE);
         sfzh = ((Ac_archive) context).identity_num;
-//        queryYdjwData(V_config.PERSON_FOCUS_INFO);
-        queryYdjwData(V_config.INSPECT_PERSON);
-
-        new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -77,47 +76,44 @@ public class Frg_focus extends Frg_base implements OnRequestCallback {
                     taskParams.putEntity("sfzh", sfzh);
                     final String result = QueryHttp.post(Global.PERSON_CHECK_QGZT_URL, taskParams);
                     //-1 查无结果,2100再逃
-                    ((Ac_archive) context).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            LmhcResBean lmhcResBean = JsonUtils.fromJson(result, LmhcResBean.class);
-                            tv_wanted.setText(lmhcResBean.getMessage());
-                            if (lmhcResBean.getStatus().equals("-1")) {
-                                tv_wanted.setTextColor(getResources().getColor(R.color.non_warning_color));
-                            } else {
-                                ((Ac_base) context).startVibrate();
-                                tv_wanted.setTextColor(getResources().getColor(R.color.warning_color));
+                    if (context != null) {
+                        ((Ac_archive) context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                LmhcResBean lmhcResBean = JsonUtils.fromJson(result, LmhcResBean.class);
+                                tv_wanted.setText(lmhcResBean.getMessage());
+                                if (lmhcResBean.getStatus().equals("-1")) {
+                                    tv_wanted.setTextColor(getResources().getColor(R.color.non_warning_color));
+                                } else {
+                                    ((Ac_base) context).startVibrate();
+                                    tv_wanted.setTextColor(getResources().getColor(R.color.warning_color));
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
+        thread.start();
     }
 
-    public void queryYdjwData(String method_name) {
-        mRequestManager.addRequest(Global.ip, Global.port, Global.postfix, method_name
-                , assembleRequestObj(method_name), 15000);
-        mRequestManager.postRequest();
-
-    }
-
+    @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
         switch (reqName) {
             case V_config.PERSON_FOCUS_INFO:
                 FocusReqBean focusReqBean = new FocusReqBean();
-                assembleBasicObj(focusReqBean);
+                assembleBasicRequest(focusReqBean);
                 focusReqBean.setSfzh(sfzh);
                 return focusReqBean;
             case V_config.INSPECT_PERSON:
                 InspectPersonReqBean inspectPersonReqBean = new InspectPersonReqBean();
-                assembleBasicObj(inspectPersonReqBean);
+                assembleBasicRequest(inspectPersonReqBean);
                 Request request = new Request();
                 inspectPersonReqBean.setYhdm("115576");
                 Dlxx dlxx = new Dlxx();
-                dlxx.setHCDZ(UserInfo.hc_address);
+                dlxx.setHCDZ(V_config.hc_address);
                 request.setDlxx(dlxx);
                 RyxxReq ryxxReq = new RyxxReq();
                 ryxxReq.setJNJW("01");
@@ -133,13 +129,23 @@ public class Frg_focus extends Frg_base implements OnRequestCallback {
 
     @Override
     public <T> void onRequestFinish(String reqId, String reqName, T bean) {
+
         switch (reqName) {
             case V_config.PERSON_FOCUS_INFO:
                 PeopleFocusResBean peopleFocusResBean = (PeopleFocusResBean) bean;
+                if (peopleFocusResBean == null) {
+                    Toast.makeText(context, "人员关注信息接口异常", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 gzxx_list = peopleFocusResBean.getGzxxList();
+                hasLoaded = true;
                 break;
             case V_config.INSPECT_PERSON:
                 InspectPersonJsonRet inspectPersonJsonRet = (InspectPersonJsonRet) bean;
+                if (inspectPersonJsonRet == null) {
+                    Toast.makeText(context, "杭州人核查接口异常", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
                 if (ryxxRes != null) {
                     String result;
@@ -149,19 +155,20 @@ public class Frg_focus extends Frg_base implements OnRequestCallback {
                         result = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
                     }
                     tv_hcjg.setText(Html.fromHtml(result));
+                    hasLoaded = true;
                 }
                 break;
         }
     }
 
     @Override
-    public <T extends ResultBase> Class<?> getBeanClass(String reqId, String reqName) {
-        switch (reqName) {
-            case V_config.PERSON_FOCUS_INFO:
-                return PeopleFocusResBean.class;
-            case V_config.INSPECT_PERSON:
-                return InspectPersonJsonRet.class;
+    public void onFragmentVisible() {
+        super.onFragmentVisible();
+        if (hasLoaded) {
+            return;
         }
-        return null;
+//        queryYdjwData(V_config.PERSON_FOCUS_INFO);
+        queryYdjwData(V_config.INSPECT_PERSON);
+        loading_icon.setVisibility(View.VISIBLE);
     }
 }

@@ -1,6 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
+
+    signingConfigs {
+        release {
+            keyAlias 'key0'
+            keyPassword '13567497155abc'
+            storeFile file('F:/asKeyStore/yptKeystore.jks')
+            storePassword '13567497155abc'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.sunland.hzhc"
@@ -9,9 +18,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        signingConfig signingConfigs.release
     }
-
     packagingOptions {
         exclude 'META-INF/LGPL2.1'
         exclude 'META-INF/LICENSE'
@@ -21,10 +29,17 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
     useLibrary 'org.apache.http.legacy'
-
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
     flavorDimensions "hzhc"
     productFlavors {
         //独立app版
@@ -43,10 +58,10 @@ android {
             dimension "hzhc"
         }
     }
-
 }
 
 dependencies {
+    implementation 'com.github.ybq:Android-SpinKit:1.0.4'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.jakewharton:butterknife:8.8.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
@@ -61,4 +76,5 @@ dependencies {
     implementation files('libs/alibgis.jar')
     implementation project(':buttonSpin')
     implementation project(':httpRequest')
+    implementation project(':qrscan')
 }

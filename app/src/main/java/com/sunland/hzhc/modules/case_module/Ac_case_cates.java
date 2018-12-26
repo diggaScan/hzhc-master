@@ -12,26 +12,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sunland.hzhc.Ac_base;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
-import com.sunland.hzhc.modules.case_module.bean.CaseCateResBean;
-import com.sunland.hzhc.modules.case_module.bean.LbList;
+import com.sunland.hzhc.bean.i_case_cate.CaseCateResBean;
+import com.sunland.hzhc.bean.i_charge_case.LbList;
+import com.sunland.hzhc.modules.Ac_base_info;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
-import com.sunlandgroup.Global;
 import com.sunlandgroup.def.bean.result.ResultBase;
-import com.sunlandgroup.network.OnRequestCallback;
 import com.sunlandgroup.network.RequestManager;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class Ac_case_cates extends Ac_base implements OnRequestCallback {
+public class Ac_case_cates extends Ac_base_info {
 
     @BindView(R.id.cate_list)
     public RecyclerView rv_cate_list;
@@ -47,8 +43,15 @@ public class Ac_case_cates extends Ac_base implements OnRequestCallback {
         showNavIcon(true);
         setToolbarTitle("案件类型列表");
         initView();
-        mRequestManager = new RequestManager(this, this);
-        queryCaseCates(V_config.QUERY_ALL_CASE_CATEGORY);
+
+        queryYdjwDataNoDialog(V_config.QUERY_ALL_CASE_CATEGORY);
+        queryYdjwDataX("");
+        showLoading_layout(true);
+    }
+
+    @Override
+    public void handleIntent() {
+
     }
 
     private void initView() {
@@ -60,42 +63,26 @@ public class Ac_case_cates extends Ac_base implements OnRequestCallback {
         rv_cate_list.addItemDecoration(new Rv_Item_decoration(this));
     }
 
-    private void queryCaseCates(String reqName) {
-        mRequestManager.addRequest(Global.ip, Global.port, Global.postfix, reqName
-                , assembleRequestObj(), 15000);
-        mRequestManager.postRequest();
-    }
-
-    private BaseRequestBean assembleRequestObj() {
+    @Override
+    public BaseRequestBean assembleRequestObj(String reqName) {
         BaseRequestBean bean = new BaseRequestBean();
-        assembleBasicObj(bean);
+        assembleBasicRequest(bean);
         return bean;
     }
 
-    public void assembleBasicObj(BaseRequestBean baseRequestBean) {
-        baseRequestBean.setYhdm("test");
-        baseRequestBean.setImei(Global.imei);
-        baseRequestBean.setImsi(Global.imsi1);
-        baseRequestBean.setLbr("02");
-        baseRequestBean.setGpsX("");
-        baseRequestBean.setGpsY("");
-        Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String pda_time = simpleDateFormat.format(date);
-        baseRequestBean.setPdaTime(pda_time);
-    }
-
     @Override
-    public <T> void onRequestFinish(String reqId, String reqName, T bean) {
+    public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
         switch (reqName) {
             case V_config.QUERY_ALL_CASE_CATEGORY:
-                CaseCateResBean caseCateResBean = (CaseCateResBean) bean;
+                showLoading_layout(false);
+                CaseCateResBean caseCateResBean = (CaseCateResBean) resultBase;
                 if (caseCateResBean == null) {
+                    Toast.makeText(this, "案件种类接口异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 List<LbList> lbList = caseCateResBean.getLbList();
                 if (lbList == null || lbList.isEmpty()) {
-                    Toast.makeText(this, "数据返回为空", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "案件种类返回未空", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 dataSet.clear();
@@ -103,11 +90,6 @@ public class Ac_case_cates extends Ac_base implements OnRequestCallback {
                 adapter.notifyDataSetChanged();
                 break;
         }
-    }
-
-    @Override
-    public <T extends ResultBase> Class<?> getBeanClass(String reqId, String reqName) {
-        return CaseCateResBean.class;
     }
 
     class MyCateAdapter extends RecyclerView.Adapter<MyCateAdapter.MyViewHolder> {

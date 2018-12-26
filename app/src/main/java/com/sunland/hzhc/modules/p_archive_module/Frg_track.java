@@ -6,20 +6,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.sunland.hzhc.V_config;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.sunland.hzhc.Frg_base;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
-import com.sunland.hzhc.modules.p_archive_module.track_bean.GjList;
-import com.sunland.hzhc.modules.p_archive_module.track_bean.TrackResBean;
-import com.sunland.hzhc.modules.sfz_module.beans.TrackReqBean;
+import com.sunland.hzhc.bean.i_track.GjList;
+import com.sunland.hzhc.bean.i_track.TrackReqBean;
+import com.sunland.hzhc.bean.i_track.TrackResBean;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
-import com.sunlandgroup.Global;
-import com.sunlandgroup.def.bean.result.ResultBase;
-import com.sunlandgroup.network.OnRequestCallback;
-import com.sunlandgroup.network.RequestManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,15 +26,18 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class Frg_track extends Frg_base implements OnRequestCallback {
-
-    private RequestManager mRequestManager;
+public class Frg_track extends Frg_base {
 
     @BindView(R.id.track_infos)
     public RecyclerView rv_track_infos;
+    @BindView(R.id.loading_layout)
+    public FrameLayout loading_layout;
+    @BindView(R.id.loading_icon)
+    public SpinKitView loading_icon;
 
     private List<GjList> dataSet;
     private MyRvAdapter adapter;
+    private boolean hasLoaded;
 
     @Override
     public int setLayoutId() {
@@ -44,27 +46,19 @@ public class Frg_track extends Frg_base implements OnRequestCallback {
 
     @Override
     public void initView() {
+        loading_icon.setVisibility(View.GONE);
         dataSet = new ArrayList<>();
-        mRequestManager = new RequestManager(context, this);
         adapter = new MyRvAdapter(dataSet);
         LinearLayoutManager manager = new LinearLayoutManager(context);
         rv_track_infos.setAdapter(adapter);
         rv_track_infos.setLayoutManager(manager);
         rv_track_infos.addItemDecoration(new Rv_Item_decoration(context));
-        queryYdjwData(V_config.PERSON_LOCUS_INFOS);
-
-
     }
 
-    public void queryYdjwData(String method_name) {
-        mRequestManager.addRequest(Global.ip, Global.port, Global.postfix, method_name
-                , assembleRequestObj(method_name), 15000);
-        mRequestManager.postRequest();
-    }
-
-    private BaseRequestBean assembleRequestObj(String reqName) {
+    @Override
+    public BaseRequestBean assembleRequestObj(String reqName) {
         TrackReqBean trackReqBean = new TrackReqBean();
-        assembleBasicObj(trackReqBean);
+        assembleBasicRequest(trackReqBean);
         trackReqBean.setSfzh(((Ac_archive) context).identity_num);
         trackReqBean.setCount(100);
         trackReqBean.setQqsj_q("19930101");
@@ -76,15 +70,32 @@ public class Frg_track extends Frg_base implements OnRequestCallback {
 
     @Override
     public <T> void onRequestFinish(String reqId, String reqName, T bean) {
+        loading_layout.setVisibility(View.GONE);
+
         TrackResBean resBean = (TrackResBean) bean;
+        if (resBean == null) {
+            Toast.makeText(context, "人员轨迹接口异常", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        List<GjList> list = resBean.getGjList();
+        if (list == null || list.isEmpty()) {
+            Toast.makeText(context, "无轨迹信息", Toast.LENGTH_SHORT).show();
+            return;
+        }
         dataSet.clear();
-        dataSet.addAll(resBean.getGjList());
+        dataSet.addAll(list);
         adapter.notifyDataSetChanged();
+        hasLoaded = true;
     }
 
     @Override
-    public <T extends ResultBase> Class<?> getBeanClass(String reqId, String reqName) {
-        return TrackResBean.class;
+    public void onFragmentVisible() {
+        super.onFragmentVisible();
+        if (hasLoaded) {
+            return;
+        }
+        queryYdjwData(V_config.PERSON_LOCUS_INFOS);
+        loading_icon.setVisibility(View.VISIBLE);
     }
 
     class MyRvAdapter extends RecyclerView.Adapter<MyRvAdapter.MyViewHolder> {

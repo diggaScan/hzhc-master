@@ -36,4 +36,8 @@
     <!--警告颜色 -->
     <color name="warning_color">#d13931</color>
     <color name="non_warning_color">#05b163</color>
+
+    <!--dialog_utils-->
+    <color name="dialog_backgrounf">#a4313131</color>
+    <color name="progress_gray">#aea6a6</color>
 </resources>

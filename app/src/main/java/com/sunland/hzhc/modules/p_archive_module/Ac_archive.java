@@ -56,19 +56,18 @@ public class Ac_archive extends Ac_base {
         frgs.add(new Frg_track());
         String[] names = {"档案信息", "关注信息", "轨迹信息"};
         MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager(), frgs, names);
-
         vp_frgs.setAdapter(myViewPagerAdapter);
         vp_frgs.setOffscreenPageLimit(3);
         tl_items.setupWithViewPager(vp_frgs);
         vp_frgs.setCurrentItem(tab_id);
+        vp_frgs.setOffscreenPageLimit(3);
     }
-
 
     class MyViewPagerAdapter extends FragmentPagerAdapter {
         private List<Fragment> dataSet;
         private String[] names;
 
-        public MyViewPagerAdapter(FragmentManager fm, List<Fragment> dataSet, String[] names) {
+        MyViewPagerAdapter(FragmentManager fm, List<Fragment> dataSet, String[] names) {
             super(fm);
             this.dataSet = dataSet;
             this.names = names;

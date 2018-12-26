@@ -206,7 +206,8 @@ public class HttpRequest {
         sb.append("<" + mReqName + ">");
 
         try {
-            sb.append(String.format(PARAMMASK, URLEncoder.encode(JsonUtils.toJson(mParamObj), "utf-8")));
+            String json = JsonUtils.toJson(mParamObj);
+            sb.append(String.format(PARAMMASK, URLEncoder.encode(json, "utf-8")));
         } catch (Exception e) {
             e.printStackTrace();
         }

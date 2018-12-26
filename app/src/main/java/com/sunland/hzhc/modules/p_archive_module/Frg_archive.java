@@ -1,27 +1,27 @@
 package com.sunland.hzhc.modules.p_archive_module;
 
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.sunland.hzhc.V_config;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.sunland.hzhc.Frg_base;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
-import com.sunland.hzhc.modules.p_archive_module.bean.InfoRYDADHHM;
-import com.sunland.hzhc.modules.p_archive_module.bean.PersonArchiveResBean;
-import com.sunland.hzhc.modules.p_archive_module.bean.QueryInfoDAJDC;
-import com.sunland.hzhc.modules.p_archive_module.bean.QueryInfoHY;
-import com.sunland.hzhc.modules.p_archive_module.bean.RYDAInfoGZDW;
-import com.sunland.hzhc.modules.sfz_module.beans.ArchiveReqBean;
-import com.sunlandgroup.Global;
-import com.sunlandgroup.def.bean.result.ResultBase;
-import com.sunlandgroup.network.OnRequestCallback;
-import com.sunlandgroup.network.RequestManager;
+import com.sunland.hzhc.bean.i_archive.ArchiveReqBean;
+import com.sunland.hzhc.bean.i_archive.InfoRYDADHHM;
+import com.sunland.hzhc.bean.i_archive.PersonArchiveResBean;
+import com.sunland.hzhc.bean.i_archive.QueryInfoDAJDC;
+import com.sunland.hzhc.bean.i_archive.QueryInfoHY;
+import com.sunland.hzhc.bean.i_archive.RYDAInfoGZDW;
 
 import java.util.List;
 
 import butterknife.BindView;
 
-public class Frg_archive extends Frg_base implements OnRequestCallback {
+public class Frg_archive extends Frg_base {
 
     @BindView(R.id.name)
     public TextView tv_name;
@@ -61,8 +61,12 @@ public class Frg_archive extends Frg_base implements OnRequestCallback {
     public TextView tv_gzdw;
     @BindView(R.id.car_reg)
     public TextView tv_car_reg;
+    @BindView(R.id.loading_layout)
+    public FrameLayout loading_layout;
+    @BindView(R.id.loading_icon)
+    public SpinKitView loading_icon;
 
-    private RequestManager mRequestManager;
+    private boolean hasLoaded;
 
     @Override
     public int setLayoutId() {
@@ -71,29 +75,25 @@ public class Frg_archive extends Frg_base implements OnRequestCallback {
 
     @Override
     public void initView() {
-        mRequestManager = new RequestManager(context, this);
-        queryYdjwData(V_config.GET_PERSON_INFO_BY_SFZH);
-    }
-
-    public void queryYdjwData(String method_name) {
-        mRequestManager.addRequest(Global.ip, Global.port, Global.postfix, method_name
-                , assembleRequestObj(method_name), 15000);
-        mRequestManager.postRequest();
 
     }
 
-
+    @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
         ArchiveReqBean archiveReqBean = new ArchiveReqBean();
-        assembleBasicObj(archiveReqBean);
+        assembleBasicRequest(archiveReqBean);
         archiveReqBean.setSfzh(((Ac_archive) context).identity_num);
         return archiveReqBean;
     }
 
-
     @Override
     public <T> void onRequestFinish(String reqId, String reqName, T bean) {
+        loading_layout.setVisibility(View.GONE);
         PersonArchiveResBean resBean = (PersonArchiveResBean) bean;
+        if (resBean == null) {
+            Toast.makeText(context, "人员档案信息接口异常", Toast.LENGTH_SHORT).show();
+            return;
+        }
         setText(tv_name, resBean.getXm());
         setText(tv_eng_name, resBean.getXm_e());
         setText(tv_gender, resBean.getXb());
@@ -146,12 +146,15 @@ public class Frg_archive extends Frg_base implements OnRequestCallback {
             }
             setText(tv_car_reg, cc.toString());
         }
-
-
+        hasLoaded = true;
     }
 
     @Override
-    public <T extends ResultBase> Class<?> getBeanClass(String reqId, String reqName) {
-        return PersonArchiveResBean.class;
+    public void onFragmentVisible() {
+        super.onFragmentVisible();
+        if (hasLoaded) {
+            return;
+        }
+        queryYdjwData(V_config.GET_PERSON_INFO_BY_SFZH);
     }
 }

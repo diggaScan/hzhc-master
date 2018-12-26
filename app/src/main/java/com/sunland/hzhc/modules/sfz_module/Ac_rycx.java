@@ -18,16 +18,22 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.sunland.hzhc.Ac_location;
 import com.sunland.hzhc.DataModel;
-import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
-import com.sunland.hzhc.UserInfo;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
+import com.sunland.hzhc.bean.i_country_people.CountryPersonReqBean;
+import com.sunland.hzhc.bean.i_country_people.PersonOfCountryJsonRet;
 import com.sunland.hzhc.bean.i_inspect_person.Dlxx;
 import com.sunland.hzhc.bean.i_inspect_person.InspectPersonJsonRet;
 import com.sunland.hzhc.bean.i_inspect_person.InspectPersonReqBean;
 import com.sunland.hzhc.bean.i_inspect_person.Request;
 import com.sunland.hzhc.bean.i_inspect_person.RyxxReq;
 import com.sunland.hzhc.bean.i_inspect_person.RyxxRes;
+import com.sunland.hzhc.bean.i_people_complex.InfoFCXX;
+import com.sunland.hzhc.bean.i_people_complex.InfoRYXXForJDC;
+import com.sunland.hzhc.bean.i_people_complex.RyzhxxReqBean;
+import com.sunland.hzhc.bean.i_people_complex.RyzhxxResBean;
+import com.sunland.hzhc.bean.i_people_complex.XQInfoZZ;
 import com.sunland.hzhc.bean.ssjBean.PersonInfo;
 import com.sunland.hzhc.modules.Ac_base_info;
 import com.sunland.hzhc.modules.ddc_module.Ac_ddc_list;
@@ -37,13 +43,6 @@ import com.sunland.hzhc.modules.lmhc_module.MyTaskParams;
 import com.sunland.hzhc.modules.lmhc_module.QueryHttp;
 import com.sunland.hzhc.modules.own_car_module.Ac_car_list;
 import com.sunland.hzhc.modules.p_archive_module.Ac_archive;
-import com.sunland.hzhc.modules.sfz_module.beans.CountryPersonReqBean;
-import com.sunland.hzhc.modules.sfz_module.beans.InfoFCXX;
-import com.sunland.hzhc.modules.sfz_module.beans.InfoRYXXForJDC;
-import com.sunland.hzhc.modules.sfz_module.beans.PersonOfCountryJsonRet;
-import com.sunland.hzhc.modules.sfz_module.beans.RyzhxxReqBean;
-import com.sunland.hzhc.modules.sfz_module.beans.RyzhxxResBean;
-import com.sunland.hzhc.modules.sfz_module.beans.XQInfoZZ;
 import com.sunlandgroup.Global;
 import com.sunlandgroup.def.bean.result.ResultBase;
 import com.sunlandgroup.utils.JsonUtils;
@@ -132,14 +131,16 @@ public class Ac_rycx extends Ac_base_info {
         setToolbarTitle("个人信息");
         resources = getResources();
         initView();
-        queryYdjwData(V_config.PERSON_COMPLEX);
-        queryYdjwDataNoDialog(V_config.COUNTRY_PERSON);
+
         queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
+        queryYdjwDataNoDialog(V_config.COUNTRY_PERSON);
+        queryYdjwDataNoDialog(V_config.PERSON_COMPLEX);
         queryYdjwDataX("");
+        showLoading_layout(true);
     }
 
     public void initView() {
-        tv_hc_location.setText(UserInfo.hc_address);
+        tv_hc_location.setText(V_config.hc_address);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -194,21 +195,21 @@ public class Ac_rycx extends Ac_base_info {
         switch (reqName) {
             case V_config.PERSON_COMPLEX:
                 RyzhxxReqBean bean = new RyzhxxReqBean();
-                assembleBasicObj(bean);
+                assembleBasicRequest(bean);
                 bean.setSfzh(sfzh);
                 return bean;
             case V_config.COUNTRY_PERSON:
                 CountryPersonReqBean countryPersonReqBean = new CountryPersonReqBean();
-                assembleBasicObj(countryPersonReqBean);
+                assembleBasicRequest(countryPersonReqBean);
                 countryPersonReqBean.setSfzh(sfzh);
                 return countryPersonReqBean;
             case V_config.INSPECT_PERSON:
                 InspectPersonReqBean inspectPersonReqBean = new InspectPersonReqBean();
-                assembleBasicObj(inspectPersonReqBean);
+                assembleBasicRequest(inspectPersonReqBean);
                 Request request = new Request();
-                inspectPersonReqBean.setYhdm(UserInfo.jhdm);
+                inspectPersonReqBean.setYhdm(V_config.jhdm);
                 Dlxx dlxx = new Dlxx();
-                dlxx.setHCDZ(UserInfo.hc_address);
+                dlxx.setHCDZ(V_config.hc_address);
                 request.setDlxx(dlxx);
                 RyxxReq ryxxReq = new RyxxReq();
                 ryxxReq.setJNJW("01");
@@ -264,8 +265,8 @@ public class Ac_rycx extends Ac_base_info {
                 break;
 
             case R.id.location_container:
-                bundle.putInt("req_location", UserInfo.REQ_LOCATION);
-                hop2ActivityForResult(Ac_location.class, bundle, UserInfo.REQ_LOCATION);
+                bundle.putInt("req_location", V_config.REQ_LOCATION);
+                hop2ActivityForResult(Ac_location.class, bundle, V_config.REQ_LOCATION);
                 break;
         }
     }
@@ -274,179 +275,180 @@ public class Ac_rycx extends Ac_base_info {
     public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
         switch (reqName) {
             case V_config.PERSON_COMPLEX:
+                showLoading_layout(false);
                 RyzhxxResBean ryzhxxResBean = (RyzhxxResBean) resultBase;
-                if (ryzhxxResBean != null) {
-                    setText(tv_id_num, ryzhxxResBean.getSfzh());
-                    setText(tv_name, ryzhxxResBean.getXm());
-                    setText(tv_gender, ryzhxxResBean.getXb());
-                    setText(tv_birth, ryzhxxResBean.getCsrq());
-                    setText(tv_ethnic, ryzhxxResBean.getMz());
-                    setText(tv_origin_place, ryzhxxResBean.getJg());
-                    setText(tv_driver_license, ryzhxxResBean.getZjcx());
-                    setText(tv_og_address, ryzhxxResBean.getHjdz());
-                    List<InfoRYXXForJDC> jdcs = ryzhxxResBean.getJdc_list();
+                if (ryzhxxResBean == null) {
+                    Toast.makeText(this, "人员综合信息查询接口异常", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                setText(tv_id_num, ryzhxxResBean.getSfzh());
+                setText(tv_name, ryzhxxResBean.getXm());
+                setText(tv_gender, ryzhxxResBean.getXb());
+                setText(tv_birth, ryzhxxResBean.getCsrq());
+                setText(tv_ethnic, ryzhxxResBean.getMz());
+                setText(tv_origin_place, ryzhxxResBean.getJg());
+                setText(tv_driver_license, ryzhxxResBean.getZjcx());
+                setText(tv_og_address, ryzhxxResBean.getHjdz());
+                List<InfoRYXXForJDC> jdcs = ryzhxxResBean.getJdc_list();
+                xm = ryzhxxResBean.getXm();
+                xb = ryzhxxResBean.getXb();
+                hjqh = ryzhxxResBean.getHjqh();
+                mz = ryzhxxResBean.getMz();
 
-
-                    xm = ryzhxxResBean.getXm();
-                    xb = ryzhxxResBean.getXb();
-                    hjqh = ryzhxxResBean.getHjqh();
-                    mz = ryzhxxResBean.getMz();
-
-                    if (jdcs != null && !jdcs.isEmpty()) {
-                        jdc_num = jdcs.size();
-                        StringBuilder hphms = new StringBuilder();
-                        StringBuilder sb_jdc = new StringBuilder();
-                        int y = 1;
-                        for (int i = 0; i < jdc_num; i++) {
-                            String jdc_hp = jdcs.get(i).getHphm();
-                            sb_jdc.append(jdc_hp).append(",");
-                            if (y != 3) {
+                if (jdcs == null || jdcs.isEmpty()) {
+                    setText(tv_vehicle, "");
+                    showButton(btn_jdc_check, "");
+                } else {
+                    jdc_num = jdcs.size();
+                    StringBuilder hphms = new StringBuilder();
+                    StringBuilder sb_jdc = new StringBuilder();
+                    int y = 1;
+                    for (int i = 0; i < jdc_num; i++) {
+                        String jdc_hp = jdcs.get(i).getHphm();
+                        sb_jdc.append(jdc_hp).append(",");
+                        if (y != 3) {
+                            hphms.append(jdc_hp).append(",");
+                            y++;
+                        } else {
+                            if (i == jdc_num - 1) {
                                 hphms.append(jdc_hp).append(",");
-                                y++;
                             } else {
-                                if (i == jdc_num - 1) {
-                                    hphms.append(jdc_hp).append(",");
-                                } else {
-                                    hphms.append(jdc_hp).append("," + "\n");
-                                }
-                                y = 1;
+                                hphms.append(jdc_hp).append("," + "\n");
                             }
+                            y = 1;
                         }
-                        tp_jdc_hp = sb_jdc.toString();
-                        jdc_hp = hphms.toString();
-                        setText(tv_vehicle, jdc_hp.substring(0, jdc_hp.length() - 1));
-                        showButton(btn_jdc_check, jdc_hp);
-                    } else {
-                        setText(tv_vehicle, "");
-                        showButton(btn_jdc_check, "");
                     }
+                    tp_jdc_hp = sb_jdc.toString();
+                    jdc_hp = hphms.toString();
+                    setText(tv_vehicle, jdc_hp.substring(0, jdc_hp.length() - 1));
+                    showButton(btn_jdc_check, jdc_hp);
+                }
 
-                    List<String> dh_list = ryzhxxResBean.getDh_list();
-                    if (dh_list != null && !dh_list.isEmpty()) {
-                        StringBuilder phone_nums = new StringBuilder();
-                        int k = 1;
-                        StringBuilder tp_phone = new StringBuilder();
-                        for (int i = 0; i < dh_list.size(); i++) {
-                            String dh = dh_list.get(i);
-                            tp_phone.append(dh).append(",").toString();
-                            if (k != 2) {
+                List<String> dh_list = ryzhxxResBean.getDh_list();
+                if (dh_list == null || dh_list.isEmpty()) {
+                    setText(tv_phone_num, "");
+                    showButton(btn_phone_check, "");
+                } else {
+                    StringBuilder phone_nums = new StringBuilder();
+                    int k = 1;
+                    StringBuilder tp_phone = new StringBuilder();
+                    for (int i = 0; i < dh_list.size(); i++) {
+                        String dh = dh_list.get(i);
+                        tp_phone.append(dh).append(",").toString();
+                        if (k != 2) {
+                            phone_nums.append(dh).append(",");
+                            k++;
+                        } else {
+                            if (i == dh_list.size() - 1) {
                                 phone_nums.append(dh).append(",");
-                                k++;
                             } else {
-                                if (i == dh_list.size() - 1) {
-                                    phone_nums.append(dh).append(",");
-                                } else {
-                                    phone_nums.append(dh).append("," + "\n");
-                                }
-                                k = 1;
+                                phone_nums.append(dh).append("," + "\n");
                             }
+                            k = 1;
                         }
-                        tp_dh_str = tp_phone.toString();
-                        dh_str = phone_nums.toString();
-                        setText(tv_phone_num, dh_str.substring(0, dh_str.length() - 1));
-                        showButton(btn_phone_check, dh_str);
-                    } else {
-                        setText(tv_phone_num, "");
-                        showButton(btn_phone_check, "");
                     }
+                    tp_dh_str = tp_phone.toString();
+                    dh_str = phone_nums.toString();
+                    setText(tv_phone_num, dh_str.substring(0, dh_str.length() - 1));
+                    showButton(btn_phone_check, dh_str);
+                }
 
-                    List<XQInfoZZ> zzxx_list = ryzhxxResBean.getZzxx_list();
-                    if (zzxx_list != null && !zzxx_list.isEmpty()) {
-                        StringBuilder temp_adds = new StringBuilder();
-                        for (XQInfoZZ xqInfoZZ : zzxx_list) {
-                            temp_adds.append(xqInfoZZ.getZzdz());
-                        }
-                        setText(tv_temp_address, temp_adds.toString());
-                    } else {
-                        setText(tv_temp_address, "");
+                List<XQInfoZZ> zzxx_list = ryzhxxResBean.getZzxx_list();
+                if (zzxx_list == null || zzxx_list.isEmpty()) {
+                    setText(tv_temp_address, "");
+                } else {
+                    StringBuilder temp_adds = new StringBuilder();
+                    for (XQInfoZZ xqInfoZZ : zzxx_list) {
+                        temp_adds.append(xqInfoZZ.getZzdz());
                     }
+                    setText(tv_temp_address, temp_adds.toString());
+                }
 
-                    List<String> fjdc_list = ryzhxxResBean.getFjdc_list();
-                    if (fjdc_list != null && !fjdc_list.isEmpty()) {
-                        fjdc_num = fjdc_list.size();
-                        StringBuilder temp_adds = new StringBuilder();
-                        StringBuilder sb_fjdc = new StringBuilder();
-                        int y = 1;//分为3列
-                        for (int i = 0; i < fjdc_list.size(); i++) {
-                            String hp = fjdc_list.get(i);
-                            sb_fjdc.append(hp).append(",").toString();
-                            if (y != 3) {
+                List<String> fjdc_list = ryzhxxResBean.getFjdc_list();
+                if (fjdc_list == null || fjdc_list.isEmpty()) {
+                    setText(tv_fjdc, "");
+                    showButton(btn_fjdc_check, "");
+                } else {
+                    fjdc_num = fjdc_list.size();
+                    StringBuilder temp_adds = new StringBuilder();
+                    StringBuilder sb_fjdc = new StringBuilder();
+                    int y = 1;//分为3列
+                    for (int i = 0; i < fjdc_list.size(); i++) {
+                        String hp = fjdc_list.get(i);
+                        sb_fjdc.append(hp).append(",").toString();
+                        if (y != 3) {
+                            temp_adds.append(hp).append(",");
+                            y++;
+                        } else {
+                            if (i == fjdc_list.size() - 1) {
                                 temp_adds.append(hp).append(",");
-                                y++;
                             } else {
-                                if (i == fjdc_list.size() - 1) {
-                                    temp_adds.append(hp).append(",");
-                                } else {
-                                    temp_adds.append(hp).append("," + "\n");
-                                }
-                                y = 1;
+                                temp_adds.append(hp).append("," + "\n");
                             }
+                            y = 1;
                         }
-                        fjdc_hp = temp_adds.toString();
-                        tp_fjdc_hp = sb_fjdc.toString();
-                        setText(tv_fjdc, fjdc_hp.substring(0, fjdc_hp.length() - 1));
-                        showButton(btn_fjdc_check, fjdc_hp);
-                    } else {
-                        setText(tv_fjdc, "");
-                        showButton(btn_fjdc_check, "");
                     }
+                    fjdc_hp = temp_adds.toString();
+                    tp_fjdc_hp = sb_fjdc.toString();
+                    setText(tv_fjdc, fjdc_hp.substring(0, fjdc_hp.length() - 1));
+                    showButton(btn_fjdc_check, fjdc_hp);
+                }
 
-                    List<InfoFCXX> fcxxes = ryzhxxResBean.getFcxx_list();
-                    if (fcxxes != null && !fcxxes.isEmpty()) {
-                        StringBuilder fcxx = new StringBuilder();
-                        for (InfoFCXX infoFcxx : fcxxes) {
-                            fcxx.append(infoFcxx.getFcsj()).append(infoFcxx.getFcdz()).append(",");
-                        }
-                        setText(tv_fcxx, fcxx.substring(0, fcxx.length() - 1));
-                    } else {
-                        setText(tv_fcxx, "");
+                List<InfoFCXX> fcxxes = ryzhxxResBean.getFcxx_list();
+                if (fcxxes == null || fcxxes.isEmpty()) {
+                    setText(tv_fcxx, "");
+                } else {
+                    StringBuilder fcxx = new StringBuilder();
+                    for (InfoFCXX infoFcxx : fcxxes) {
+                        fcxx.append(infoFcxx.getFcsj()).append(infoFcxx.getFcdz()).append(",");
                     }
+                    setText(tv_fcxx, fcxx.substring(0, fcxx.length() - 1));
                 }
                 break;
             case V_config.COUNTRY_PERSON:
                 PersonOfCountryJsonRet personOfCountry = (PersonOfCountryJsonRet) resultBase;
-                if (personOfCountry != null) {
-                    final String xp = personOfCountry.getXP();
-                    gj = personOfCountry.getJGGJ();
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (xp != null) {
-                                byte[] bitmapArray = Base64.decode(xp, Base64.DEFAULT);
-                                final Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        iv_xp.setImageBitmap(bitmap);
-                                    }
-                                });
-                            }
-                        }
-                    }).start();
-                } else {
-                    Toast.makeText(this, "异常", Toast.LENGTH_SHORT).show();
+                if (personOfCountry == null) {
+                    Toast.makeText(this, "全国库人员信息查询异常", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+                final String xp = personOfCountry.getXP();
+                gj = personOfCountry.getJGGJ();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (xp != null) {
+                            byte[] bitmapArray = Base64.decode(xp, Base64.DEFAULT);
+                            final Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    iv_xp.setImageBitmap(bitmap);
+                                }
+                            });
+                        }
+                    }
+                }).start();
                 break;
             case V_config.INSPECT_PERSON:
                 InspectPersonJsonRet inspectPersonJsonRet = (InspectPersonJsonRet) resultBase;
-                if (inspectPersonJsonRet != null) {
-                    RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
-                    if (ryxxRes != null) {
-                        tv_road_check.setText(ryxxRes.getHcjg() + "  " + ryxxRes.getBjxx());
-                        String result;
-                        if (ryxxRes.getFhm().equals("000")) {
-                            result = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
-                            zdry = "0";//非重点
-                        } else {
-                            result = "<font color=\"#d13931\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
-                            zdry = "1";//重点人员
-                        }
-                        tv_road_check.setText(Html.fromHtml(result));
-                        returncode = ryxxRes.getFhm();
-                        ryxx.append(ryxxRes.getHcjg()).append(ryxxRes.getBjxx());
+                if (inspectPersonJsonRet == null) {
+                    Toast.makeText(this, "杭州人核录接口异常", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
+                if (ryxxRes != null) {
+                    tv_road_check.setText(ryxxRes.getHcjg() + "  " + ryxxRes.getBjxx());
+                    String result;
+                    if (ryxxRes.getFhm().equals("000")) {
+                        result = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
+                        zdry = "0";//非重点
+                    } else {
+                        result = "<font color=\"#d13931\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
+                        zdry = "1";//重点人员
                     }
-                } else {
-                    Toast.makeText(this, "异常", Toast.LENGTH_SHORT).show();
+                    tv_road_check.setText(Html.fromHtml(result));
+                    returncode = ryxxRes.getFhm();
+                    ryxx.append(ryxxRes.getHcjg()).append(ryxxRes.getBjxx());
                 }
                 break;
         }
@@ -475,12 +477,11 @@ public class Ac_rycx extends Ac_base_info {
                 break;
             case R.id.ssj:
                 Intent intent = new Intent();
-
                 PersonInfo personInfo = new PersonInfo();
                 initPersonInfo(personInfo);
                 if (isFromssj) {
                     bundle.putInt(DataModel.RECORD_BUNDLE_TYPE, 0);
-                    bundle.putString(DataModel.RECORD_BUNDLE_ADDR, UserInfo.hc_address);
+                    bundle.putString(DataModel.RECORD_BUNDLE_ADDR, V_config.hc_address);
                     bundle.putString(DataModel.RECORD_BUNDLE_DATA, new Gson().toJson(personInfo));
                     intent.putExtra("bundle", bundle);
                     setResult(RESULT_OK, intent);
@@ -488,7 +489,7 @@ public class Ac_rycx extends Ac_base_info {
                 } else {
                     intent.setAction("com.sunland.action.record");
                     bundle.putInt(DataModel.RECORD_BUNDLE_TYPE, 0);
-                    bundle.putString(DataModel.RECORD_BUNDLE_ADDR, UserInfo.hc_address);
+                    bundle.putString(DataModel.RECORD_BUNDLE_ADDR, V_config.hc_address);
                     bundle.putString(DataModel.RECORD_BUNDLE_DATA, new Gson().toJson(personInfo));
                     intent.putExtras(bundle);
                     try {
@@ -497,7 +498,6 @@ public class Ac_rycx extends Ac_base_info {
                         e.printStackTrace();
                     }
                 }
-
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -522,9 +522,9 @@ public class Ac_rycx extends Ac_base_info {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == UserInfo.REQ_LOCATION) {
+        if (requestCode == V_config.REQ_LOCATION) {
             if (resultCode == RESULT_OK) {
-                tv_hc_location.setText(UserInfo.hc_address);
+                tv_hc_location.setText(V_config.hc_address);
             }
         }
     }

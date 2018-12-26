@@ -12,8 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.modules.Ac_base_info;
 import com.sunland.hzhc.modules.Hotel_module.bean.InfoLGZSRY;
@@ -37,7 +37,6 @@ public class Ac_hotel extends Ac_base_info {
 
     private MyRvAdapter adapter;
 
-
     private List<InfoLGZSRY> dataSet;
 
     @Override
@@ -46,7 +45,9 @@ public class Ac_hotel extends Ac_base_info {
         setContentLayout(R.layout.ac_hotel);
         showNavIcon(true);
         setToolbarTitle("入住旅客列表");
-        queryYdjwData(V_config.GET_PERSON_IN_HOTEL_INFO);
+        queryYdjwDataNoDialog(V_config.GET_PERSON_IN_HOTEL_INFO);
+        queryYdjwDataX("");
+        showLoading_layout(true);
     }
 
     @Override
@@ -67,7 +68,7 @@ public class Ac_hotel extends Ac_base_info {
     @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
         PllgrzReqBean bean = new PllgrzReqBean();
-        assembleBasicObj(bean);
+        assembleBasicRequest(bean);
         bean.setLgmc(lgmc);
         bean.setFjh(fjh);
         bean.setRzrq_q(rzrq_q);
@@ -82,14 +83,16 @@ public class Ac_hotel extends Ac_base_info {
         switch (reqName) {
             case V_config.GET_PERSON_IN_HOTEL_INFO:
                 LGResBean lgResBean = (LGResBean) resultBase;
-                List<InfoLGZSRY> infoLGZSRIES = lgResBean.getInfoLGZSRYs();
-                if (infoLGZSRIES != null) {
-                    dataSet = lgResBean.getInfoLGZSRYs();
-                    initRv();
-                } else {
-                    Toast.makeText(this, "为获取住店旅客信息", Toast.LENGTH_SHORT).show();
+                if (lgResBean == null) {
+                    Toast.makeText(this, "入住旅客信息接口异常", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-
+                dataSet = lgResBean.getInfoLGZSRYs();
+                if (dataSet == null || dataSet.isEmpty()) {
+                    Toast.makeText(this, "无相关住店旅客信息", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                initRv();
                 break;
         }
     }
@@ -106,7 +109,6 @@ public class Ac_hotel extends Ac_base_info {
 
         private List<InfoLGZSRY> dataSet;
         private LayoutInflater inflater;
-
         public MyRvAdapter(List<InfoLGZSRY> dataSet) {
             super();
             this.dataSet = dataSet;
@@ -169,8 +171,6 @@ public class Ac_hotel extends Ac_base_info {
                 tv_rzsj = itemView.findViewById(R.id.rzsj);
                 tv_gender = itemView.findViewById(R.id.gender);
                 tv_identity = itemView.findViewById(R.id.identity);
-
-
             }
         }
     }

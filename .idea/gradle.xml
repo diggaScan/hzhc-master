@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/buttonSpin" />
             <option value="$PROJECT_DIR$/httpRequest" />
+            <option value="$PROJECT_DIR$/qrscan" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

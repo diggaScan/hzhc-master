@@ -11,10 +11,12 @@ import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.gson.Gson;
 import com.sunland.hzhc.Ac_location;
 import com.sunland.hzhc.DataModel;
@@ -95,6 +97,17 @@ public class Ac_rycx extends Ac_base_info {
     public TextView btn_fjdc_check;
     @BindView(R.id.phone_check)
     public TextView btn_phone_check;
+    @BindView(R.id.loading_icon_hc)
+    public SpinKitView loading_hc;
+    @BindView(R.id.loading_icon_zt)
+    public SpinKitView loading_zt;
+    @BindView(R.id.retry)
+    public Button btn_retry;
+
+    private boolean load_inspect_person;
+    private boolean load_country_person;
+    private boolean load_person_complex;
+    private boolean load_zt_info;
 
     private String sfzh = "";//身份证号
 
@@ -120,7 +133,6 @@ public class Ac_rycx extends Ac_base_info {
     private String mz = "";//民族
     private String returncode = "";//情报核录入接口返回代码
     private StringBuilder ryxx = new StringBuilder();//在逃接口+关注信息+情报接口 返回的描述信息
-
     public boolean isFromssj;
 
     @Override
@@ -132,15 +144,33 @@ public class Ac_rycx extends Ac_base_info {
         resources = getResources();
         initView();
 
-        queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
-        queryYdjwDataNoDialog(V_config.COUNTRY_PERSON);
-        queryYdjwDataNoDialog(V_config.PERSON_COMPLEX);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!load_person_complex) {
+            showLoading_layout(true);
+            queryYdjwDataNoDialog(V_config.PERSON_COMPLEX);
+        }
+        if (!load_country_person) {
+            queryYdjwDataNoDialog(V_config.COUNTRY_PERSON);
+        }
+        if (!load_inspect_person) {
+            queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
+        }
+
         queryYdjwDataX("");
-        showLoading_layout(true);
+        if (!load_zt_info) {
+            queryWanted();
+        }
     }
 
     public void initView() {
         tv_hc_location.setText(V_config.hc_address);
+    }
+
+    private void queryWanted() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -156,18 +186,19 @@ public class Ac_rycx extends Ac_base_info {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            loading_zt.setVisibility(View.GONE);
                             LmhcResBean lmhcResBean = JsonUtils.fromJson(result, LmhcResBean.class);
-                            if (lmhcResBean != null) {
-                                tv_wanted.setText(lmhcResBean.getMessage());
-                                if (lmhcResBean.getStatus().equals("-1")) {
-                                    tv_wanted.setTextColor(resources.getColor(R.color.non_warning_color));
-                                    ztry = "0";//未在逃
-                                } else {
-                                    startVibrate();
-                                    tv_wanted.setTextColor(resources.getColor(R.color.warning_color));
-                                    ztry = "1";//在逃
-                                }
-                                ryxx.append(lmhcResBean.getMessage());
+                            if (lmhcResBean == null) {
+                                tv_wanted.setText(Html.fromHtml("<font color=\"#FF7F50\">全国在逃接口异常</font>"));
+                                return;
+                            }
+                            load_zt_info = true;
+                            tv_wanted.setText(lmhcResBean.getMessage());
+                            if (lmhcResBean.getStatus().equals("-1")) {
+                                tv_wanted.setTextColor(getResources().getColor(R.color.non_warning_color));
+                            } else {
+                                startVibrate();
+                                tv_wanted.setTextColor(getResources().getColor(R.color.warning_color));
                             }
                         }
                     });
@@ -223,7 +254,7 @@ public class Ac_rycx extends Ac_base_info {
         return null;
     }
 
-    @OnClick({R.id.focus, R.id.jdc_check, R.id.fjdc_check, R.id.phone_check, R.id.location_container})
+    @OnClick({R.id.focus, R.id.jdc_check, R.id.fjdc_check, R.id.phone_check, R.id.location_container, R.id.retry})
     public void onClick(View view) {
         int id = view.getId();
         Bundle bundle = new Bundle();
@@ -268,6 +299,12 @@ public class Ac_rycx extends Ac_base_info {
                 bundle.putInt("req_location", V_config.REQ_LOCATION);
                 hop2ActivityForResult(Ac_location.class, bundle, V_config.REQ_LOCATION);
                 break;
+            case R.id.retry:
+                tv_road_check.setText("");
+                loading_hc.setVisibility(View.VISIBLE);
+                queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
+                queryYdjwDataX("");
+                break;
         }
     }
 
@@ -281,6 +318,7 @@ public class Ac_rycx extends Ac_base_info {
                     Toast.makeText(this, "人员综合信息查询接口异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                load_person_complex = true;
                 setText(tv_id_num, ryzhxxResBean.getSfzh());
                 setText(tv_name, ryzhxxResBean.getXm());
                 setText(tv_gender, ryzhxxResBean.getXb());
@@ -411,6 +449,7 @@ public class Ac_rycx extends Ac_base_info {
                     Toast.makeText(this, "全国库人员信息查询异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                load_country_person = true;
                 final String xp = personOfCountry.getXP();
                 gj = personOfCountry.getJGGJ();
                 new Thread(new Runnable() {
@@ -430,26 +469,30 @@ public class Ac_rycx extends Ac_base_info {
                 }).start();
                 break;
             case V_config.INSPECT_PERSON:
+                loading_hc.setVisibility(View.GONE);
                 InspectPersonJsonRet inspectPersonJsonRet = (InspectPersonJsonRet) resultBase;
                 if (inspectPersonJsonRet == null) {
                     Toast.makeText(this, "杭州人核录接口异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
-                if (ryxxRes != null) {
-                    tv_road_check.setText(ryxxRes.getHcjg() + "  " + ryxxRes.getBjxx());
-                    String result;
-                    if (ryxxRes.getFhm().equals("000")) {
-                        result = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
-                        zdry = "0";//非重点
-                    } else {
-                        result = "<font color=\"#d13931\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
-                        zdry = "1";//重点人员
-                    }
-                    tv_road_check.setText(Html.fromHtml(result));
-                    returncode = ryxxRes.getFhm();
-                    ryxx.append(ryxxRes.getHcjg()).append(ryxxRes.getBjxx());
+                if (ryxxRes == null) {
+                    tv_road_check.setText(Html.fromHtml("<font color=\"#FF7F50\">未获取人员信息</font>"));
+                    return;
                 }
+
+                load_inspect_person = true;
+                String result;
+                if (ryxxRes.getFhm().equals("000")) {
+                    result = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
+                    zdry = "0";//非重点，绿色
+                } else {
+                    result = "<font color=\"#d13931\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
+                    zdry = "1";//重点人员,红色
+                }
+                tv_road_check.setText(Html.fromHtml(result));
+                returncode = ryxxRes.getFhm();
+                ryxx.append(ryxxRes.getHcjg()).append(ryxxRes.getBjxx());
                 break;
         }
     }

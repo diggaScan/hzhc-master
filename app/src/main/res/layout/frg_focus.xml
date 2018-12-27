@@ -8,6 +8,6 @@
 
     <include layout="@layout/check_status_layout" />
 
-    <include layout="@layout/loading_layout" />
+
 
 </FrameLayout>

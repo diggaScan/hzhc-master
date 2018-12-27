@@ -20,10 +20,10 @@ import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.bean.i_e_bike_info.DdcListResBean;
 import com.sunland.hzhc.bean.i_e_bike_info.DdcxxplReqBean;
 import com.sunland.hzhc.bean.i_e_bike_info.InfoDDCXQs;
+import com.sunland.hzhc.customView.DragToRefreshView.DragToRefreshView;
 import com.sunland.hzhc.modules.Ac_base_info;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
 import com.sunlandgroup.def.bean.result.ResultBase;
-import com.sunlandgroup.network.RequestManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,15 +35,18 @@ public class Ac_ddc_list extends Ac_base_info {
 
     @BindView(R.id.ddc_list)
     public RecyclerView rv_ddc_list;
-
+    @BindView(R.id.drag2Refresh)
+    public DragToRefreshView d2r_refresh;
     private String hphm;
     private String fdjh;
     private String cjh;
-    private RequestManager mRequestManager;
     private List<InfoDDCXQs> dataSet;
     private MyRvAdapter adapter;
-
+    private final int items_per_page = 50;
     private boolean isFromSsj;
+
+    private int cur_page = 1;
+    private int add_pages = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,9 @@ public class Ac_ddc_list extends Ac_base_info {
         setToolbarTitle("电动车查询列表");
         handleIntent();
         initView();
+        showLoading_layout(true);
+        queryYdjwDataNoDialog(V_config.GET_ELECTRIC_CAR_INFO);
+        queryYdjwDataX("");
     }
 
     public void handleIntent() {
@@ -75,18 +81,37 @@ public class Ac_ddc_list extends Ac_base_info {
         rv_ddc_list.setAdapter(adapter);
         rv_ddc_list.setLayoutManager(manager);
         rv_ddc_list.addItemDecoration(new Rv_Item_decoration(this));
-        mRequestManager = new RequestManager(this, this);
-        queryYdjwDataNoDialog(V_config.GET_ELECTRIC_CAR_INFO);
-        queryYdjwDataX("");
-        showLoading_layout(true);
+        d2r_refresh.unableHeaderRefresh(false);
+        d2r_refresh.setUpdateListener(new DragToRefreshView.OnUpdateListener() {
+            @Override
+            public void onRefreshing(DragToRefreshView view) {
+                if (view.isFooterRefreshing()) {
+                    add_pages++;
+                    cur_page = 1 + add_pages;
+                    queryYdjwDataNoDialog(V_config.GET_ELECTRIC_CAR_INFO);
+                    queryYdjwDataX("");
+                }
+            }
+
+            @Override
+            public void onFinished(DragToRefreshView view) {
+                if (view.getState() == DragToRefreshView.State.footer_release_to_load) {
+                    int scroll_position = dataSet.size() - items_per_page;
+                    if (scroll_position > 0) {
+                        rv_ddc_list.scrollToPosition(dataSet.size());
+                    }
+                }
+            }
+        });
+        d2r_refresh.addMainContent(rv_ddc_list);
     }
 
     public BaseRequestBean assembleRequestObj(String reqName) {
         switch (reqName) {
             case V_config.GET_ELECTRIC_CAR_INFO:
                 DdcxxplReqBean ddcxxplReqBean = new DdcxxplReqBean();
-                ddcxxplReqBean.setCurrentPage(1);
-                ddcxxplReqBean.setTotalCount(50);
+                ddcxxplReqBean.setCurrentPage(cur_page);
+                ddcxxplReqBean.setTotalCount(items_per_page);
                 ddcxxplReqBean.setHphm(hphm);
                 ddcxxplReqBean.setCjh(cjh);
                 ddcxxplReqBean.setFdjh(fdjh);
@@ -100,6 +125,7 @@ public class Ac_ddc_list extends Ac_base_info {
         switch (reqName) {
             case V_config.GET_ELECTRIC_CAR_INFO:
                 showLoading_layout(false);
+                d2r_refresh.dismiss();
                 DdcListResBean ddcListResBean = (DdcListResBean) bean;
                 if (ddcListResBean == null) {
                     Toast.makeText(this, "电动车批量查询接口异常", Toast.LENGTH_SHORT).show();
@@ -110,9 +136,11 @@ public class Ac_ddc_list extends Ac_base_info {
                     Toast.makeText(this, "无相关电动车信息返回", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                dataSet.clear();
                 dataSet.addAll(infoDDCXQs);
-                adapter.notifyDataSetChanged();
+                adapter.notifyItemRangeInserted(dataSet.size(), infoDDCXQs.size());
+                if (dataSet.size() < items_per_page) {
+                    d2r_refresh.unableFooterRefresh(false);
+                }
                 break;
         }
     }

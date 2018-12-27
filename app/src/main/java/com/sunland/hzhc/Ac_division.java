@@ -19,7 +19,7 @@ public class Ac_division extends Ac_base {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.ac_division);
-        showTollbar(false);
+        showToolbar(false);
 
     }
 

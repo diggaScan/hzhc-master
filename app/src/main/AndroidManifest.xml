@@ -42,17 +42,17 @@
             android:value="${PLATEFORM_VALUE}" />
 
         <activity android:name=".Ac_splash">
-            <intent-filter>
-                <action android:name="${PLATEFORM_VALUE}.intent.action.MAIN" />
 
-                <category android:name="${PLATEFORM_VALUE}.intent.category.${CATEGORY_VALUE}" />
-            </intent-filter>
         </activity>
         <activity android:name=".Ac_login" />
         <activity
             android:name=".Ac_location"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
+            <intent-filter>
+                <action android:name="${PLATEFORM_VALUE}.intent.action.MAIN" />
 
+                <category android:name="${PLATEFORM_VALUE}.intent.category.${CATEGORY_VALUE}" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".Ac_main"
@@ -71,7 +71,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".Ac_metro_address" />
+        <activity
+            android:name=".Ac_metro_address"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".modules.jdc_module.Ac_clcx" />
         <activity android:name=".modules.ddc_module.Ac_ddc" />
         <activity android:name=".modules.xmzh_module.Ac_xmzh_list" />

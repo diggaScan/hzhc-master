@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
+import com.sunland.hzhc.customView.DragToRefreshView.DragToRefreshView;
 import com.sunland.hzhc.modules.Ac_base_info;
 import com.sunland.hzhc.modules.Hotel_module.bean.InfoLGZSRY;
 import com.sunland.hzhc.modules.Hotel_module.bean.LGResBean;
@@ -34,10 +35,17 @@ public class Ac_hotel extends Ac_base_info {
 
     @BindView(R.id.ry_info)
     public RecyclerView rv_ry_info;
+    @BindView(R.id.drag2Refresh)
+    public DragToRefreshView d2r_refresh;
 
     private MyRvAdapter adapter;
 
     private List<InfoLGZSRY> dataSet;
+
+    private final int items_per_page = 50;
+
+    private int cur_page = 1;
+    private int add_pages = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +56,7 @@ public class Ac_hotel extends Ac_base_info {
         queryYdjwDataNoDialog(V_config.GET_PERSON_IN_HOTEL_INFO);
         queryYdjwDataX("");
         showLoading_layout(true);
+        initView();
     }
 
     @Override
@@ -64,6 +73,31 @@ public class Ac_hotel extends Ac_base_info {
         }
     }
 
+    private void initView() {
+        d2r_refresh.unableHeaderRefresh(false);
+        d2r_refresh.setUpdateListener(new DragToRefreshView.OnUpdateListener() {
+            @Override
+            public void onRefreshing(DragToRefreshView view) {
+                if (view.isFooterRefreshing()) {
+                    add_pages++;
+                    cur_page = 1 + add_pages;
+                    queryYdjwDataNoDialog(V_config.GET_PERSON_IN_HOTEL_INFO);
+                    queryYdjwDataX("");
+                }
+            }
+
+            @Override
+            public void onFinished(DragToRefreshView view) {
+                if (view.getState() == DragToRefreshView.State.footer_release_to_load) {
+                    int scroll_position = dataSet.size() - items_per_page;
+                    if (scroll_position > 0) {
+                        rv_ry_info.scrollToPosition(dataSet.size());
+                    }
+                }
+            }
+        });
+        d2r_refresh.addMainContent(rv_ry_info);
+    }
 
     @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
@@ -73,8 +107,8 @@ public class Ac_hotel extends Ac_base_info {
         bean.setFjh(fjh);
         bean.setRzrq_q(rzrq_q);
         bean.setRerq_z(rzrq_z);
-        bean.setCurrentPage(1);
-        bean.setTotalCount(50);
+        bean.setCurrentPage(cur_page);
+        bean.setTotalCount(items_per_page);
         return bean;
     }
 
@@ -83,14 +117,19 @@ public class Ac_hotel extends Ac_base_info {
         switch (reqName) {
             case V_config.GET_PERSON_IN_HOTEL_INFO:
                 LGResBean lgResBean = (LGResBean) resultBase;
+                d2r_refresh.dismiss();
+                showLoading_layout(false);
                 if (lgResBean == null) {
-                    Toast.makeText(this, "入住旅客信息接口异常", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "入住旅客信息接口异常", Toast.LENGTH_SHORT).show();
                     return;
-                }
+            }
                 dataSet = lgResBean.getInfoLGZSRYs();
                 if (dataSet == null || dataSet.isEmpty()) {
                     Toast.makeText(this, "无相关住店旅客信息", Toast.LENGTH_SHORT).show();
                     return;
+                }
+                if (dataSet.size() < items_per_page) {
+                    d2r_refresh.unableFooterRefresh(false);
                 }
                 initRv();
                 break;
@@ -109,6 +148,7 @@ public class Ac_hotel extends Ac_base_info {
 
         private List<InfoLGZSRY> dataSet;
         private LayoutInflater inflater;
+
         public MyRvAdapter(List<InfoLGZSRY> dataSet) {
             super();
             this.dataSet = dataSet;
@@ -145,7 +185,6 @@ public class Ac_hotel extends Ac_base_info {
                     }
                 }
             });
-
         }
 
         @Override

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.gson.Gson;
 import com.sunland.hzhc.Ac_location;
 import com.sunland.hzhc.DataModel;
@@ -86,6 +87,10 @@ public class Ac_clcx extends Ac_base_info {
     public ImageView iv_xp;
     @BindView(R.id.sfzh_check)
     public Button btn_sfzh;
+    @BindView(R.id.loading_icon_hc)
+    public SpinKitView loading_hc;
+    @BindView(R.id.loading_icon_zt)
+    public SpinKitView loading_zt;
 
     private String sfzh;
     private boolean isFromssj;
@@ -98,15 +103,38 @@ public class Ac_clcx extends Ac_base_info {
     private String hclx = "";//核查类型  01安保 02 路面
     private StringBuilder clxx = new StringBuilder();//盗抢信息+关注信息+情报接口返回的描述信息
 
+    private boolean load_car_info;
+    private boolean load_inspect_car;
+    private boolean load_country_person;
+    private boolean load_wanted;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.ac_clcx);
         showNavIcon(true);
         setToolbarTitle("机动车信息");
-        queryYdjwDataNoDialog(V_config.CAR_INFO_JOIN);
-        queryYdjwDataNoDialog(V_config.INSPECT_CAR);
         initView();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!load_car_info) {
+            showLoading_layout(true);
+            queryYdjwDataNoDialog(V_config.CAR_INFO_JOIN);
+        }
+        if (!load_country_person) {
+            queryYdjwDataNoDialog(V_config.COUNTRY_PERSON);
+        }
+        if (!load_inspect_car) {
+            queryYdjwDataNoDialog(V_config.INSPECT_CAR);
+        }
+
+        queryYdjwDataX("");
+        if (!load_wanted) {
+            queryWanted();
+        }
     }
 
     @Override
@@ -167,7 +195,7 @@ public class Ac_clcx extends Ac_base_info {
     }
 
 
-    @OnClick({R.id.sfzh_check, R.id.focus, R.id.location_container, R.id.ssj})
+    @OnClick({R.id.sfzh_check, R.id.focus, R.id.location_container, R.id.ssj, R.id.retry})
     public void onClick(View view) {
         int id = view.getId();
         Bundle bundle = new Bundle();
@@ -209,6 +237,13 @@ public class Ac_clcx extends Ac_base_info {
                     }
                 }
                 break;
+            case R.id.retry:
+
+                tv_road_check.setText("");
+                loading_hc.setVisibility(View.VISIBLE);
+                queryYdjwDataNoDialog(V_config.INSPECT_CAR);
+                queryYdjwDataX("");
+                break;
         }
     }
 
@@ -216,6 +251,7 @@ public class Ac_clcx extends Ac_base_info {
     public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
         switch (reqName) {
             case V_config.CAR_INFO_JOIN:
+                showLoading_layout(false);
                 ClxxzhResponseBean resBean = (ClxxzhResponseBean) resultBase;
                 if (resBean == null) {
                     Toast.makeText(this, "车辆信息组合查询接口异常", Toast.LENGTH_SHORT).show();
@@ -227,6 +263,7 @@ public class Ac_clcx extends Ac_base_info {
                     Toast.makeText(this, "未获得相关车辆信息", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                load_car_info = true;
                 InfoJDCXQs infoJDCXQs = infoJDCXQ_list.get(0);
                 sfzh = infoJDCXQs.getZjh();
                 if (sfzh != null || !sfzh.isEmpty()) {
@@ -262,7 +299,7 @@ public class Ac_clcx extends Ac_base_info {
                     Toast.makeText(this, "全国库人员信息查询异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                load_country_person = true;
                 final String xp = personOfCountry.getXP();
                 if (xp != null) {
                     new Thread(new Runnable() {
@@ -283,6 +320,7 @@ public class Ac_clcx extends Ac_base_info {
                 }
                 break;
             case V_config.INSPECT_CAR:
+                loading_hc.setVisibility(View.GONE);
                 InspectCarResBean inspectCarResBean = (InspectCarResBean) resultBase;
                 if (inspectCarResBean == null) {
                     Toast.makeText(this, "杭州车核查接口异常", Toast.LENGTH_SHORT).show();
@@ -290,10 +328,10 @@ public class Ac_clcx extends Ac_base_info {
                 }
                 CLxxRes clxx = inspectCarResBean.getClxx();
                 if (clxx == null) {
-                    tv_road_check.setText("未返回车辆信息");
+                    tv_road_check.setText(Html.fromHtml("<font color=\"#FF7F50\">未返回车辆信息</font>"));
                     return;
                 }
-
+                load_inspect_car = true;
                 String result;
                 if (!clxx.getHcjg().equals("通过")) {
                     result = "<font color=\"#d13931\">" + clxx.getHcjg() + "</font>" + clxx.getBjxx();
@@ -323,7 +361,13 @@ public class Ac_clcx extends Ac_base_info {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            loading_zt.setVisibility(View.GONE);
                             LmhcResBean lmhcResBean = JsonUtils.fromJson(result, LmhcResBean.class);
+                            if (lmhcResBean == null) {
+                                tv_wanted.setText(Html.fromHtml("<font color=\"#FF7F50\">全国在逃接口异常</font>"));
+                                return;
+                            }
+                            load_wanted = true;
                             tv_wanted.setText(lmhcResBean.getMessage());
                             if (lmhcResBean.getStatus().equals("-1")) {
                                 tv_wanted.setTextColor(getResources().getColor(R.color.non_warning_color));

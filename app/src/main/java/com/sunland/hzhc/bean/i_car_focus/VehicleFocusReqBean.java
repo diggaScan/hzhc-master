@@ -1,4 +1,4 @@
-package com.sunland.hzhc.modules.jdc_module;
+package com.sunland.hzhc.bean.i_car_focus;
 
 import com.sunland.hzhc.bean.BaseRequestBean;
 

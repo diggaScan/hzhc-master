@@ -6,38 +6,34 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
-import com.sunland.hzhc.Ac_base;
 import com.sunland.hzhc.DataModel;
-import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
-import com.sunland.hzhc.modules.Hotel_module.bean.LgBaseInfo;
-import com.sunland.hzhc.modules.Hotel_module.bean.LgLbResBean;
+import com.sunland.hzhc.bean.i_hotel_names.LgBaseInfo;
+import com.sunland.hzhc.bean.i_hotel_names.LgLbResBean;
+import com.sunland.hzhc.modules.Ac_base_info;
 import com.sunland.hzhc.modules.xmzh_module.Rv_Jg_adapter;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
 import com.sunland.hzhc.utils.AssetDBReader;
-import com.sunlandgroup.Global;
 import com.sunlandgroup.def.bean.result.ResultBase;
-import com.sunlandgroup.network.OnRequestCallback;
-import com.sunlandgroup.network.RequestManager;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
+public class Ac_hotel_name extends Ac_base_info {
 
     @BindView(R.id.district_list)
     public RecyclerView rv_districts;
     @BindView(R.id.hotel_list)
     public RecyclerView rv_hotel_list;
 
-    private Rv_Jg_adapter d_adapter;
+    private Loadable_adapter d_adapter;
     private Rv_Jg_adapter h_adapter;
 
     private List<String> dataSet_hotels;
@@ -46,7 +42,6 @@ public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
     private List<String> all_lg;
     private List<String> all_lg_code;
 
-    private RequestManager mRequestManager;
     private AssetDBReader assetDBReader;
     private SQLiteDatabase database;
 
@@ -58,9 +53,8 @@ public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
         setToolbarTitle("旅馆列表");
         initView();
         readDb();
-        mRequestManager = new RequestManager(this, this);
-        queryHotelNames(V_config.GET_ALL_HOTELS);
-
+        queryYdjwDataNoDialog(V_config.GET_ALL_HOTELS);
+        queryYdjwDataX("");
     }
 
     private void initView() {
@@ -68,14 +62,12 @@ public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
         lgdm = new ArrayList<>();
         all_lg = new ArrayList<>();
         all_lg_code = new ArrayList<>();
-
-
-        d_adapter = new Rv_Jg_adapter(this, Arrays.asList(DataModel.HANGZHOU_DISTRICTS));
+        d_adapter = new Loadable_adapter(this, Arrays.asList(DataModel.HANGZHOU_DISTRICTS));
         h_adapter = new Rv_Jg_adapter(this, dataSet_hotels);
-
-        d_adapter.setOnItemClickedListener(new Rv_Jg_adapter.OnItemClickedListener() {
+        d_adapter.setOnItemClickedListener(new Loadable_adapter.OnItemClickedListener() {
             @Override
             public void onItemClicked(int position) {
+
                 if (position == 0) {
                     dataSet_hotels.clear();
                     lgdm.clear();
@@ -87,7 +79,6 @@ public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
                 }
             }
         });
-
         h_adapter.setOnItemClickedListener(new Rv_Jg_adapter.OnItemClickedListener() {
             @Override
             public void onItemClicked(int position) {
@@ -100,15 +91,12 @@ public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
                 finish();
             }
         });
-
         LinearLayoutManager manager1 = new LinearLayoutManager(this);
         LinearLayoutManager manager2 = new LinearLayoutManager(this);
         rv_districts.setAdapter(d_adapter);
         rv_hotel_list.setAdapter(h_adapter);
-
         rv_districts.setLayoutManager(manager1);
         rv_hotel_list.setLayoutManager(manager2);
-
         rv_districts.addItemDecoration(new Rv_Item_decoration(this));
         rv_hotel_list.addItemDecoration(new Rv_Item_decoration(this));
     }
@@ -134,13 +122,13 @@ public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
         }
     }
 
-    private void queryHotelNames(String reqName) {
-        mRequestManager.addRequest(Global.ip, Global.port, Global.postfix, reqName
-                , assembleRequestObj(reqName), 15000);
-        mRequestManager.postRequest();
+    @Override
+    public void handleIntent() {
+
     }
 
-    private BaseRequestBean assembleRequestObj(String reqName) {
+    @Override
+    public BaseRequestBean assembleRequestObj(String reqName) {
         switch (reqName) {
             case V_config.GET_ALL_HOTELS:
                 BaseRequestBean bean = new BaseRequestBean();
@@ -151,28 +139,30 @@ public class Ac_hotel_name extends Ac_base implements OnRequestCallback {
     }
 
     @Override
-    public <T> void onRequestFinish(String reqId, String reqName, T bean) {
-        LgLbResBean lgLbResBean = (LgLbResBean) bean;
-        dataSet_hotels.clear();
-        lgdm.clear();
-        List<LgBaseInfo> lgBaseInfos = lgLbResBean.getLGList();
-        if (lgBaseInfos != null) {
-            for (LgBaseInfo info : lgBaseInfos) {
-                all_lg.add(info.getLgmc());
-                all_lg_code.add(info.getLgmc_code());
-            }
+    public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
+        LgLbResBean lgLbResBean = (LgLbResBean) resultBase;
+        d_adapter.hasLoaded(true);
+        d_adapter.notifyItemChanged(0);
+        if (lgLbResBean == null) {
+            Toast.makeText(this, "获取旅馆名称接口异常", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        List<LgBaseInfo> lgBaseInfos = lgLbResBean.getLGList();
+        if (lgBaseInfos == null) {
+            Toast.makeText(this, "无法获取杭州全市旅馆信息", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        for (LgBaseInfo info : lgBaseInfos) {
+            all_lg.add(info.getLgmc());
+            all_lg_code.add(info.getLgmc_code());
+        }
+
         dataSet_hotels.addAll(all_lg);
         lgdm.addAll(all_lg_code);
+
         h_adapter.notifyDataSetChanged();
-
-
     }
-
-    @Override
-    public <T extends ResultBase> Class<?> getBeanClass(String reqId, String reqName) {
-        return LgLbResBean.class;
-    }
-
 
 }

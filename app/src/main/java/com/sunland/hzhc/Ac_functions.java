@@ -25,7 +25,7 @@ public class Ac_functions extends Ac_base {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.ac_functions);
-        showTollbar(false);
+        showToolbar(false);
         initRv();
     }
 

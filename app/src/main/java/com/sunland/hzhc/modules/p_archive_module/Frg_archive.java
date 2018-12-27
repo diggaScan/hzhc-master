@@ -66,11 +66,24 @@ public class Frg_archive extends Frg_base {
     @BindView(R.id.loading_icon)
     public SpinKitView loading_icon;
 
-    private boolean hasLoaded;
+    private boolean load_get_person_info_by_sfzh;
+
 
     @Override
     public int setLayoutId() {
         return R.layout.frg_archive;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isVisible) {
+            loading_layout.setVisibility(View.VISIBLE);
+            queryYdjwDataNoDialog(V_config.GET_PERSON_INFO_BY_SFZH);
+            queryYdjwDataX();
+        }
+
     }
 
     @Override
@@ -94,6 +107,7 @@ public class Frg_archive extends Frg_base {
             Toast.makeText(context, "人员档案信息接口异常", Toast.LENGTH_SHORT).show();
             return;
         }
+        load_get_person_info_by_sfzh = true;
         setText(tv_name, resBean.getXm());
         setText(tv_eng_name, resBean.getXm_e());
         setText(tv_gender, resBean.getXb());
@@ -146,15 +160,15 @@ public class Frg_archive extends Frg_base {
             }
             setText(tv_car_reg, cc.toString());
         }
-        hasLoaded = true;
     }
 
     @Override
     public void onFragmentVisible() {
         super.onFragmentVisible();
-        if (hasLoaded) {
+        if (load_get_person_info_by_sfzh) {
             return;
         }
-        queryYdjwData(V_config.GET_PERSON_INFO_BY_SFZH);
+        queryYdjwDataNoDialog(V_config.GET_PERSON_INFO_BY_SFZH);
+        queryYdjwDataX();
     }
 }

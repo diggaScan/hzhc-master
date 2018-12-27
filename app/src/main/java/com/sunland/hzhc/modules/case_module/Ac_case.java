@@ -87,6 +87,10 @@ public class Ac_case extends Ac_base_info {
         switch (reqName) {
             case V_config.CASE_INFO:
                 CaseListResBean caseListResBean = (CaseListResBean) resultBase;
+                if (caseListResBean == null) {
+                    Toast.makeText(this, "案件信息接口异常", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 dataSet.clear();
                 List<InfoAJLB> infoAJLBS = caseListResBean.getInfoAJLBs();
                 if (infoAJLBS != null) {

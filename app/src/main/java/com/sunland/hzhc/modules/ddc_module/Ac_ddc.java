@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.gson.Gson;
 import com.sunland.hzhc.DataModel;
 import com.sunland.hzhc.R;
@@ -65,6 +67,10 @@ public class Ac_ddc extends Ac_base_info {
     public TextView tv_fdj_sequence;
     @BindView(R.id.xp)
     public ImageView iv_xp;
+    @BindView(R.id.loading_icon_hc)
+    public SpinKitView loading_hc;
+    @BindView(R.id.loading_icon_zt)
+    public SpinKitView loading_zt;
 
     private String sfzh;
     private String czxm;
@@ -75,17 +81,36 @@ public class Ac_ddc extends Ac_base_info {
 
     private boolean isFromSsj;
 
+    private boolean load_want;
+    private boolean load_country_person;
+    private boolean load_inspect_person;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.ac_ddc);
         showNavIcon(true);
         setToolbarTitle("电动车详情");
-        showLoading_layout(true);
         queryYdjwDataNoDialog(V_config.COUNTRY_PERSON);
         queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
         queryYdjwDataX("");
         initView();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (!load_country_person) {
+            queryYdjwDataNoDialog(V_config.COUNTRY_PERSON);
+        }
+        if (!load_inspect_person) {
+            queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
+        }
+        queryYdjwDataX("");
+        if (!load_want) {
+            queryWanted();
+        }
     }
 
     @Override
@@ -106,6 +131,16 @@ public class Ac_ddc extends Ac_base_info {
     }
 
     private void initView() {
+        setText(tv_hc_loaciton, V_config.hc_address);
+        setText(tv_id_num, sfzh);
+        setText(tv_name, czxm);
+        setText(tv_plateform_num, hphm);
+        setText(tv_car_brand, clpp);
+        setText(tv_cjh, cjh);
+        setText(tv_fdjh, fdjh);
+    }
+
+    private void queryWanted() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -117,11 +152,24 @@ public class Ac_ddc extends Ac_base_info {
                     taskParams.putHead("version", Global.VERSION_URL);
                     taskParams.putEntity("sfzh", sfzh);
                     final String result = QueryHttp.post(Global.PERSON_CHECK_QGZT_URL, taskParams);
+                    //-1 查无结果,2100再逃
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            loading_zt.setVisibility(View.GONE);
                             LmhcResBean lmhcResBean = JsonUtils.fromJson(result, LmhcResBean.class);
+                            if (lmhcResBean == null) {
+                                tv_wanted.setText(Html.fromHtml("<font color=\"#FF7F50\">全国在逃接口异常</font>"));
+                                return;
+                            }
+                            load_want = true;
                             tv_wanted.setText(lmhcResBean.getMessage());
+                            if (lmhcResBean.getStatus().equals("-1")) {
+                                tv_wanted.setTextColor(getResources().getColor(R.color.non_warning_color));
+                            } else {
+                                startVibrate();
+                                tv_wanted.setTextColor(getResources().getColor(R.color.warning_color));
+                            }
                         }
                     });
                 } catch (Exception e) {
@@ -129,13 +177,6 @@ public class Ac_ddc extends Ac_base_info {
                 }
             }
         }).start();
-        setText(tv_hc_loaciton, V_config.hc_address);
-        setText(tv_id_num, sfzh);
-        setText(tv_name, czxm);
-        setText(tv_plateform_num, hphm);
-        setText(tv_car_brand, clpp);
-        setText(tv_cjh, cjh);
-        setText(tv_fdjh, fdjh);
     }
 
     @Override
@@ -192,6 +233,7 @@ public class Ac_ddc extends Ac_base_info {
                     Toast.makeText(this, "全国库人员信息查询异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                load_country_person = true;
                 final String xp = personOfCountry.getXP();
                 new Thread(new Runnable() {
                     @Override
@@ -210,21 +252,28 @@ public class Ac_ddc extends Ac_base_info {
                 }).start();
                 break;
             case V_config.INSPECT_PERSON:
-                showLoading_layout(false);
+                loading_hc.setVisibility(View.GONE);
                 InspectPersonJsonRet inspectPersonJsonRet = (InspectPersonJsonRet) resultBase;
                 if (inspectPersonJsonRet == null) {
                     Toast.makeText(this, "杭州人核查接口异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                load_inspect_person = true;
                 RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
-                if (ryxxRes != null) {
-                    tv_road_check.setText(ryxxRes.getHcjg() + " " + ryxxRes.getBjxx());
-//                    if (ryxxRes.getFhm().equals("000")) {
-//                        tv_road_check.setTextColor(Color.GREEN);
-//                    } else {
-//                        tv_road_check.setTextColor(Color.RED);
-//                    }
+                if (ryxxRes == null) {
+                    tv_road_check.setText(Html.fromHtml("<font color=\"#FF7F50\">未获取人员信息</font>"));
+                    return;
                 }
+
+                String result;
+                if (ryxxRes.getFhm().equals("000")) {
+                    result = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
+                } else {
+                    result = "<font color=\"#d13931\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
+                }
+                tv_road_check.setText(Html.fromHtml(result));
+
                 break;
         }
     }
@@ -237,7 +286,7 @@ public class Ac_ddc extends Ac_base_info {
         }
     }
 
-    @OnClick({R.id.ddc_check, R.id.focus, R.id.ssj})
+    @OnClick({R.id.ddc_check, R.id.focus, R.id.ssj, R.id.retry})
     public void onClick(View view) {
         int id = view.getId();
         Bundle bundle = new Bundle();
@@ -274,8 +323,14 @@ public class Ac_ddc extends Ac_base_info {
                         e.printStackTrace();
                     }
                 }
-
                 break;
+            case R.id.retry:
+                tv_road_check.setText("");
+                loading_hc.setVisibility(View.VISIBLE);
+                queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
+                queryYdjwDataX("");
+                break;
+
         }
     }
 

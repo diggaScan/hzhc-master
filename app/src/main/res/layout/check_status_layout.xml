@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/form_margin_left"
@@ -23,17 +24,31 @@
             android:textColor="@color/str_color"
             android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/wanted"
+        <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/info_display_item_height"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/focus"
             android:layout_toRightOf="@id/wanted_str"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/form_text_margin_left"
-            android:textColor="@color/content_color"
-            android:textSize="@dimen/content_text_size" />
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/wanted"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_display_item_height"
+                android:paddingLeft="@dimen/form_text_margin_left"
+                android:textColor="@color/content_color"
+                android:textSize="@dimen/content_text_size" />
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                android:id="@+id/loading_icon_zt"
+                style="@style/SpinKitView.Small.Circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:paddingLeft="8dp"
+                app:SpinKit_Color="@color/colorPrimary" />
+        </FrameLayout>
 
         <Button
             android:id="@+id/focus"
@@ -72,6 +87,7 @@
             android:textColor="@color/str_color"
             android:textSize="15sp" />
 
+
         <TextView
             android:id="@+id/road_check"
             android:layout_width="wrap_content"
@@ -80,9 +96,21 @@
             android:layout_toLeftOf="@id/retry"
             android:layout_toRightOf="@id/lmhc_str"
             android:gravity="center_vertical"
+            android:minHeight="@dimen/input_height"
             android:paddingLeft="@dimen/form_text_margin_left"
             android:textColor="@color/content_color"
             android:textSize="@dimen/content_text_size" />
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/loading_icon_hc"
+            style="@style/SpinKitView.Small.Circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/lmhc_str"
+            android:paddingLeft="8dp"
+            app:SpinKit_Color="@color/colorPrimary" />
+
 
         <Button
             android:id="@+id/retry"

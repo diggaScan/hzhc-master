@@ -37,7 +37,7 @@ public class Frg_track extends Frg_base {
 
     private List<GjList> dataSet;
     private MyRvAdapter adapter;
-    private boolean hasLoaded;
+    private boolean load_person_locus_info;
 
     @Override
     public int setLayoutId() {
@@ -53,6 +53,17 @@ public class Frg_track extends Frg_base {
         rv_track_infos.setAdapter(adapter);
         rv_track_infos.setLayoutManager(manager);
         rv_track_infos.addItemDecoration(new Rv_Item_decoration(context));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isVisible) {
+            queryYdjwDataNoDialog(V_config.PERSON_LOCUS_INFOS);
+        }
+        loading_layout.setVisibility(View.VISIBLE);
+        queryYdjwDataX();
+
     }
 
     @Override
@@ -85,17 +96,18 @@ public class Frg_track extends Frg_base {
         dataSet.clear();
         dataSet.addAll(list);
         adapter.notifyDataSetChanged();
-        hasLoaded = true;
+        load_person_locus_info = true;
     }
 
     @Override
     public void onFragmentVisible() {
         super.onFragmentVisible();
-        if (hasLoaded) {
+        if (load_person_locus_info) {
             return;
         }
-        queryYdjwData(V_config.PERSON_LOCUS_INFOS);
         loading_icon.setVisibility(View.VISIBLE);
+        queryYdjwData(V_config.PERSON_LOCUS_INFOS);
+
     }
 
     class MyRvAdapter extends RecyclerView.Adapter<MyRvAdapter.MyViewHolder> {

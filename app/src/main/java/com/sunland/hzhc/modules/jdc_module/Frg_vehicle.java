@@ -3,7 +3,6 @@ package com.sunland.hzhc.modules.jdc_module;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 import com.concretejungle.spinbutton.SpinButton;
 import com.sunland.hzhc.Ac_main;
 import com.sunland.hzhc.DataModel;
-import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.Frg_base;
 import com.sunland.hzhc.R;
 import com.sunland.sunlandkeyboard.SunlandKeyBoardManager;
@@ -58,10 +56,15 @@ public class Frg_vehicle extends Frg_base {
         int id = view.getId();
         switch (id) {
             case R.id.query:
+
                 String cphm = et_number.getText().toString();
                 String hpzl_str = sb_vehicle.getSelectedItem();
                 String hpzl_num = DataModel.VEHICLEMODLES.get(hpzl_str);
                 String fdjh = et_engine_num.getText().toString();
+                if (cphm.isEmpty()) {
+                    Toast.makeText(context, "机动车号牌不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String clsbh = et_vehivle_id.getText().toString();
                 Bundle bundle = new Bundle();
                 bundle.putString("cphm", cphm);

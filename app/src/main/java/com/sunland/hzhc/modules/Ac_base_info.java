@@ -11,14 +11,16 @@ import com.sunland.hzhc.bean.i_case_cate.CaseCateResBean;
 import com.sunland.hzhc.bean.i_case_info.CaseListResBean;
 import com.sunland.hzhc.bean.i_country_people.PersonOfCountryJsonRet;
 import com.sunland.hzhc.bean.i_e_bike_info.DdcListResBean;
+import com.sunland.hzhc.bean.i_hotel_names.LgLbResBean;
 import com.sunland.hzhc.bean.i_inspect_car.InspectCarResBean;
 import com.sunland.hzhc.bean.i_inspect_person.InspectPersonJsonRet;
 import com.sunland.hzhc.bean.i_internet_cafe_people.RyResBean;
 import com.sunland.hzhc.bean.i_mobile_join.RyPhoneResBean;
+import com.sunland.hzhc.bean.i_owned_car.OwnedCarResBean;
 import com.sunland.hzhc.bean.i_people_complex.RyzhxxResBean;
 import com.sunland.hzhc.bean.i_person_join_info.XmzhResBean;
+import com.sunland.hzhc.bean.i_subway_info.SubwayInfoResBean;
 import com.sunland.hzhc.modules.Hotel_module.bean.LGResBean;
-import com.sunland.hzhc.bean.i_owned_car.OwnedCarResBean;
 import com.sunlandgroup.Global;
 import com.sunlandgroup.def.bean.result.ResultBase;
 import com.sunlandgroup.network.OnRequestCallback;
@@ -111,8 +113,20 @@ public abstract class Ac_base_info extends Ac_base implements OnRequestCallback 
                 return CaseCateResBean.class;
             case V_config.GET_CAR_INFO_BY_SFZH:
                 return OwnedCarResBean.class;
+            case V_config.SUBWAY_INFO:
+                return SubwayInfoResBean.class;
+            case V_config.GET_ALL_HOTELS:
+                return LgLbResBean.class;
         }
         return null;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mRequestManager != null) {
+            mRequestManager.cancelAll();
+        }
     }
 
     public abstract void onDataResponse(String reqId, String reqName, ResultBase resultBase);

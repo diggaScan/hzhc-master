@@ -1,4 +1,4 @@
-package com.sunland.hzhc.modules.Hotel_module.bean;
+package com.sunland.hzhc.bean.i_hotel_names;
 
 public class LgBaseInfo {
     private String xzqh;

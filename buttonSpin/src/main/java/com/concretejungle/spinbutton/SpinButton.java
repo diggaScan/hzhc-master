@@ -152,6 +152,14 @@ public class SpinButton extends AppCompatTextView {
 
     }
 
+    public void showSpin() {
+        initPopUpWindow();
+        mPop_window.showAtLocation(((AppCompatActivity) mContext).getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+        mPop_window.setFocusable(true);
+        dimWindow();
+    }
+
+
     public void setEnable(boolean isEnabled) {
         this.isEnabled = isEnabled;
         if (!isEnabled) {
@@ -286,7 +294,7 @@ public class SpinButton extends AppCompatTextView {
                 holder.popup_item.setText("空");
             } else if (mSpanDrawables != null && !mSpanDrawables.isEmpty()) {
                 ssb.setSpan(new DrawableMarginSpan(mSpanDrawables.get(position), 20), 0, 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                 holder.popup_item.setText(ssb);
+                holder.popup_item.setText(ssb);
             } else {
                 holder.popup_item.setText(item);
             }

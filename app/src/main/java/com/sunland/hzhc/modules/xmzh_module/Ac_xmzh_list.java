@@ -19,6 +19,7 @@ import com.sunland.hzhc.bean.i_person_join_info.PersonInfo;
 import com.sunland.hzhc.bean.i_person_join_info.PersonJoinDto;
 import com.sunland.hzhc.bean.i_person_join_info.RycombineReqBean;
 import com.sunland.hzhc.bean.i_person_join_info.XmzhResBean;
+import com.sunland.hzhc.customView.DragToRefreshView.DragToRefreshView;
 import com.sunland.hzhc.modules.Ac_base_info;
 import com.sunland.hzhc.modules.sfz_module.Ac_rycx;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
@@ -37,9 +38,14 @@ public class Ac_xmzh_list extends Ac_base_info {
 
     @BindView(R.id.name_list)
     public RecyclerView rv_name_list;
-
+    @BindView(R.id.drag2Refresh)
+    public DragToRefreshView d2r_refresh;
     private MyRvAdapter adapter;
     private List<PersonInfo> dataSet;
+    private final int items_per_page = 50;
+
+    private int cur_page = 1;
+    private int add_pages = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +80,29 @@ public class Ac_xmzh_list extends Ac_base_info {
         rv_name_list.setAdapter(adapter);
         rv_name_list.setLayoutManager(manager);
         rv_name_list.addItemDecoration(new Rv_Item_decoration(this));
+        d2r_refresh.unableHeaderRefresh(false);
+        d2r_refresh.setUpdateListener(new DragToRefreshView.OnUpdateListener() {
+            @Override
+            public void onRefreshing(DragToRefreshView view) {
+                if (view.isFooterRefreshing()) {
+                    add_pages++;
+                    cur_page = 1 + add_pages;
+                    queryYdjwDataNoDialog(V_config.GET_PERSON_JOIN_INFO);
+                    queryYdjwDataX("");
+                }
+            }
+
+            @Override
+            public void onFinished(DragToRefreshView view) {
+                if (view.getState() == DragToRefreshView.State.footer_release_to_load) {
+                    int scroll_position = dataSet.size() - items_per_page;
+                    if (scroll_position > 0) {
+                        rv_name_list.scrollToPosition(dataSet.size());
+                    }
+                }
+            }
+        });
+        d2r_refresh.addMainContent(rv_name_list);
     }
 
     @Override
@@ -86,8 +115,8 @@ public class Ac_xmzh_list extends Ac_base_info {
         personJoinDto.setXb(String.valueOf(xb));
         personJoinDto.setXm(xm);
         bean.setPersonJoinDto(personJoinDto);
-        bean.setCurrentPage(1);
-        bean.setTotalCount(50);
+        bean.setCurrentPage(cur_page);
+        bean.setTotalCount(items_per_page);
         return bean;
     }
 
@@ -96,6 +125,7 @@ public class Ac_xmzh_list extends Ac_base_info {
         switch (reqName) {
             case V_config.GET_PERSON_JOIN_INFO:
                 showLoading_layout(false);
+                d2r_refresh.dismiss();
                 XmzhResBean xmzhResBean = (XmzhResBean) resultBase;
                 if (xmzhResBean == null) {
                     Toast.makeText(this, "人员姓名查询接口异常", Toast.LENGTH_SHORT).show();
@@ -106,9 +136,11 @@ public class Ac_xmzh_list extends Ac_base_info {
                     Toast.makeText(this, "无相关人员数据", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                dataSet.clear();
                 dataSet.addAll(personInfos);
-                adapter.notifyDataSetChanged();
+                adapter.notifyItemRangeInserted(dataSet.size(), personInfos.size());
+                if (dataSet.size() < items_per_page) {
+                    d2r_refresh.unableFooterRefresh(false);
+                }
                 break;
         }
     }

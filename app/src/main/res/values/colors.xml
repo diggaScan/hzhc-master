@@ -40,4 +40,11 @@
     <!--dialog_utils-->
     <color name="dialog_backgrounf">#a4313131</color>
     <color name="progress_gray">#aea6a6</color>
+
+    <!--drag2Refresh-->
+    <color name="loadingcolor">#e8e8e8</color>
+
+    <!--list_text_color-->
+    <color name="list_unclicked_color">#282828</color>
+    <color name="list_clicked_color">#CD8500</color>
 </resources>

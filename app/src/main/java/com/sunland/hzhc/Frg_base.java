@@ -12,11 +12,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sunland.hzhc.bean.BaseRequestBean;
+import com.sunland.hzhc.bean.i_archive.PersonArchiveResBean;
 import com.sunland.hzhc.bean.i_inspect_person.InspectPersonJsonRet;
 import com.sunland.hzhc.bean.i_person_focus.PeopleFocusResBean;
-import com.sunland.hzhc.customView.CustomPicker;
-import com.sunland.hzhc.bean.i_archive.PersonArchiveResBean;
 import com.sunland.hzhc.bean.i_track.TrackResBean;
+import com.sunland.hzhc.customView.CustomPicker;
 import com.sunlandgroup.Global;
 import com.sunlandgroup.def.bean.result.ResultBase;
 import com.sunlandgroup.network.OnRequestCallback;
@@ -90,6 +90,10 @@ public abstract class Frg_base extends Fragment implements OnRequestCallback, On
     public void queryYdjwDataNoDialog(String method_name) {
         mRequestManager.addRequest(Global.ip, Global.port, Global.postfix, method_name
                 , assembleRequestObj(method_name), 15000);
+//        mRequestManager.postRequestWithoutDialog();
+    }
+
+    public void queryYdjwDataX() {
         mRequestManager.postRequestWithoutDialog();
     }
 

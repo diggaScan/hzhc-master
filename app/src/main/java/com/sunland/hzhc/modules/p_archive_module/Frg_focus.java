@@ -3,7 +3,6 @@ package com.sunland.hzhc.modules.p_archive_module;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,15 +42,17 @@ public class Frg_focus extends Frg_base {
     public Button btn_focus;
     @BindView(R.id.retry)
     public Button btn_retry;
-    @BindView(R.id.loading_layout)
-    public FrameLayout loading_layout;
-    @BindView(R.id.loading_icon)
-    public SpinKitView loading_icon;
+    @BindView(R.id.loading_icon_hc)
+    public SpinKitView loading_hc;
+    @BindView(R.id.loading_icon_zt)
+    public SpinKitView loading_zt;
 
     private String sfzh;//身份证号码
     private List<InfoGZXXResp> gzxx_list;//关注信息列表
     private Thread thread;
-    private boolean hasLoaded;
+    private boolean load_person_focus_info;
+    private boolean load_inspect_person;
+    private boolean load_wanted;
 
     @Override
     public int setLayoutId() {
@@ -60,10 +61,13 @@ public class Frg_focus extends Frg_base {
 
     @Override
     public void initView() {
-        loading_icon.setVisibility(View.GONE);
         btn_focus.setVisibility(View.GONE);
         btn_retry.setVisibility(View.GONE);
         sfzh = ((Ac_archive) context).identity_num;
+
+    }
+
+    private void queryWanted() {
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -80,7 +84,13 @@ public class Frg_focus extends Frg_base {
                         ((Ac_archive) context).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                loading_zt.setVisibility(View.GONE);
                                 LmhcResBean lmhcResBean = JsonUtils.fromJson(result, LmhcResBean.class);
+                                if (lmhcResBean == null) {
+                                    tv_wanted.setText(Html.fromHtml("<font color=\"#FF7F50\">全国在逃接口异常</font>"));
+                                    return;
+                                }
+                                load_wanted = true;
                                 tv_wanted.setText(lmhcResBean.getMessage());
                                 if (lmhcResBean.getStatus().equals("-1")) {
                                     tv_wanted.setTextColor(getResources().getColor(R.color.non_warning_color));
@@ -97,6 +107,17 @@ public class Frg_focus extends Frg_base {
             }
         });
         thread.start();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isVisible) {
+
+            queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
+            queryYdjwDataX();
+            queryWanted();
+        }
     }
 
     @Override
@@ -138,7 +159,7 @@ public class Frg_focus extends Frg_base {
                     return;
                 }
                 gzxx_list = peopleFocusResBean.getGzxxList();
-                hasLoaded = true;
+                load_person_focus_info = true;
                 break;
             case V_config.INSPECT_PERSON:
                 InspectPersonJsonRet inspectPersonJsonRet = (InspectPersonJsonRet) bean;
@@ -146,6 +167,7 @@ public class Frg_focus extends Frg_base {
                     Toast.makeText(context, "杭州人核查接口异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                loading_hc.setVisibility(View.GONE);
                 RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
                 if (ryxxRes != null) {
                     String result;
@@ -155,7 +177,7 @@ public class Frg_focus extends Frg_base {
                         result = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
                     }
                     tv_hcjg.setText(Html.fromHtml(result));
-                    hasLoaded = true;
+                    load_inspect_person = true;
                 }
                 break;
         }
@@ -164,11 +186,16 @@ public class Frg_focus extends Frg_base {
     @Override
     public void onFragmentVisible() {
         super.onFragmentVisible();
-        if (hasLoaded) {
-            return;
+        if (!load_inspect_person) {
+
+        }
+        if (!load_inspect_person) {
+            queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
         }
 //        queryYdjwData(V_config.PERSON_FOCUS_INFO);
-        queryYdjwData(V_config.INSPECT_PERSON);
-        loading_icon.setVisibility(View.VISIBLE);
+        queryYdjwDataX();
+        if (!load_wanted) {
+            queryWanted();
+        }
     }
 }

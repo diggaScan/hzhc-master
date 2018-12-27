@@ -9,10 +9,12 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.concretejungle.spinbutton.SpinButton;
 import com.esri.android.map.MapView;
 import com.esri.android.map.event.OnPanListener;
 import com.esri.android.map.event.OnStatusChangedListener;
@@ -20,6 +22,10 @@ import com.esri.android.map.event.OnZoomListener;
 import com.esri.core.geometry.Point;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.sunland.hzhc.bean.BaseRequestBean;
+import com.sunland.hzhc.bean.i_subway_info.SubwayInfo;
+import com.sunland.hzhc.bean.i_subway_info.SubwayInfoRequestBean;
+import com.sunland.hzhc.bean.i_subway_info.SubwayInfoResBean;
 import com.sunland.hzhc.map_config.AddressJsonBean;
 import com.sunland.hzhc.map_config.Config;
 import com.sunland.hzhc.map_config.GenericTask;
@@ -29,8 +35,10 @@ import com.sunland.hzhc.map_config.QueryCommon;
 import com.sunland.hzhc.map_config.TaskAdapter;
 import com.sunland.hzhc.map_config.TaskParams;
 import com.sunland.hzhc.map_config.TaskResult;
+import com.sunland.hzhc.modules.Ac_base_info;
 import com.sunland.hzhc.recycler_config.Location_rv_adapter;
 import com.sunland.hzhc.recycler_config.OnRvItemClickedListener;
+import com.sunlandgroup.def.bean.result.ResultBase;
 import com.tgram.gis.MapManager;
 
 import java.lang.reflect.Type;
@@ -38,11 +46,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class Ac_location extends Ac_base {
+public class Ac_location extends Ac_base_info {
 
     public final String TAG = this.getClass().getCanonicalName();
     @BindView(R.id.mapView)
@@ -55,7 +64,11 @@ public class Ac_location extends Ac_base {
     public TextView tv_enter;
     @BindView(R.id.address)
     public EditText et_address;
+    @BindView(R.id.loading_layout)
+    public FrameLayout loading_layout;
+
     public final int QR_REQUEST_CODE = 0;
+    public final int REQUEST_METRO_ADDRESS = 1;
 
     private ArrayList<HashMap<String, String>> allList = null;
     private Location_rv_adapter adapter;
@@ -81,14 +94,15 @@ public class Ac_location extends Ac_base {
     private String result_s;
 
     private int req_location = -1;
+    private String metro_address_code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.ac_location);
         handleIntent();
-        getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        showTollbar(false);
+//        getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        showToolbar(false);
         initView();
         initMap();
     }
@@ -103,7 +117,7 @@ public class Ac_location extends Ac_base {
                 startActivityForResult(intent, QR_REQUEST_CODE);
                 break;
             case R.id.metro:
-                hop2ActivityForResult(Ac_metro_address.class, QR_REQUEST_CODE);
+                hop2ActivityForResult(Ac_metro_address.class, REQUEST_METRO_ADDRESS);
                 break;
             case R.id.enter:
                 String loc = et_address.getText().toString();
@@ -134,20 +148,96 @@ public class Ac_location extends Ac_base {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == QR_REQUEST_CODE) {
-            if (data != null) {
-                //requestAddress
-            }
+        if (data == null)
+            return;
+        switch (requestCode) {
+            case QR_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    metro_address_code = data.getStringExtra("result");
+                    loading_layout.setVisibility(View.VISIBLE);
+                    queryYdjwDataNoDialog(V_config.SUBWAY_INFO);
+                    queryYdjwDataX("");
+                } else {
+                    Toast.makeText(Ac_location.this, "二维码解析异常", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case REQUEST_METRO_ADDRESS:
+                if (resultCode == RESULT_OK) {
+                    String address = data.getStringExtra("metro_address");
+                    et_address.setText(address
+                    );
+                } else {
+                    Toast.makeText(Ac_location.this, "地址传递错误", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
     }
 
-    private void handleIntent() {
+    @Override
+    public void handleIntent() {
         Intent intent = getIntent();
         if (intent != null) {
             Bundle bundle = intent.getBundleExtra("bundle");
             if (bundle != null) {
                 req_location = bundle.getInt("req_location");
             }
+        }
+    }
+
+    @Override
+    public BaseRequestBean assembleRequestObj(String reqName) {
+        switch (reqName) {
+            case V_config.SUBWAY_INFO:
+                SubwayInfoRequestBean subwayInfoRequestBean = new SubwayInfoRequestBean();
+                assembleBasicRequest(subwayInfoRequestBean);
+                subwayInfoRequestBean.setYhdm("012146");
+                subwayInfoRequestBean.setNumber(metro_address_code);
+                return subwayInfoRequestBean;
+        }
+        return null;
+    }
+
+    @Override
+    public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
+        switch (reqName) {
+            case V_config.SUBWAY_INFO:
+                loading_layout.setVisibility(View.GONE);
+                SubwayInfoResBean subwayInfoResBean = (SubwayInfoResBean) resultBase;
+                if (subwayInfoResBean == null) {
+                    Toast.makeText(this, "地铁地址接口异常", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                List<SubwayInfo> list = subwayInfoResBean.getRows();
+                if (list == null || list.isEmpty()) {
+                    Toast.makeText(this, "地址信息为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (list.size() == 1) {
+                    SubwayInfo si = list.get(0);
+                    StringBuilder sb = new StringBuilder();
+                    String address = sb.append(si.getLineName()).append(si.getStationName()).append(si.getPositionName()).toString();
+                    et_address.setText(address);
+                } else {
+                    //当返回地址多余一项时才会显示spinButton
+                    final List<String> addresses = new ArrayList<>();
+                    for (SubwayInfo si : list) {
+                        StringBuilder sb = new StringBuilder();
+                        String address = sb.append(si.getLineName()).append(si.getStationName()).append(si.getPositionName()).toString();
+                        addresses.add(address);
+                    }
+                    SpinButton spinButton = new SpinButton(this);
+                    spinButton.setHeaderTitle("选择地址");
+                    spinButton.setDataSet(addresses);
+                    spinButton.setSelection(0);
+                    spinButton.setOnItemSelectedListener(new SpinButton.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(int position) {
+                            et_address.setText(addresses.get(position));
+                        }
+                    });
+                    spinButton.showSpin();
+                }
+                break;
         }
     }
 

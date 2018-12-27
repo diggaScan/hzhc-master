@@ -75,7 +75,7 @@ public class Ac_base extends AppCompatActivity {
         }
     }
 
-    public void showTollbar(boolean isShow) {
+    public void showToolbar(boolean isShow) {
         if (isShow)
             toolbar.setVisibility(View.VISIBLE);
         else
@@ -153,6 +153,7 @@ public class Ac_base extends AppCompatActivity {
     }
 
     public static boolean isChinese(char str) {
+        //根据unicode编码中的汉字区间来判定
         String regEx = "[\u4e00-\u9fa5]";
         Pattern pat = Pattern.compile(regEx);
         Matcher matcher = pat.matcher(String.valueOf(str));
@@ -169,6 +170,4 @@ public class Ac_base extends AppCompatActivity {
             loading_icon.setVisibility(View.GONE);
         }
     }
-
-
 }

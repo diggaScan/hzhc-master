@@ -20,7 +20,7 @@ import cn.com.cybertech.models.User;
 import cn.com.cybertech.pdk.OperationLog;
 
 
-public class Ac_splash extends Ac_base implements OnRequestCallback {
+public class Ac_splash extends CheckSelfPermissionActivity implements OnRequestCallback {
 
     private final String TAG = this.getClass().getSimpleName();
     private RequestManager mRequestManager;

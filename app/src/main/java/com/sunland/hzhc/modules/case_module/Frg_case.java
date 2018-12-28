@@ -64,7 +64,6 @@ public class Frg_case extends Frg_base {
             case R.id.case_src:
                 hop2ActivityForResult(Ac_case_gxdw.class, REQ_DW);
                 break;
-
         }
     }
 

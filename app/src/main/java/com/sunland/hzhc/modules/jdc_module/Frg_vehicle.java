@@ -3,6 +3,8 @@ package com.sunland.hzhc.modules.jdc_module;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -14,6 +16,8 @@ import com.sunland.hzhc.Ac_main;
 import com.sunland.hzhc.DataModel;
 import com.sunland.hzhc.Frg_base;
 import com.sunland.hzhc.R;
+import com.sunland.hzhc.modules.sfz_module.Ac_rycx;
+import com.sunland.hzhc.utils.UtilsString;
 import com.sunland.sunlandkeyboard.SunlandKeyBoardManager;
 
 import java.util.ArrayList;
@@ -49,6 +53,46 @@ public class Frg_vehicle extends Frg_base {
         sb_vehicle.setHeaderTitle("选择车辆类型");
         sb_vehicle.setDataSet(Arrays.asList(DataModel.VEHICLEMODELS));
         sb_vehicle.setSelection(0);
+        et_number.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String cphm=s.toString();
+                String hpzl_str = sb_vehicle.getSelectedItem();
+                String hpzl_num = DataModel.VEHICLEMODLES.get(hpzl_str);
+                if (!UtilsString.isAutoQueryVeh(hpzl_num,cphm)) {
+                    return;
+                }
+                String fdjh = et_engine_num.getText().toString();
+                if (cphm.isEmpty()) {
+                    Toast.makeText(context, "机动车号牌不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String clsbh = et_vehivle_id.getText().toString();
+                Bundle bundle = new Bundle();
+                bundle.putString("cphm", cphm);
+                bundle.putString("hpzl", hpzl_num);
+                bundle.putString("fdjh", fdjh);
+                bundle.putString("clsbh", clsbh);
+
+                if (((Ac_main) context).isFromSsj) {
+                    bundle.putBoolean(DataModel.FROM_SSJ_FLAG, true);
+                    ((Ac_main) context).hopWithssj(Ac_clcx.class, bundle);
+                } else {
+
+                    ((Ac_main) context).hop2Activity(Ac_clcx.class, bundle);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @OnClick({R.id.query, R.id.scan})

@@ -2,6 +2,8 @@ package com.sunland.hzhc.modules.sfz_module;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -36,9 +38,35 @@ public class Frg_id extends Frg_base {
     public void initView() {
         ((Ac_main) context).sunlandKeyBoardManager.addTarget(((Ac_main) context).myKeyBoardView, et_id,
                 SunlandKeyBoardManager.KeyboardMode.IDENTITY);
+        et_id.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!UtilsString.checkId(s.toString()).equals("")) {
+                    Bundle bundle = new Bundle();
+                    if (((Ac_main) context).isFromSsj) {
+                        bundle.putString("id", s.toString());
+                        bundle.putBoolean(DataModel.FROM_SSJ_FLAG, true);
+                        ((Ac_main) context).hopWithssj(Ac_rycx.class, bundle);
+                    } else {
+                        bundle.putString("id", s.toString());
+                        ((Ac_main) context).hop2Activity(Ac_rycx.class, bundle);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
-    @OnClick({R.id.query, R.id.nfc_scan})
+    @OnClick({R.id.query, R.id.nfc_scan, R.id.id_input})
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
@@ -61,6 +89,9 @@ public class Frg_id extends Frg_base {
             case R.id.nfc_scan:
                 Frg_nfc_ocr frg_nfc_ocr = new Frg_nfc_ocr();
                 frg_nfc_ocr.show(((Ac_main) context).getSupportFragmentManager(), "dialog");
+                break;
+            case R.id.id_input:
+                et_id.setCursorVisible(true);
                 break;
         }
     }

@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CheckSelfPermissionActivity extends AppCompatActivity {
+public abstract class CheckSelfPermissionActivity extends Ac_base {
 
     public static String[] permission_required = {
             Manifest.permission.INTERNET,

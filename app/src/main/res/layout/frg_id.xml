@@ -36,6 +36,7 @@
                 android:digits="1234567890xX"
                 android:ems="10"
                 android:gravity="center"
+                android:cursorVisible="false"
                 android:hint="输入身份证号码"
                 android:inputType="number"
                 android:maxLength="18"

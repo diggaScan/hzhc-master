@@ -6,19 +6,19 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
-import com.sunland.hzhc.Ac_base;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.bean.i_case_cate.DwBaseInfo;
 import com.sunland.hzhc.bean.i_charge_case.DwListResBean;
+import com.sunland.hzhc.modules.Ac_base_info;
+import com.sunland.hzhc.modules.Hotel_module.Loadable_adapter;
 import com.sunland.hzhc.modules.xmzh_module.Rv_Jg_adapter;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
 import com.sunland.hzhc.utils.AssetDBReader;
-import com.sunlandgroup.Global;
 import com.sunlandgroup.def.bean.result.ResultBase;
-import com.sunlandgroup.network.OnRequestCallback;
 import com.sunlandgroup.network.RequestManager;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class Ac_case_gxdw extends Ac_base implements OnRequestCallback {
+public class Ac_case_gxdw extends Ac_base_info {
 
     @BindView(R.id.district_list)
     public RecyclerView rv_district_list;
@@ -35,7 +35,7 @@ public class Ac_case_gxdw extends Ac_base implements OnRequestCallback {
     private RequestManager mRequestManager;
     private AssetDBReader assetDBReader;
     private SQLiteDatabase database;
-    private Rv_Jg_adapter d_adapter;
+    private Loadable_adapter d_adapter;
     private Rv_Jg_adapter dw_adapter;
 
     private List<String> districts;
@@ -56,7 +56,13 @@ public class Ac_case_gxdw extends Ac_base implements OnRequestCallback {
         mRequestManager = new RequestManager(this, this);
         readDb();
         showDistricts();
-        queryCaseGxdw(V_config.QUERY_ALL_CASE_INFO);
+        queryYdjwDataNoDialog(V_config.QUERY_ALL_CASE_INFO);
+        queryYdjwDataX("");
+    }
+
+    @Override
+    public void handleIntent() {
+
     }
 
     private void readDb() {
@@ -73,9 +79,9 @@ public class Ac_case_gxdw extends Ac_base implements OnRequestCallback {
         all_dwdm = new ArrayList<>();
         all_dwmc = new ArrayList<>();
 
-        d_adapter = new Rv_Jg_adapter(this, districts);
+        d_adapter = new Loadable_adapter(this, districts);
         dw_adapter = new Rv_Jg_adapter(this, dw);
-        d_adapter.setOnItemClickedListener(new Rv_Jg_adapter.OnItemClickedListener() {
+        d_adapter.setOnItemClickedListener(new Loadable_adapter.OnItemClickedListener() {
             @Override
             public void onItemClicked(int position) {
                 if (position == 0) {
@@ -132,13 +138,8 @@ public class Ac_case_gxdw extends Ac_base implements OnRequestCallback {
 
     }
 
-    private void queryCaseGxdw(String reqName) {
-        mRequestManager.addRequest(Global.ip, Global.port, Global.postfix, reqName
-                , assembleRequestObj(), 15000);
-        mRequestManager.postRequest();
-    }
-
-    private BaseRequestBean assembleRequestObj() {
+    @Override
+    public BaseRequestBean assembleRequestObj(String reqName) {
         BaseRequestBean bean = new BaseRequestBean();
         assembleBasicRequest(bean);
         return bean;
@@ -162,27 +163,31 @@ public class Ac_case_gxdw extends Ac_base implements OnRequestCallback {
     }
 
     @Override
-    public <T> void onRequestFinish(String reqId, String reqName, T bean) {
-
-        DwListResBean dwListResBean = (DwListResBean) bean;
-        dw.clear();
-        dwdm.clear();
-        List<DwBaseInfo> dwBaseInfoList = dwListResBean.getDwlist();
-        if (dwBaseInfoList != null) {
-            for (DwBaseInfo info : dwBaseInfoList) {
-                all_dwmc.add(info.getName());
-                all_dwdm.add(info.getCode());
-            }
-            dw.addAll(all_dwmc);
-            dwdm.addAll(all_dwdm);
-            dw_adapter.notifyDataSetChanged();
+    public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
+        d_adapter.hasLoaded(true);
+        d_adapter.notifyItemChanged(0);
+        DwListResBean dwListResBean = (DwListResBean) resultBase;
+        if (dwListResBean == null) {
+            Toast.makeText(this, "案件管辖单位接口异常", Toast.LENGTH_SHORT).show();
+            return;
         }
 
+        List<DwBaseInfo> dwBaseInfoList = dwListResBean.getDwlist();
+        if (dwBaseInfoList == null || dwBaseInfoList.isEmpty()) {
+            Toast.makeText(this, "无相关管辖单位", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        dw.clear();
+        dwdm.clear();
+        for (DwBaseInfo info : dwBaseInfoList) {
+            all_dwmc.add(info.getName());
+            all_dwdm.add(info.getCode());
+        }
+        dw.addAll(all_dwmc);
+        dwdm.addAll(all_dwdm);
+        dw_adapter.notifyDataSetChanged();
 
     }
 
-    @Override
-    public <T extends ResultBase> Class<?> getBeanClass(String reqId, String reqName) {
-        return DwListResBean.class;
-    }
+
 }

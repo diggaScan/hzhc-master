@@ -212,23 +212,7 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
         }
     }
 
-    public void hop2Activity(Class<? extends Ac_base> clazz) {
-        Intent intent = new Intent(this, clazz);
-        startActivity(intent);
-    }
 
-
-    public void hop2Activity(Class<? extends Ac_base> clazz, Bundle bundle) {
-        Intent intent = new Intent(this, clazz);
-        intent.putExtra("bundle", bundle);
-        startActivity(intent);
-    }
-
-    public void hopWithssj(Class<? extends Ac_base> clazz, Bundle bundle) {
-        Intent intent = new Intent(this, clazz);
-        intent.putExtra("bundle", bundle);
-        startActivityForResult(intent, REQ_SSJ);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

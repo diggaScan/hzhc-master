@@ -86,6 +86,7 @@ public class Ac_case extends Ac_base_info {
     public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
         switch (reqName) {
             case V_config.CASE_INFO:
+                showLoading_layout(false);
                 CaseListResBean caseListResBean = (CaseListResBean) resultBase;
                 if (caseListResBean == null) {
                     Toast.makeText(this, "案件信息接口异常", Toast.LENGTH_SHORT).show();

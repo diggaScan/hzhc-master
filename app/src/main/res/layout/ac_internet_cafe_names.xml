@@ -11,11 +11,18 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="20dp" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/wb_list"
+    <com.sunland.hzhc.customView.DragToRefreshView.DragToRefreshView
+        android:id="@+id/refresh"
+        android:layout_weight="1"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="20dp" />
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/wb_list"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp" />
+    </com.sunland.hzhc.customView.DragToRefreshView.DragToRefreshView>
 
 
 </LinearLayout>

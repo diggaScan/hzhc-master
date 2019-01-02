@@ -34,11 +34,8 @@ public class Ac_phone_num extends Ac_base_info {
 
     @BindView(R.id.ry_list)
     public RecyclerView rv_list;
-
     private MyRvAdapter adapter;
-
     private List<RyInfo> dataSet;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,8 +44,8 @@ public class Ac_phone_num extends Ac_base_info {
         showNavIcon(true);
         setToolbarTitle("人员列表");
         dataSet = new ArrayList<>();
-        queryYdjwDataNoDialog(V_config.GET_PERSON_MOBILE_JOIN_INFO);
-        queryYdjwDataX("");
+        queryYdjwDataNoDialog("GET_PERSON_MOBILE_JOIN_INFO",V_config.GET_PERSON_MOBILE_JOIN_INFO);
+        queryYdjwDataX();
         showLoading_layout(true);
     }
 

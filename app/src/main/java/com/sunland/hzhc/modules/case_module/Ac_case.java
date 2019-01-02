@@ -48,8 +48,8 @@ public class Ac_case extends Ac_base_info {
         showNavIcon(true);
         setToolbarTitle("案件列表");
         dataSet = new ArrayList<>();
-        queryYdjwDataNoDialog(V_config.CASE_INFO);
-        queryYdjwDataX("");
+        queryYdjwDataNoDialog("CASE_INFO",V_config.CASE_INFO);
+        queryYdjwDataX();
         showLoading_layout(true);
     }
 

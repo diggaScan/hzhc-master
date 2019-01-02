@@ -39,6 +39,9 @@ public class Ac_splash extends CheckSelfPermissionActivity implements OnRequestC
             User user = cn.com.cybertech.pdk.UserInfo.getUser(this);
             try {
                 V_config.YHDM = user.getAccount();
+                V_config.JYSFZH = user.getIdCard();
+                V_config.JYXM = user.getName();
+                V_config.JYBMBH = user.getDeptId();
             } catch (NullPointerException e) {
                 Toast.makeText(this, "无法获取警号", Toast.LENGTH_LONG).show();
                 finish();
@@ -69,12 +72,12 @@ public class Ac_splash extends CheckSelfPermissionActivity implements OnRequestC
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String pda_time = simpleDateFormat.format(date);
         loginBean.setPdaTime(pda_time);
-        loginBean.setGpsX("gpsx");
-        loginBean.setGpsY("gpsy");
-        loginBean.setDlmk("1");
-        loginBean.setSjpp("1");
-        loginBean.setSjxx("1");
-        loginBean.setZzxt("1");
+        loginBean.setGpsX(V_config.gpsX);
+        loginBean.setGpsY(V_config.gpsY);
+        loginBean.setDlmk(V_config.DLMK);
+        loginBean.setSjpp(V_config.BRAND);
+        loginBean.setSjxx(V_config.MODEL);
+        loginBean.setZzxt(V_config.OS);
         return loginBean;
     }
 
@@ -92,7 +95,6 @@ public class Ac_splash extends CheckSelfPermissionActivity implements OnRequestC
             Toast.makeText(this, "服务异常", Toast.LENGTH_SHORT).show();
             return;
         }
-
         if (!loginResBean.getCode().equals("0")) {
             saveLog(0, OperationLog.OperationResult.CODE_SUCCESS, appendString(V_config.YHDM, V_config.BRAND, V_config.MODEL));
             Bundle bundle = new Bundle();

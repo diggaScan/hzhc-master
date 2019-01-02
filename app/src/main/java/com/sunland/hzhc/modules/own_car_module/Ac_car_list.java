@@ -19,6 +19,7 @@ import com.sunland.hzhc.bean.i_owned_car.CarBaseInfo;
 import com.sunland.hzhc.bean.i_owned_car.CzsycReqBean;
 import com.sunland.hzhc.bean.i_owned_car.OwnedCarResBean;
 import com.sunland.hzhc.modules.Ac_base_info;
+import com.sunland.hzhc.modules.jdc_module.Ac_clcx;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
 import com.sunlandgroup.def.bean.result.ResultBase;
 
@@ -43,8 +44,8 @@ public class Ac_car_list extends Ac_base_info {
         setToolbarTitle("名下机动车");
         handleIntent();
         initView();
-        queryYdjwDataNoDialog(V_config.GET_CAR_INFO_BY_SFZH);
-        queryYdjwDataX("");
+        queryYdjwDataNoDialog("GET_CAR_INFO_BY_SFZH",V_config.GET_CAR_INFO_BY_SFZH);
+        queryYdjwDataX();
         showLoading_layout(true);
     }
 
@@ -112,13 +113,18 @@ public class Ac_car_list extends Ac_base_info {
 
         @Override
         public void onBindViewHolder(@NonNull MyRvAdapter.MyViewHolder myViewHolder, int i) {
-            CarBaseInfo info = dataSet.get(i);
+            final CarBaseInfo info = dataSet.get(i);
             myViewHolder.tv_cphm.setText(info.getHphm());
             myViewHolder.tv_cllx.setText(info.getCllx_code());
             myViewHolder.ll_container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Bundle bundle = new Bundle();
+                    bundle.putString("cphm", info.getHphm());
+                    bundle.putString("hpzl", "");
+                    bundle.putString("fdjh", "");
+                    bundle.putString("clsbh", "");
+                    hop2Activity(Ac_clcx.class, bundle);
                 }
             });
         }

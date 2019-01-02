@@ -85,6 +85,5 @@ public class Frg_name extends Frg_base {
     public void unbpdateView(String name, String gender, String birth) {
         et_name.setText(name);
         tv_birth.setText(birth);
-
     }
 }

@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.sunland.hzhc.bean.BaseRequestBean;
+import com.sunland.hzhc.bean.i_login.Dljyxx;
 import com.sunland.hzhc.bean.i_login.LoginRequestBean;
 import com.sunland.hzhc.bean.i_login.LoginResBean;
 import com.sunland.hzhc.utils.DialogUtils;
@@ -58,19 +59,19 @@ public class Ac_login extends Ac_base implements OnRequestCallback {
             case V_config.USER_LOGIN:
                 LoginRequestBean requestBean = new LoginRequestBean();
                 requestBean.setYhdm(et_username.getText().toString());
-                requestBean.setImei("1");
-                requestBean.setImsi("1");
+                requestBean.setImei(V_config.imei);
+                requestBean.setImsi(V_config.imsi1);
                 Date date = new Date();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String pda_time = simpleDateFormat.format(date);
                 requestBean.setPdaTime(pda_time);
-                requestBean.setGpsX("gpsx");
-                requestBean.setGpsY("gpsy");
+                requestBean.setGpsX(V_config.gpsX);
+                requestBean.setGpsY(V_config.gpsY);
                 requestBean.setPassword(et_password.getText().toString());
-                requestBean.setDlmk("1");
-                requestBean.setSjpp("1");
-                requestBean.setSjxx("1");
-                requestBean.setZzxt("1");
+                requestBean.setDlmk(V_config.DLMK);
+                requestBean.setSjpp(V_config.BRAND);
+                requestBean.setSjxx(V_config.MODEL);
+                requestBean.setZzxt(V_config.OS);
                 return requestBean;
         }
         return null;
@@ -92,7 +93,6 @@ public class Ac_login extends Ac_base implements OnRequestCallback {
                 mRequestManager.cancelAll();
             }
         }, null);
-
         queryYdjwData(V_config.USER_LOGIN);
     }
 
@@ -111,6 +111,14 @@ public class Ac_login extends Ac_base implements OnRequestCallback {
             Toast.makeText(this, "服务异常", Toast.LENGTH_SHORT).show();
             return;
         }
+//        Dljyxx dljyxx = loginResBean.getDljyxx();
+//        if (dljyxx == null) {
+//            Toast.makeText(this, "警员信息为空", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        V_config.JYSFZH = dljyxx.getUsernumber();
+//        V_config.JYXM = dljyxx.getJyname();
+//        V_config.JYBMBH = dljyxx.getBmcode();
 
         //code 0 允许登录
         //code 1 登录失败
@@ -118,10 +126,7 @@ public class Ac_login extends Ac_base implements OnRequestCallback {
             V_config.YHDM = et_username.getText().toString();
             saveLog(0, OperationLog.OperationResult.CODE_SUCCESS, appendString(V_config.YHDM, V_config.BRAND,
                     V_config.MODEL));//yhdm,手机品牌，手机型号，警号
-            String bm_code = loginResBean.getDljyxx().getBmcode().substring(0, 6);
-            Bundle bundle = new Bundle();
-            bundle.putString("bmcode", bm_code);
-            hop2Activity(Ac_location.class, bundle);
+            hop2Activity(Ac_location.class);
         } else {
             saveLog(0, OperationLog.OperationResult.CODE_FAILURE,
                     appendString(V_config.YHDM, V_config.BRAND, V_config.MODEL));

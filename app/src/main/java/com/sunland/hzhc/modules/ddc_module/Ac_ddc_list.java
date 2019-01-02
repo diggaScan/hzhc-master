@@ -57,8 +57,8 @@ public class Ac_ddc_list extends Ac_base_info {
         handleIntent();
         initView();
         showLoading_layout(true);
-        queryYdjwDataNoDialog(V_config.GET_ELECTRIC_CAR_INFO);
-        queryYdjwDataX("");
+        queryYdjwDataNoDialog("GET_ELECTRIC_CAR_INFO",V_config.GET_ELECTRIC_CAR_INFO);
+        queryYdjwDataX();
     }
 
     public void handleIntent() {
@@ -88,8 +88,8 @@ public class Ac_ddc_list extends Ac_base_info {
                 if (view.isFooterRefreshing()) {
                     add_pages++;
                     cur_page = 1 + add_pages;
-                    queryYdjwDataNoDialog(V_config.GET_ELECTRIC_CAR_INFO);
-                    queryYdjwDataX("");
+                    queryYdjwDataNoDialog("GET_ELECTRIC_CAR_INFO",V_config.GET_ELECTRIC_CAR_INFO);
+                    queryYdjwDataX();
                 }
             }
 

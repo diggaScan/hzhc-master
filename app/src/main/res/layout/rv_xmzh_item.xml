@@ -49,9 +49,8 @@
     <TextView
         android:id="@+id/src_str"
         android:layout_width="wrap_content"
-
         android:layout_height="wrap_content"
-        android:layout_below="@id/hj_str"
+        android:layout_below="@id/address"
         android:layout_marginLeft="@dimen/form_text_margin_left"
         android:text="数据来源" />
 

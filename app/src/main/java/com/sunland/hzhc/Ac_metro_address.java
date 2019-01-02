@@ -78,8 +78,8 @@ public class Ac_metro_address extends Ac_base_info {
                     Toast.makeText(this, "请输入7位号码", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                queryYdjwDataNoDialog(V_config.SUBWAY_INFO);
-                queryYdjwDataX("");
+                queryYdjwDataNoDialog("SUBWAY_INFO",V_config.SUBWAY_INFO);
+                queryYdjwDataX();
                 btn_query.setEnabled(false);
                 showLoading_layout(true);
                 break;

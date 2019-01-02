@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_margin="@dimen/form_margin_left"
     android:orientation="vertical">
 
-    <include layout="@layout/check_status_layout" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <include layout="@layout/check_status_layout" />
 
+        <TextView
+            android:id="@+id/focus_str"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="人员关注信息"
+            android:textColor="@color/light_blue"
+            android:visibility="gone" />
 
-</FrameLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/people_focus"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+    </LinearLayout>
+</ScrollView>

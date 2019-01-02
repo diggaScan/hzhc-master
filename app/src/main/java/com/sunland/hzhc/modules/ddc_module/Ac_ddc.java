@@ -91,9 +91,9 @@ public class Ac_ddc extends Ac_base_info {
         setContentLayout(R.layout.ac_ddc);
         showNavIcon(true);
         setToolbarTitle("电动车详情");
-        queryYdjwDataNoDialog(V_config.COUNTRY_PERSON);
-        queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
-        queryYdjwDataX("");
+        queryYdjwDataNoDialog("COUNTRY_PERSON",V_config.COUNTRY_PERSON);
+        queryYdjwDataNoDialog("COUNTRY_PERSON",V_config.INSPECT_PERSON);
+        queryYdjwDataX();
         initView();
     }
 
@@ -102,12 +102,12 @@ public class Ac_ddc extends Ac_base_info {
         super.onStart();
 
         if (!load_country_person) {
-            queryYdjwDataNoDialog(V_config.COUNTRY_PERSON);
+            queryYdjwDataNoDialog("COUNTRY_PERSON",V_config.COUNTRY_PERSON);
         }
         if (!load_inspect_person) {
-            queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
+            queryYdjwDataNoDialog("COUNTRY_PERSON",V_config.INSPECT_PERSON);
         }
-        queryYdjwDataX("");
+        queryYdjwDataX();
         if (!load_want) {
             queryWanted();
         }
@@ -207,7 +207,7 @@ public class Ac_ddc extends Ac_base_info {
                 InspectPersonReqBean inspectPersonReqBean = new InspectPersonReqBean();
                 assembleBasicRequest(inspectPersonReqBean);
                 Request request = new Request();
-                inspectPersonReqBean.setYhdm("115576");
+                inspectPersonReqBean.setYhdm(V_config.YHDM);
                 Dlxx dlxx = new Dlxx();
                 dlxx.setHCDZ(V_config.hc_address);
                 request.setDlxx(dlxx);
@@ -267,10 +267,11 @@ public class Ac_ddc extends Ac_base_info {
                 }
 
                 String result;
-                if (ryxxRes.getFhm().equals("000")) {
-                    result = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
-                } else {
+                if (!ryxxRes.getFhm().equals("000") || ryxxRes.getHcjg().equals("存疑")) {
                     result = "<font color=\"#d13931\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
+
+                } else {
+                    result = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
                 }
                 tv_road_check.setText(Html.fromHtml(result));
 
@@ -327,8 +328,8 @@ public class Ac_ddc extends Ac_base_info {
             case R.id.retry:
                 tv_road_check.setText("");
                 loading_hc.setVisibility(View.VISIBLE);
-                queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
-                queryYdjwDataX("");
+                queryYdjwDataNoDialog("INSPECT_PERSON",V_config.INSPECT_PERSON);
+                queryYdjwDataX();
                 break;
 
         }

@@ -28,7 +28,6 @@ import com.sunland.hzhc.customView.BannerIndicator;
 import com.sunland.hzhc.fragments.Vp_main_adapter;
 import com.sunland.hzhc.modules.Hotel_module.Frg_hotel;
 import com.sunland.hzhc.modules.Internet_cafe_module.Frg_internet_cafe;
-import com.sunland.hzhc.modules.abroad_module.Frg_abroad;
 import com.sunland.hzhc.modules.case_module.Frg_case;
 import com.sunland.hzhc.modules.ddc_module.Frg_e_vehicle;
 import com.sunland.hzhc.modules.jdc_module.Frg_vehicle;
@@ -125,7 +124,7 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
         ComponentName componentName = new ComponentName("com.sunland.sunlandkeyboard", "com.sunland.sunlandkeyboard.目标activity"); //用于获取该activity的softInputMode
         sunlandKeyBoardManager = new SunlandKeyBoardManager(this, componentName);
 
-        bannerIndicator.setItem_nums(9);
+        bannerIndicator.setItem_nums(8);
         bannerIndicator.setRadius(WindowInfoUtils.dp2px(this, 3));
         bannerIndicator.setDotsColor(mRes.getColor(R.color.dot_color));
         bannerIndicator.setMovingDotColor(mRes.getColor(R.color.colorAccent));
@@ -211,7 +210,6 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
                 break;
         }
     }
-
 
 
     @Override

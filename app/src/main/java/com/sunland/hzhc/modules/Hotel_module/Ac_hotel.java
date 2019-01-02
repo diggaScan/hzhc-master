@@ -15,10 +15,11 @@ import android.widget.Toast;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
+import com.sunland.hzhc.bean.i_hotel_people_info.PllgrzReqBean;
 import com.sunland.hzhc.customView.DragToRefreshView.DragToRefreshView;
 import com.sunland.hzhc.modules.Ac_base_info;
-import com.sunland.hzhc.modules.Hotel_module.bean.InfoLGZSRY;
-import com.sunland.hzhc.modules.Hotel_module.bean.LGResBean;
+import com.sunland.hzhc.bean.i_hotel_people_info.InfoLGZSRY;
+import com.sunland.hzhc.bean.i_hotel_people_info.LGResBean;
 import com.sunland.hzhc.modules.sfz_module.Ac_rycx;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
 import com.sunlandgroup.def.bean.result.ResultBase;
@@ -53,8 +54,8 @@ public class Ac_hotel extends Ac_base_info {
         setContentLayout(R.layout.ac_hotel);
         showNavIcon(true);
         setToolbarTitle("入住旅客列表");
-        queryYdjwDataNoDialog(V_config.GET_PERSON_IN_HOTEL_INFO);
-        queryYdjwDataX("");
+        queryYdjwDataNoDialog("GET_PERSON_IN_HOTEL_INFO",V_config.GET_PERSON_IN_HOTEL_INFO);
+        queryYdjwDataX();
         showLoading_layout(true);
         initView();
     }
@@ -81,8 +82,8 @@ public class Ac_hotel extends Ac_base_info {
                 if (view.isFooterRefreshing()) {
                     add_pages++;
                     cur_page = 1 + add_pages;
-                    queryYdjwDataNoDialog(V_config.GET_PERSON_IN_HOTEL_INFO);
-                    queryYdjwDataX("");
+                    queryYdjwDataNoDialog("GET_PERSON_IN_HOTEL_INFO",V_config.GET_PERSON_IN_HOTEL_INFO);
+                    queryYdjwDataX();
                 }
             }
 

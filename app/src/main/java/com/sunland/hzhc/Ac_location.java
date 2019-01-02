@@ -155,8 +155,8 @@ public class Ac_location extends Ac_base_info {
                 if (resultCode == RESULT_OK) {
                     metro_address_code = data.getStringExtra("result");
                     loading_layout.setVisibility(View.VISIBLE);
-                    queryYdjwDataNoDialog(V_config.SUBWAY_INFO);
-                    queryYdjwDataX("");
+                    queryYdjwDataNoDialog("SUBWAY_INFO",V_config.SUBWAY_INFO);
+                    queryYdjwDataX();
                 } else {
                     Toast.makeText(Ac_location.this, "二维码解析异常", Toast.LENGTH_SHORT).show();
                 }

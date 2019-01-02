@@ -1,4 +1,4 @@
-package com.sunland.hzhc.modules.Hotel_module;
+package com.sunland.hzhc.bean.i_hotel_people_info;
 
 import com.sunland.hzhc.bean.BaseRequestBean;
 

@@ -143,27 +143,34 @@ public class Ac_rycx extends Ac_base_info {
         setToolbarTitle("个人信息");
         resources = getResources();
         initView();
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        if (!load_country_person) {
+            queryYdjwDataNoDialog("COUNTRY_PERSON", V_config.COUNTRY_PERSON);
+        }
         if (!load_person_complex) {
             showLoading_layout(true);
-            queryYdjwDataNoDialog(V_config.PERSON_COMPLEX);
-        }
-        if (!load_country_person) {
-            queryYdjwDataNoDialog(V_config.COUNTRY_PERSON);
-        }
-        if (!load_inspect_person) {
-            queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
+            queryYdjwDataNoDialog("PERSON_COMPLEX", V_config.PERSON_COMPLEX);
         }
 
-        queryYdjwDataX("");
+        if (!load_inspect_person) {
+            queryYdjwDataNoDialog("INSPECT_PERSON", V_config.INSPECT_PERSON);
+        }
+
+        queryYdjwDataX();
+
         if (!load_zt_info) {
             queryWanted();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopVibrate();
     }
 
     public void initView() {
@@ -176,9 +183,9 @@ public class Ac_rycx extends Ac_base_info {
             public void run() {
                 try {
                     MyTaskParams taskParams = new MyTaskParams();
-                    taskParams.putHead("jySfzh", "330103199107170010");
-                    taskParams.putHead("jyXm", URLEncoder.encode("华晓阳", "UTF-8"));
-                    taskParams.putHead("jyBmbh", "330100230500");//330100230500;04E5E90AFFD64035B700F6B62D772E2E
+                    taskParams.putHead("jySfzh", V_config.JYSFZH);
+                    taskParams.putHead("jyXm", URLEncoder.encode(V_config.JYXM, "UTF-8"));
+                    taskParams.putHead("jyBmbh", V_config.JYBMBH);//330100230500;04E5E90AFFD64035B700F6B62D772E2E
                     taskParams.putHead("version", Global.VERSION_URL);
                     taskParams.putEntity("sfzh", sfzh);
                     final String result = QueryHttp.post(Global.PERSON_CHECK_QGZT_URL, taskParams);
@@ -238,7 +245,7 @@ public class Ac_rycx extends Ac_base_info {
                 InspectPersonReqBean inspectPersonReqBean = new InspectPersonReqBean();
                 assembleBasicRequest(inspectPersonReqBean);
                 Request request = new Request();
-                inspectPersonReqBean.setYhdm(V_config.jhdm);
+                inspectPersonReqBean.setYhdm(V_config.YHDM);
                 Dlxx dlxx = new Dlxx();
                 dlxx.setHCDZ(V_config.hc_address);
                 request.setDlxx(dlxx);
@@ -265,7 +272,6 @@ public class Ac_rycx extends Ac_base_info {
                 hop2Activity(Ac_archive.class, bundle);
                 break;
             case R.id.jdc_check:
-
                 if (jdc_num == 1) {
                     String cphm = tp_jdc_hp.split(",")[0];
                     bundle.putString("cphm", cphm);
@@ -294,7 +300,6 @@ public class Ac_rycx extends Ac_base_info {
                 bundle.putString("dh_str", tp_dh_str);
                 hop2Activity(Ac_dh.class, bundle);
                 break;
-
             case R.id.location_container:
                 bundle.putInt("req_location", V_config.REQ_LOCATION);
                 hop2ActivityForResult(Ac_location.class, bundle, V_config.REQ_LOCATION);
@@ -302,8 +307,8 @@ public class Ac_rycx extends Ac_base_info {
             case R.id.retry:
                 tv_road_check.setText("");
                 loading_hc.setVisibility(View.VISIBLE);
-                queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
-                queryYdjwDataX("");
+                queryYdjwDataNoDialog("INSPECT_PERSON",V_config.INSPECT_PERSON);
+                queryYdjwDataX();
                 break;
         }
     }
@@ -438,7 +443,8 @@ public class Ac_rycx extends Ac_base_info {
                 } else {
                     StringBuilder fcxx = new StringBuilder();
                     for (InfoFCXX infoFcxx : fcxxes) {
-                        fcxx.append(infoFcxx.getFcsj()).append(infoFcxx.getFcdz()).append(",");
+                        fcxx.append("访查时间:").append(infoFcxx.getFcsj()).append("\n").append("访查地址:")
+                                .append(infoFcxx.getFcdz()).append("\n\n");
                     }
                     setText(tv_fcxx, fcxx.substring(0, fcxx.length() - 1));
                 }
@@ -483,12 +489,13 @@ public class Ac_rycx extends Ac_base_info {
 
                 load_inspect_person = true;
                 String result;
-                if (ryxxRes.getFhm().equals("000")) {
-                    result = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
-                    zdry = "0";//非重点，绿色
-                } else {
+                if (!ryxxRes.getFhm().equals("000") || ryxxRes.getHcjg().equals("存疑")) {
                     result = "<font color=\"#d13931\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
                     zdry = "1";//重点人员,红色
+                    startVibrate();
+                } else {
+                    result = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
+                    zdry = "0";//非重点，绿色
                 }
                 tv_road_check.setText(Html.fromHtml(result));
                 returncode = ryxxRes.getFhm();

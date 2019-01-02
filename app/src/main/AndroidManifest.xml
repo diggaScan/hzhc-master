@@ -43,13 +43,17 @@
         <activity android:name=".Ac_splash">
 
         </activity>
-        <activity android:name=".Ac_login" />
+        <activity android:name=".Ac_login">
+
+        </activity>
+        <activity android:name=".Ac_division">
+
+        </activity>
         <activity
             android:name=".Ac_location"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
             <intent-filter>
                 <action android:name="${PLATEFORM_VALUE}.intent.action.MAIN" />
-
                 <category android:name="${PLATEFORM_VALUE}.intent.category.${CATEGORY_VALUE}" />
             </intent-filter>
         </activity>
@@ -58,31 +62,40 @@
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="com.sunland.hzhc.intent.action.QUERY" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
         </activity>
         <activity android:name=".Ac_module_list" />
-        <activity android:name=".modules.sfz_module.Ac_rycx">
+        <activity
+            android:name=".modules.sfz_module.Ac_rycx"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="com.sunland.intent.action.QUERY_ID" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Ac_metro_address"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".modules.jdc_module.Ac_clcx" />
+        <activity
+            android:name=".modules.jdc_module.Ac_clcx"
+            android:launchMode="singleTask" />
         <activity android:name=".modules.ddc_module.Ac_ddc" />
         <activity android:name=".modules.xmzh_module.Ac_xmzh_list" />
         <activity android:name=".modules.Hotel_module.Ac_hotel" />
         <activity android:name=".modules.Internet_cafe_module.Ac_internet_cafe" />
         <activity android:name=".modules.phone_num_module.Ac_phone_num" />
         <activity android:name=".modules.case_module.Ac_case" />
-        <activity android:name=".modules.Hotel_module.Ac_hotel_name" />
-        <activity android:name=".modules.Internet_cafe_module.Ac_internet_cafe_names" />
-        <activity android:name=".modules.case_module.Ac_case_cates" />
+        <activity
+            android:name=".modules.Hotel_module.Ac_hotel_name"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".modules.Internet_cafe_module.Ac_internet_cafe_names"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+        <activity
+            android:name=".modules.case_module.Ac_case_cates"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".modules.case_module.Ac_case_gxdw" />
         <activity android:name=".modules.abroad_module.Ac_nations_list" />
         <activity android:name=".modules.p_archive_module.Ac_archive" />

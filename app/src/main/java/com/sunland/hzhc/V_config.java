@@ -57,6 +57,8 @@ public class V_config {
     public final static String MM_USER_LOGIN = "userMMLogin";
     //   26. 地铁接口详情
     public final static String SUBWAY_INFO = "querySubwayInfo";
+    //   27. 安保接口
+    public final static String GET_AN_BAO_INFO = "getAnBaoInfo";
 
     //本机信息
     public final static String BRAND = Build.BRAND;//手机品牌
@@ -69,9 +71,14 @@ public class V_config {
     public static String gpsY = "";//纬度
     public static String gpsinfo = gpsX + gpsY;
     //用户代码
-    public static String YHDM;
-    public static String jhdm = "115576";
-    public static String hc_address = "";
+    public static String YHDM = "115576";
+
+    public static String JYSFZH = "";
+    public static String JYXM = "";
+    public static String JYBMBH = "";
     //
+    public static String DLMK = "杭州核查";
+
+    public static String hc_address = "";
     public final static int REQ_LOCATION = 1;
 }

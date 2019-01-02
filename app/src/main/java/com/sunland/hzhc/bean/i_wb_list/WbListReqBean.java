@@ -1,4 +1,4 @@
-package com.sunland.hzhc.modules.Internet_cafe_module;
+package com.sunland.hzhc.bean.i_wb_list;
 
 import com.sunland.hzhc.bean.BaseRequestBean;
 

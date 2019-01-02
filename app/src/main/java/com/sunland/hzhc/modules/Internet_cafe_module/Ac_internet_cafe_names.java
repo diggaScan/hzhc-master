@@ -1,23 +1,38 @@
 package com.sunland.hzhc.modules.Internet_cafe_module;
 
+import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
+import com.sunland.hzhc.bean.i_wb_list.WbBaseInfo;
+import com.sunland.hzhc.bean.i_wb_list.WbListReqBean;
+import com.sunland.hzhc.bean.i_wb_list.WbListResBean;
+import com.sunland.hzhc.customView.CancelableEdit;
 import com.sunland.hzhc.customView.DragToRefreshView.DragToRefreshView;
 import com.sunland.hzhc.modules.Ac_base_info;
+import com.sunland.hzhc.modules.Frg_search_result;
 import com.sunland.hzhc.modules.Hotel_module.Loadable_adapter;
-import com.sunland.hzhc.modules.Internet_cafe_module.bean.WbBaseInfo;
-import com.sunland.hzhc.modules.Internet_cafe_module.bean.WbListResBean;
+import com.sunland.hzhc.modules.OnItemSelected;
 import com.sunland.hzhc.modules.xmzh_module.Rv_Jg_adapter;
 import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
 import com.sunland.hzhc.utils.AssetDBReader;
+import com.sunland.hzhc.utils.WindowInfoUtils;
 import com.sunlandgroup.def.bean.result.ResultBase;
 
 import java.util.ArrayList;
@@ -25,7 +40,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class Ac_internet_cafe_names extends Ac_base_info {
+public class Ac_internet_cafe_names extends Ac_base_info implements OnItemSelected {
 
     private AssetDBReader assetDBReader;
     private SQLiteDatabase database;
@@ -35,7 +50,12 @@ public class Ac_internet_cafe_names extends Ac_base_info {
     public RecyclerView rv_wb_list;
     @BindView(R.id.refresh)
     public DragToRefreshView d2r_refresh;
-
+    @BindView(R.id.popup_cover)
+    public View cover;
+    @BindView(R.id.search)
+    public CancelableEdit et_search;
+    @BindView(R.id.enter_query)
+    public TextView tv_query;
     private List<String> districts;
     private List<String> xzqh;
     private List<String> wbmcs;
@@ -52,6 +72,10 @@ public class Ac_internet_cafe_names extends Ac_base_info {
     private int add_pages = 0;
 
     private boolean hasLoaded;
+    private boolean showSearchIcon;
+    private boolean shownResultFrg;
+
+    private Frg_search_result frg_search_result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +86,8 @@ public class Ac_internet_cafe_names extends Ac_base_info {
         readZdDb();
         showDistrict();
         initView();
-        queryYdjwDataNoDialog(V_config.GET_INTERNET_CAFE_INFO);
-        queryYdjwDataX("");
+        queryYdjwDataNoDialog("GET_INTERNET_CAFE_INFO",V_config.GET_INTERNET_CAFE_INFO);
+        queryYdjwDataX();
     }
 
     @Override
@@ -72,6 +96,8 @@ public class Ac_internet_cafe_names extends Ac_base_info {
     }
 
     private void initView() {
+
+        frg_search_result = new Frg_search_result();
         d2r_refresh.unableHeaderRefresh(false);
         d2r_refresh.unableFooterRefresh(false);
         d2r_refresh.setUpdateListener(new DragToRefreshView.OnUpdateListener() {
@@ -80,8 +106,8 @@ public class Ac_internet_cafe_names extends Ac_base_info {
                 if (view.isFooterRefreshing()) {
                     add_pages++;
                     cur_page = 1 + add_pages;
-                    queryYdjwDataNoDialog(V_config.GET_INTERNET_CAFE_INFO);
-                    queryYdjwDataX("");
+                    queryYdjwDataNoDialog("GET_INTERNET_CAFE_INFO",V_config.GET_INTERNET_CAFE_INFO);
+                    queryYdjwDataX();
                 }
             }
 
@@ -96,6 +122,61 @@ public class Ac_internet_cafe_names extends Ac_base_info {
             }
         });
         d2r_refresh.addMainContent(rv_wb_list);
+
+        et_search.setOnEditTextClickedListener(new CancelableEdit.OnEditTextClickedListener() {
+            @Override
+            public void onEditTextClicked() {
+                cover.setVisibility(View.VISIBLE);
+            }
+        });
+        cover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cover.setVisibility(View.GONE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        });
+
+        et_search.setOnTextChangeListener(new CancelableEdit.OnTextChangeListener() {
+            @Override
+            public void beforeTextChange() {
+            }
+
+            @Override
+            public void onTextChange() {
+            }
+
+            @Override
+            public void afterTextChange() {
+                showEnterButton();
+                String input = et_search.getText().toString();
+                if (input.isEmpty()) {
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.remove(frg_search_result);
+                    ft.commit();
+                    shownResultFrg = false;
+                }
+            }
+        });
+        tv_query.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                String input = et_search.getText().toString().trim();
+                if (shownResultFrg) {
+                    frg_search_result.update(input);
+                    return;
+                }
+                frg_search_result.setSearch_index(input, 2);
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.add(R.id.main_content, frg_search_result, "search_result");
+                ft.show(frg_search_result);
+                ft.commit();
+                shownResultFrg = true;
+            }
+        });
     }
 
     private void readZdDb() {
@@ -137,11 +218,8 @@ public class Ac_internet_cafe_names extends Ac_base_info {
             public void onItemClicked(int position) {
                 String name = wbmcs.get(position);
                 String code = wbbh.get(position);
-                Intent intent = new Intent();
-                intent.putExtra("code", code);
-                intent.putExtra("name", name);
-                setResult(RESULT_OK, intent);
-                finish();
+                onChosenItem(code, name);
+
             }
         });
         LinearLayoutManager manager1 = new LinearLayoutManager(this);
@@ -169,18 +247,15 @@ public class Ac_internet_cafe_names extends Ac_base_info {
             d_adapter.notifyDataSetChanged();
             cursor.close();
         }
+    }
 
-        Cursor cursor1 = database.rawQuery("SELECT MC,BH FROM wbmclb ", null);
-        if (cursor1 != null && cursor.getCount() > 0) {
-            cursor1.moveToFirst();
-            while (!cursor1.isAfterLast()) {
-                wbmcs.add(cursor1.getString(0));
-                wbbh.add(cursor1.getString(1));
-                cursor1.moveToNext();
-            }
-            wb_adapter.notifyDataSetChanged();
-            cursor1.close();
-        }
+    @Override
+    public void onChosenItem(String code, String name) {
+        Intent intent = new Intent();
+        intent.putExtra("code", code);
+        intent.putExtra("name", name);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     private void showWbmc(String xzqh) {
@@ -226,10 +301,13 @@ public class Ac_internet_cafe_names extends Ac_base_info {
         }
 
         if (wbListResBean == null) {
+            Toast.makeText(this, "网吧基本信息接口异常", Toast.LENGTH_SHORT).show();
             return;
         }
+
         List<WbBaseInfo> wbBaseInfos = wbListResBean.getResps();
         if (wbBaseInfos == null || wbBaseInfos.isEmpty()) {
+            Toast.makeText(this, "无法获取网吧信息", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -237,7 +315,6 @@ public class Ac_internet_cafe_names extends Ac_base_info {
             all_wbmc.add(info.getWbmc());
             all_wbbh.add(info.getWb_code());
         }
-
 
         if (wbBaseInfos.size() < items_per_page) {
             d2r_refresh.unableFooterRefresh(false);
@@ -247,5 +324,53 @@ public class Ac_internet_cafe_names extends Ac_base_info {
         wbmcs.addAll(all_wbmc);
         wbbh.addAll(all_wbbh);
         wb_adapter.notifyDataSetChanged();
+    }
+
+    private void showEnterButton() {
+        final int ce_search_width = et_search.getWidth();
+        if (!showSearchIcon) {
+            ValueAnimator animator = ValueAnimator.ofFloat(0f, 1.0f);
+            animator.setDuration(300);
+            animator.start();
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float value = (float) animation.getAnimatedValue();
+                    showSearchIcon = true;
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ce_search_width - (int) (tv_query.getWidth() * value), et_search.getHeight());
+                    lp.gravity = Gravity.CENTER_VERTICAL;
+                    lp.leftMargin = WindowInfoUtils.dp2px(Ac_internet_cafe_names.this, 8);
+                    lp.rightMargin = WindowInfoUtils.dp2px(Ac_internet_cafe_names.this, 8);
+                    et_search.setLayoutParams(lp);
+
+                }
+            });
+        }
+        String q = et_search.getText().toString();
+        if (q.equals("")) {
+            if (showSearchIcon) {
+                ValueAnimator animator2 = ValueAnimator.ofFloat(0f, 1.0f);
+                animator2.setDuration(300);
+                animator2.start();
+                animator2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        showSearchIcon = false;
+                        float value = (float) animation.getAnimatedValue();
+                        LinearLayout.LayoutParams lp;
+                        if (1 - value < 0.0000001) {
+                            lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, et_search.getHeight());
+                        } else {
+                            lp = new LinearLayout.LayoutParams(ce_search_width + (int) (tv_query.getWidth() * (value))
+                                    , et_search.getHeight());
+                        }
+                        lp.gravity = Gravity.CENTER_VERTICAL;
+                        lp.leftMargin = WindowInfoUtils.dp2px(Ac_internet_cafe_names.this, 8);
+                        lp.rightMargin = WindowInfoUtils.dp2px(Ac_internet_cafe_names.this, 8);
+                        et_search.setLayoutParams(lp);
+                    }
+                });
+            }
+        }
     }
 }

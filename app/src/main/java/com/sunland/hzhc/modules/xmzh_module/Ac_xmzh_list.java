@@ -55,8 +55,8 @@ public class Ac_xmzh_list extends Ac_base_info {
         setToolbarTitle("人员列表");
         initView();
         showLoading_layout(true);
-        queryYdjwDataNoDialog(V_config.GET_PERSON_JOIN_INFO);
-        queryYdjwDataX("");
+        queryYdjwDataNoDialog("GET_PERSON_JOIN_INFO",V_config.GET_PERSON_JOIN_INFO);
+        queryYdjwDataX();
     }
 
     @Override
@@ -87,8 +87,8 @@ public class Ac_xmzh_list extends Ac_base_info {
                 if (view.isFooterRefreshing()) {
                     add_pages++;
                     cur_page = 1 + add_pages;
-                    queryYdjwDataNoDialog(V_config.GET_PERSON_JOIN_INFO);
-                    queryYdjwDataX("");
+                    queryYdjwDataNoDialog("GET_PERSON_JOIN_INFO",V_config.GET_PERSON_JOIN_INFO);
+                    queryYdjwDataX();
                 }
             }
 

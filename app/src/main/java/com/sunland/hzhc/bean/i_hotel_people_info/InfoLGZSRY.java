@@ -1,4 +1,4 @@
-package com.sunland.hzhc.modules.Hotel_module.bean;
+package com.sunland.hzhc.bean.i_hotel_people_info;
 
 public class InfoLGZSRY {
     private String fjh;//	房间号

@@ -91,9 +91,9 @@ public class Ac_batch_check extends Ac_base_info {
                     Toast.makeText(this, "已核查过该人员", Toast.LENGTH_SHORT).show();
                     break;
                 }
-                queryYdjwDataNoDialog(V_config.PERSON_COMPLEX);
-                queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
-                queryYdjwDataX("");
+                queryYdjwDataNoDialog("PERSON_COMPLEX",V_config.PERSON_COMPLEX);
+                queryYdjwDataNoDialog("INSPECT_PERSON",V_config.INSPECT_PERSON);
+                queryYdjwDataX();
 
                 et_id_input.setText("");
                 break;
@@ -133,7 +133,7 @@ public class Ac_batch_check extends Ac_base_info {
                 InspectPersonReqBean inspectPersonReqBean = new InspectPersonReqBean();
                 assembleBasicRequest(inspectPersonReqBean);
                 Request request = new Request();
-                inspectPersonReqBean.setYhdm(V_config.jhdm);
+                inspectPersonReqBean.setYhdm(V_config.YHDM);
                 Dlxx dlxx = new Dlxx();
                 dlxx.setHCDZ(V_config.hc_address);
                 request.setDlxx(dlxx);

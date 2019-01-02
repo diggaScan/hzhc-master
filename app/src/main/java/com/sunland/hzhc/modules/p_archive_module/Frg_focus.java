@@ -1,7 +1,12 @@
 package com.sunland.hzhc.modules.p_archive_module;
 
+import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,10 +29,12 @@ import com.sunland.hzhc.bean.i_person_focus.PeopleFocusResBean;
 import com.sunland.hzhc.modules.lmhc_module.LmhcResBean;
 import com.sunland.hzhc.modules.lmhc_module.MyTaskParams;
 import com.sunland.hzhc.modules.lmhc_module.QueryHttp;
+import com.sunland.hzhc.recycler_config.Rv_Item_decoration;
 import com.sunlandgroup.Global;
 import com.sunlandgroup.utils.JsonUtils;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -46,10 +53,16 @@ public class Frg_focus extends Frg_base {
     public SpinKitView loading_hc;
     @BindView(R.id.loading_icon_zt)
     public SpinKitView loading_zt;
+    @BindView(R.id.focus_str)
+    public TextView tv_focus_str;
+    @BindView(R.id.people_focus)
+    public RecyclerView rv_people_focus;
 
     private String sfzh;//身份证号码
     private List<InfoGZXXResp> gzxx_list;//关注信息列表
     private Thread thread;
+    private MyAdapter myAdapter;
+
     private boolean load_person_focus_info;
     private boolean load_inspect_person;
     private boolean load_wanted;
@@ -61,10 +74,15 @@ public class Frg_focus extends Frg_base {
 
     @Override
     public void initView() {
+        gzxx_list = new ArrayList<>();
         btn_focus.setVisibility(View.GONE);
         btn_retry.setVisibility(View.GONE);
         sfzh = ((Ac_archive) context).identity_num;
 
+        myAdapter = new MyAdapter();
+        rv_people_focus.setAdapter(myAdapter);
+        rv_people_focus.setLayoutManager(new LinearLayoutManager(context));
+        rv_people_focus.addItemDecoration(new Rv_Item_decoration(context));
     }
 
     private void queryWanted() {
@@ -113,8 +131,8 @@ public class Frg_focus extends Frg_base {
     public void onResume() {
         super.onResume();
         if (isVisible) {
-
-            queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
+            queryYdjwDataNoDialog("INSPECT_PERSON",V_config.INSPECT_PERSON);
+            queryYdjwDataNoDialog("PERSON_FOCUS_INFO",V_config.PERSON_FOCUS_INFO);
             queryYdjwDataX();
             queryWanted();
         }
@@ -132,7 +150,7 @@ public class Frg_focus extends Frg_base {
                 InspectPersonReqBean inspectPersonReqBean = new InspectPersonReqBean();
                 assembleBasicRequest(inspectPersonReqBean);
                 Request request = new Request();
-                inspectPersonReqBean.setYhdm("115576");
+                inspectPersonReqBean.setYhdm(V_config.YHDM);
                 Dlxx dlxx = new Dlxx();
                 dlxx.setHCDZ(V_config.hc_address);
                 request.setDlxx(dlxx);
@@ -158,7 +176,25 @@ public class Frg_focus extends Frg_base {
                     Toast.makeText(context, "人员关注信息接口异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                gzxx_list = peopleFocusResBean.getGzxxList();
+                List<InfoGZXXResp> list = peopleFocusResBean.getGzxxList();
+                if (list == null || list.isEmpty()) {
+                    Toast.makeText(context, "人员关注信息无内容返回", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                load_person_focus_info = true;
+                for (InfoGZXXResp infoGZXXResp : list) {
+                    if (infoGZXXResp.getStatus().equals("2"))
+                        gzxx_list.add(infoGZXXResp);
+                }
+                if (gzxx_list != null && gzxx_list.size() > 0) {
+                    tv_focus_str.setVisibility(View.VISIBLE);
+                    tv_focus_str.setText("人员关注信息");
+                    tv_focus_str.setTextColor(Color.RED);
+                    rv_people_focus.setVisibility(View.VISIBLE);
+                } else {
+                    tv_focus_str.setVisibility(View.GONE);
+                }
+                myAdapter.notifyDataSetChanged();
                 load_person_focus_info = true;
                 break;
             case V_config.INSPECT_PERSON:
@@ -171,7 +207,7 @@ public class Frg_focus extends Frg_base {
                 RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
                 if (ryxxRes != null) {
                     String result;
-                    if (ryxxRes.getHcjg().equals("000")) {
+                    if (!ryxxRes.getFhm().equals("000") || ryxxRes.getHcjg().equals("存疑")) {
                         result = "<font color=\"#d13931\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
                     } else {
                         result = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
@@ -186,16 +222,56 @@ public class Frg_focus extends Frg_base {
     @Override
     public void onFragmentVisible() {
         super.onFragmentVisible();
-        if (!load_inspect_person) {
 
-        }
         if (!load_inspect_person) {
-            queryYdjwDataNoDialog(V_config.INSPECT_PERSON);
+            queryYdjwDataNoDialog("INSPECT_PERSON",V_config.INSPECT_PERSON);
         }
-//        queryYdjwData(V_config.PERSON_FOCUS_INFO);
+        if (!load_person_focus_info) {
+            queryYdjwDataNoDialog("PERSON_FOCUS_INFO",V_config.PERSON_FOCUS_INFO);
+        }
         queryYdjwDataX();
         if (!load_wanted) {
             queryWanted();
         }
     }
+
+    class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+        public MyAdapter() {
+            super();
+        }
+
+        @NonNull
+        @Override
+        public MyAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+            View view = getLayoutInflater().inflate(R.layout.rv_people_focus_item, viewGroup, false);
+            return new MyViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull MyAdapter.MyViewHolder myViewHolder, int i) {
+            InfoGZXXResp infoGZXXResp = gzxx_list.get(i);
+            myViewHolder.tv_focus.setText(infoGZXXResp.getLb());
+            if (!infoGZXXResp.getNr().isEmpty())
+                myViewHolder.tv_nr.setText(infoGZXXResp.getNr());
+        }
+
+        @Override
+        public int getItemCount() {
+            return gzxx_list.size();
+        }
+
+        class MyViewHolder extends RecyclerView.ViewHolder {
+
+            TextView tv_focus;
+            TextView tv_nr;
+
+            public MyViewHolder(@NonNull View itemView) {
+                super(itemView);
+                tv_focus = itemView.findViewById(R.id.focus);
+                tv_nr = itemView.findViewById(R.id.nr);
+            }
+        }
+    }
+
+
 }

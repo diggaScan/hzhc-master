@@ -189,8 +189,12 @@ public class RequestManager implements OnRequestCallback {
     public synchronized void postRequestWithoutDialog() {
         if (mRequestList == null || mRequestList.size() == 0)
             return;
-        for (HttpRequest request : mRequestList)
-            request.postRequest();
+        for (int i = 0; i < mRequestList.size(); i++) {
+            mRequestList.get(i).postRequest();
+
+        }
+
+
     }
 
     /**

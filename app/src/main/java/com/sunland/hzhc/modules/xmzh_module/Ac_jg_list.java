@@ -64,6 +64,7 @@ public class Ac_jg_list extends Ac_base {
         LinearLayoutManager manager2 = new LinearLayoutManager(this);
         LinearLayoutManager manager3 = new LinearLayoutManager(this);
         p_adapter = new Rv_Jg_adapter(this, dataSet_provinces);
+        p_adapter.setInit_pos(10);//浙江省所处位置
         c_adapter = new Rv_Jg_adapter(this, dataSet_cities);
         d_adapter = new Rv_Jg_adapter(this, dataSet_districts);
 

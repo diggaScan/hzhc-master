@@ -59,7 +59,7 @@ public class Frg_track extends Frg_base {
     public void onResume() {
         super.onResume();
         if (isVisible) {
-            queryYdjwDataNoDialog(V_config.PERSON_LOCUS_INFOS);
+            queryYdjwDataNoDialog("PERSON_LOCUS_INFOS", V_config.PERSON_LOCUS_INFOS);
         }
         loading_layout.setVisibility(View.VISIBLE);
         queryYdjwDataX();
@@ -106,7 +106,7 @@ public class Frg_track extends Frg_base {
             return;
         }
         loading_icon.setVisibility(View.VISIBLE);
-        queryYdjwData(V_config.PERSON_LOCUS_INFOS);
+        queryYdjwData("PERSON_LOCUS_INFOS", V_config.PERSON_LOCUS_INFOS);
 
     }
 

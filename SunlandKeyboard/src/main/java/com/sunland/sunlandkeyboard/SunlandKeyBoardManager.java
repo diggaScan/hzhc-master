@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -73,7 +74,6 @@ public class SunlandKeyBoardManager {
     private EditText cur_target;
     private KeyboardMode cur_mode;
     private HashMap<EditText, KeyboardMode> modes;
-
 
     public SunlandKeyBoardManager(Context context, ComponentName componentName) {
         this.mContext = context;
@@ -153,14 +153,14 @@ public class SunlandKeyBoardManager {
 
     private void configEditText(final EditText editText) {
 
-//        editText.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                v.requestFocus();
-//                mEditText = (EditText) v;
-//                return false;
-//            }
-//        });
+        editText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.requestFocus();
+                mEditText = (EditText) v;
+                return false;
+            }
+        });
 
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -201,6 +201,7 @@ public class SunlandKeyBoardManager {
                 hideSystemSoftInput(v);
                 if (!isActivated)
                     showKeyboard();
+
             }
         });
 
@@ -217,7 +218,15 @@ public class SunlandKeyBoardManager {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (s.toString().isEmpty()) {
+                    if (modes.get(editText) == KeyboardMode.VEHICLE_PLATE) {
+                        mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_vehicle);
+                        mKeyboardView.setKeyboard(mKeyboard);
 
+
+                    }
+
+                }
             }
         });
     }

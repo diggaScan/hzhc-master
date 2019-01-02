@@ -32,6 +32,10 @@ import com.sunland.hzhc.bean.i_inspect_car.Dlxx;
 import com.sunland.hzhc.bean.i_inspect_car.InspectCarReqBean;
 import com.sunland.hzhc.bean.i_inspect_car.InspectCarResBean;
 import com.sunland.hzhc.bean.i_inspect_car.Request;
+import com.sunland.hzhc.bean.i_inspect_person.InspectPersonJsonRet;
+import com.sunland.hzhc.bean.i_inspect_person.InspectPersonReqBean;
+import com.sunland.hzhc.bean.i_inspect_person.RyxxReq;
+import com.sunland.hzhc.bean.i_inspect_person.RyxxRes;
 import com.sunland.hzhc.bean.ssjBean.VehicleInfo;
 import com.sunland.hzhc.modules.Ac_base_info;
 import com.sunland.hzhc.modules.lmhc_module.LmhcResBean;
@@ -107,6 +111,11 @@ public class Ac_clcx extends Ac_base_info {
     private boolean load_inspect_car;
     private boolean load_country_person;
     private boolean load_wanted;
+    private boolean load_inspect_person;
+
+    private String result_car_inspect;
+    private String result_person_inspect;
+    private int inspect_time = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,19 +131,10 @@ public class Ac_clcx extends Ac_base_info {
         super.onStart();
         if (!load_car_info) {
             showLoading_layout(true);
-            queryYdjwDataNoDialog(V_config.CAR_INFO_JOIN);
+            queryYdjwDataNoDialog("CAR_INFO_JOIN",V_config.CAR_INFO_JOIN);
         }
-        if (!load_country_person) {
-            queryYdjwDataNoDialog(V_config.COUNTRY_PERSON);
-        }
-        if (!load_inspect_car) {
-            queryYdjwDataNoDialog(V_config.INSPECT_CAR);
-        }
+        queryYdjwDataX();
 
-        queryYdjwDataX("");
-        if (!load_wanted) {
-            queryWanted();
-        }
     }
 
     @Override
@@ -179,7 +179,6 @@ public class Ac_clcx extends Ac_base_info {
             case V_config.INSPECT_CAR:
                 InspectCarReqBean inspectCarReqBean = new InspectCarReqBean();
                 assembleBasicRequest(inspectCarReqBean);
-                inspectCarReqBean.setYhdm("115576");
                 Request request = new Request();
                 Dlxx dlxx = new Dlxx();
                 dlxx.setHCDZ(V_config.hc_address);
@@ -190,6 +189,23 @@ public class Ac_clcx extends Ac_base_info {
                 request.setClxx(clxx);
                 inspectCarReqBean.setRequest(request);
                 return inspectCarReqBean;
+            case V_config.INSPECT_PERSON:
+                InspectPersonReqBean inspectPersonReqBean = new InspectPersonReqBean();
+                assembleBasicRequest(inspectPersonReqBean);
+                com.sunland.hzhc.bean.i_inspect_person.Request request_p = new com.sunland.hzhc.bean.i_inspect_person.Request();
+                inspectPersonReqBean.setYhdm(V_config.YHDM);
+                com.sunland.hzhc.bean.i_inspect_person.Dlxx dlxx_p = new com.sunland.hzhc.bean.i_inspect_person.Dlxx();
+                dlxx_p.setHCDZ(V_config.hc_address);
+                request_p.setDlxx(dlxx_p);
+                RyxxReq ryxxReq = new RyxxReq();
+                ryxxReq.setJNJW("01");
+                ryxxReq.setZJLX("10");
+                ryxxReq.setZJHM(sfzh);
+                ryxxReq.setSJHM("");
+                request_p.setRyxxReq(ryxxReq);
+                inspectPersonReqBean.setRequest(request_p);
+                return inspectPersonReqBean;
+
         }
         return null;
     }
@@ -238,11 +254,11 @@ public class Ac_clcx extends Ac_base_info {
                 }
                 break;
             case R.id.retry:
-
                 tv_road_check.setText("");
                 loading_hc.setVisibility(View.VISIBLE);
-                queryYdjwDataNoDialog(V_config.INSPECT_CAR);
-                queryYdjwDataX("");
+                inspect_time = 0;
+                queryYdjwDataNoDialog("INSPECT_CAR",V_config.INSPECT_CAR);
+                queryYdjwDataX();
                 break;
         }
     }
@@ -257,7 +273,6 @@ public class Ac_clcx extends Ac_base_info {
                     Toast.makeText(this, "车辆信息组合查询接口异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 List<InfoJDCXQs> infoJDCXQ_list = resBean.getInfoJDCXQs();
                 if (infoJDCXQ_list == null || infoJDCXQ_list.isEmpty()) {
                     Toast.makeText(this, "未获得相关车辆信息", Toast.LENGTH_SHORT).show();
@@ -265,9 +280,16 @@ public class Ac_clcx extends Ac_base_info {
                 }
                 load_car_info = true;
                 InfoJDCXQs infoJDCXQs = infoJDCXQ_list.get(0);
+                if (infoJDCXQs == null) {
+                    Toast.makeText(this, "未获得相关车辆信息", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 sfzh = infoJDCXQs.getZjh();
                 if (sfzh != null || !sfzh.isEmpty()) {
                     btn_sfzh.setVisibility(View.VISIBLE);
+                }
+                if (!load_wanted) {
+                    queryWanted();
                 }
                 setText(tv_id_num, sfzh);
                 setText(tv_name, infoJDCXQs.getClsyr());
@@ -289,8 +311,9 @@ public class Ac_clcx extends Ac_base_info {
                 fdjxlh = infoJDCXQs.getFdjxh();
                 ys = infoJDCXQs.getClys();
                 queryWanted();
-                queryYdjwDataNoDialog(V_config.COUNTRY_PERSON);
-                queryYdjwDataX("");
+                queryYdjwDataNoDialog("COUNTRY_PERSON",V_config.COUNTRY_PERSON);
+                queryYdjwDataNoDialog("INSPECT_CAR",V_config.INSPECT_CAR);
+                queryYdjwDataX();
 
                 break;
             case V_config.COUNTRY_PERSON:
@@ -320,7 +343,8 @@ public class Ac_clcx extends Ac_base_info {
                 }
                 break;
             case V_config.INSPECT_CAR:
-                loading_hc.setVisibility(View.GONE);
+                queryYdjwDataNoDialog("INSPECT_PERSON",V_config.INSPECT_PERSON);
+                queryYdjwDataX();
                 InspectCarResBean inspectCarResBean = (InspectCarResBean) resultBase;
                 if (inspectCarResBean == null) {
                     Toast.makeText(this, "杭州车核查接口异常", Toast.LENGTH_SHORT).show();
@@ -328,18 +352,46 @@ public class Ac_clcx extends Ac_base_info {
                 }
                 CLxxRes clxx = inspectCarResBean.getClxx();
                 if (clxx == null) {
-                    tv_road_check.setText(Html.fromHtml("<font color=\"#FF7F50\">未返回车辆信息</font>"));
+                    result_car_inspect = "<font color=\"#FF7F50\">未返回车辆信息</font>";
                     return;
                 }
                 load_inspect_car = true;
                 String result;
-                if (!clxx.getHcjg().equals("通过")) {
+                if (!clxx.getFhm().equals("000") || clxx.getHcjg().equals("存疑")) {
                     result = "<font color=\"#d13931\">" + clxx.getHcjg() + "</font>" + clxx.getBjxx();
+                    startVibrate();
+
                 } else {
                     result = "<font color=\"#05b163\">" + clxx.getHcjg() + "</font>" + clxx.getBjxx();
-                    this.clxx.append(clxx.getHcjg()).append(clxx.getBjxx());
                 }
-                tv_road_check.setText(Html.fromHtml(result));
+                result_car_inspect = result;
+
+
+                break;
+            case V_config.INSPECT_PERSON:
+
+                loading_hc.setVisibility(View.GONE);
+                InspectPersonJsonRet inspectPersonJsonRet = (InspectPersonJsonRet) resultBase;
+                if (inspectPersonJsonRet == null) {
+                    Toast.makeText(this, "杭州人核录接口异常", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
+                if (ryxxRes == null) {
+                    tv_road_check.setText(Html.fromHtml("<font color=\"#FF7F50\">未获取人核查信息</font>" + "<br/><br/>" + result_car_inspect));
+                    return;
+                }
+
+                load_inspect_person = true;
+                String result_p;
+                if (!ryxxRes.getFhm().equals("000") || ryxxRes.getHcjg().equals("存疑")) {
+                    startVibrate();
+                    result_p = "<font color=\"#d13931\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
+                } else {
+                    result_p = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
+                }
+                result_person_inspect = result_p;
+                tv_road_check.setText(Html.fromHtml(result_person_inspect + "<br/><br/>" + result_car_inspect));
                 break;
         }
 
@@ -351,9 +403,9 @@ public class Ac_clcx extends Ac_base_info {
             public void run() {
                 try {
                     MyTaskParams taskParams = new MyTaskParams();
-                    taskParams.putHead("jySfzh", "330103199107170010");
-                    taskParams.putHead("jyXm", URLEncoder.encode("华晓阳", "UTF-8"));
-                    taskParams.putHead("jyBmbh", "330100230500");//330100230500;04E5E90AFFD64035B700F6B62D772E2E
+                    taskParams.putHead("jySfzh", V_config.JYSFZH);
+                    taskParams.putHead("jyXm", URLEncoder.encode(V_config.JYXM, "UTF-8"));
+                    taskParams.putHead("jyBmbh", V_config.JYBMBH);//330100230500;04E5E90AFFD64035B700F6B62D772E2E
                     taskParams.putHead("version", Global.VERSION_URL);
                     taskParams.putEntity("sfzh", sfzh);
                     final String result = QueryHttp.post(Global.PERSON_CHECK_QGZT_URL, taskParams);
@@ -400,6 +452,12 @@ public class Ac_clcx extends Ac_base_info {
                 tv_hc_location.setText(V_config.hc_address);
             }
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopVibrate();
     }
 
     private void initVehicleInfo(VehicleInfo vehicleInfo) {

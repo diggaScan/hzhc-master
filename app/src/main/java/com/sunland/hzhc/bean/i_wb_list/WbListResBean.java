@@ -1,4 +1,4 @@
-package com.sunland.hzhc.modules.Internet_cafe_module.bean;
+package com.sunland.hzhc.bean.i_wb_list;
 
 import com.sunlandgroup.def.bean.result.ResultBase;
 

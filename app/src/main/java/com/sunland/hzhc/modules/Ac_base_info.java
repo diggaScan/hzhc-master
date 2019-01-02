@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import com.sunland.hzhc.Ac_base;
 import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
+import com.sunland.hzhc.bean.i_an_bao_info.AnBaoResBean;
 import com.sunland.hzhc.bean.i_car_info_joint.ClxxzhResponseBean;
 import com.sunland.hzhc.bean.i_case_cate.CaseCateResBean;
 import com.sunland.hzhc.bean.i_case_info.CaseListResBean;
@@ -13,6 +14,7 @@ import com.sunland.hzhc.bean.i_charge_case.DwListResBean;
 import com.sunland.hzhc.bean.i_country_people.PersonOfCountryJsonRet;
 import com.sunland.hzhc.bean.i_e_bike_info.DdcListResBean;
 import com.sunland.hzhc.bean.i_hotel_names.LgLbResBean;
+import com.sunland.hzhc.bean.i_hotel_people_info.LGResBean;
 import com.sunland.hzhc.bean.i_inspect_car.InspectCarResBean;
 import com.sunland.hzhc.bean.i_inspect_person.InspectPersonJsonRet;
 import com.sunland.hzhc.bean.i_internet_cafe_people.RyResBean;
@@ -21,8 +23,7 @@ import com.sunland.hzhc.bean.i_owned_car.OwnedCarResBean;
 import com.sunland.hzhc.bean.i_people_complex.RyzhxxResBean;
 import com.sunland.hzhc.bean.i_person_join_info.XmzhResBean;
 import com.sunland.hzhc.bean.i_subway_info.SubwayInfoResBean;
-import com.sunland.hzhc.modules.Hotel_module.bean.LGResBean;
-import com.sunland.hzhc.modules.Internet_cafe_module.bean.WbListResBean;
+import com.sunland.hzhc.bean.i_wb_list.WbListResBean;
 import com.sunlandgroup.Global;
 import com.sunlandgroup.def.bean.result.ResultBase;
 import com.sunlandgroup.network.OnRequestCallback;
@@ -35,6 +36,8 @@ public abstract class Ac_base_info extends Ac_base implements OnRequestCallback 
 
     public RequestManager mRequestManager;
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,14 +47,14 @@ public abstract class Ac_base_info extends Ac_base implements OnRequestCallback 
 
     public abstract void handleIntent();
 
-    public void queryYdjwData(String method_name) {
-        mRequestManager.addRequest(Global.ip, Global.port, Global.postfix, method_name
+    public void queryYdjwData(String id, String method_name) {
+        mRequestManager.addRequest(id, Global.ip, Global.port, Global.postfix, method_name
                 , assembleRequestObj(method_name), 15000);
         mRequestManager.postRequest();
     }
 
-    public void queryYdjwDataNoDialog(String method_name) {
-        mRequestManager.addRequest(Global.ip, Global.port, Global.postfix, method_name
+    public void queryYdjwDataNoDialog(String id, String method_name) {
+        mRequestManager.addRequest(id, Global.ip, Global.port, Global.postfix, method_name
                 , assembleRequestObj(method_name), 15000);
 //        mRequestManager.postRequestWithoutDialog();
     }
@@ -63,7 +66,7 @@ public abstract class Ac_base_info extends Ac_base implements OnRequestCallback 
         mRequestManager.postRequestWithoutDialog();
     }
 
-    public void queryYdjwDataX(String method_name) {
+    public void queryYdjwDataX() {
         mRequestManager.postRequestWithoutDialog();
     }
 
@@ -123,6 +126,8 @@ public abstract class Ac_base_info extends Ac_base implements OnRequestCallback 
                 return WbListResBean.class;
             case V_config.QUERY_ALL_CASE_INFO:
                 return DwListResBean.class;
+            case V_config.GET_AN_BAO_INFO:
+                return AnBaoResBean.class;
         }
         return null;
     }

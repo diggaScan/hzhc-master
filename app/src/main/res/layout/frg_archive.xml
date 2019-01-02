@@ -11,7 +11,7 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:shrinkColumns="0">
+            android:stretchColumns="1">
 
             <TableRow
                 android:layout_width="match_parent"
@@ -538,10 +538,11 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/info_display_item_height"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/form_margin_left"
                     android:gravity="center_vertical"
                     android:maxEms="5"
+                    android:minHeight="@dimen/info_display_item_height"
                     android:text="车船登记"
                     android:textColor="@color/str_color"
                     android:textSize="@dimen/str_text_size" />
@@ -549,7 +550,7 @@
                 <TextView
                     android:id="@+id/car_reg"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/info_display_item_height"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/form_margin_left"
                     android:textColor="@color/content_color"
                     android:textSize="@dimen/content_text_size" />
@@ -557,5 +558,6 @@
 
         </TableLayout>
     </ScrollView>
-    <include layout="@layout/loading_layout"/>
+
+    <include layout="@layout/loading_layout" />
 </FrameLayout>

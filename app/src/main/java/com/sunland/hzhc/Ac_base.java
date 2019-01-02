@@ -95,14 +95,19 @@ public class Ac_base extends AppCompatActivity {
     }
 
     public void saveLog(int operateType, int operationResult, String operateCondition) {
-        OperationLog.saveLog(this
-                , getTitle().toString()
-                , "com.sunland.hzhc"
-                , "hzhc"
-                , operateType
-                , OperationLog.OperationResult.CODE_SUCCESS
-                , 1
-                , operateCondition);
+        try {
+            OperationLog.saveLog(this
+                    , getTitle().toString()
+                    , "com.sunland.hzhc"
+                    , "hzhc"
+                    , operateType
+                    , operationResult
+                    , 1
+                    , operateCondition);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public String appendString(String... strings) {

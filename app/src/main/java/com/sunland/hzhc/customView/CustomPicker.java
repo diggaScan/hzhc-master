@@ -54,6 +54,7 @@ public class CustomPicker {
     private Button confirm_button;
 
     private OnConfirmListener mOnConfirmListener;
+    private OnCancelListener mOnCancelListener;
     private String[] months = new String[]{"01月", "02月", "03月", "04月", "05月", "06月", "07月", "08月", "09月", "10月", "11月", "12月"};
 
     public CustomPicker(Context context, int mode) {
@@ -120,7 +121,11 @@ public class CustomPicker {
         b_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mOnCancelListener != null) {
+                    mOnCancelListener.onCancel();
+                }
                 mDialog.dismiss();
+
             }
         });
 
@@ -192,8 +197,6 @@ public class CustomPicker {
         to_picker.setMaxValue(99);
         to_picker.setValue(50);
         to_picker.setDisplayedValues(range_set);
-
-
     }
 
     private void initDatePicker() {
@@ -257,22 +260,31 @@ public class CustomPicker {
         day_picker.setValue(cur_day);
 
 
-        cancle_button = (Button) mView.findViewById(R.id.cancel);
+        cancle_button =  mView.findViewById(R.id.cancel);
         cancle_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDialog.dismiss();
             }
         });
-        confirm_button = (Button) mView.findViewById(R.id.confirm);
+        confirm_button =  mView.findViewById(R.id.confirm);
         confirm_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mOnConfirmListener != null) {
                     mOnConfirmListener.onConfirm();
                 }
-
                 mDialog.dismiss();
+            }
+        });
+        cancle_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnCancelListener != null) {
+                    mOnCancelListener.onCancel();
+                }
+                mDialog.dismiss();
+
             }
         });
     }
@@ -376,8 +388,16 @@ public class CustomPicker {
         mOnConfirmListener = l;
     }
 
+    public void setOnCancelListener(OnCancelListener onCancelListener) {
+        mOnCancelListener = onCancelListener;
+    }
+
     public interface OnConfirmListener {
         void onConfirm();
+    }
+
+    public interface OnCancelListener {
+        void onCancel();
     }
 
 

@@ -209,10 +209,10 @@
 
             <ImageView
                 android:id="@+id/xp"
-                android:layout_width="@dimen/input_heightx3d2"
-                android:layout_height="@dimen/input_heightx4"
+                android:layout_width="117dp"
+                android:layout_height="120dp"
                 android:layout_gravity="right|top"
-                android:layout_marginTop="@dimen/input_height" />
+                android:layout_marginTop="38dp" />
         </FrameLayout>
 
         <Button

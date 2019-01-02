@@ -1,6 +1,7 @@
 package com.sunland.hzhc.modules.xmzh_module;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,10 +21,19 @@ public class Rv_Jg_adapter extends RecyclerView.Adapter<Rv_Jg_adapter.MyViewHold
     private LayoutInflater inflater;
     private OnItemClickedListener onItemClickedListener;
 
+    private TextView pre_clicked_tv;
+    private Resources res;
+    private int init_pos = 0;
+
     public Rv_Jg_adapter(Context context, List<String> dataSet) {
         super();
         this.dataSet = dataSet;
         inflater = LayoutInflater.from(context);
+        res = context.getResources();
+    }
+
+    public void setInit_pos(int position) {
+        this.init_pos = position;
     }
 
     public void setOnItemClickedListener(OnItemClickedListener onItemClickedListener) {
@@ -38,11 +48,20 @@ public class Rv_Jg_adapter extends RecyclerView.Adapter<Rv_Jg_adapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Rv_Jg_adapter.MyViewHolder myViewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final Rv_Jg_adapter.MyViewHolder myViewHolder, final int i) {
+        if (init_pos == i) {
+            myViewHolder.tv_name.setTextColor(res.getColor(R.color.list_clicked_color));
+            pre_clicked_tv = myViewHolder.tv_name;
+        } else {
+            myViewHolder.tv_name.setTextColor(res.getColor(R.color.list_unclicked_color));
+        }
         myViewHolder.tv_name.setText(dataSet.get(i));
         myViewHolder.name_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pre_clicked_tv.setTextColor(res.getColor(R.color.list_unclicked_color));
+                myViewHolder.tv_name.setTextColor(res.getColor(R.color.list_clicked_color));
+                pre_clicked_tv = myViewHolder.tv_name;
                 if (onItemClickedListener != null) {
                     onItemClickedListener.onItemClicked(i);
                 }

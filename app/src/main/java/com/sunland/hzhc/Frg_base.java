@@ -34,7 +34,6 @@ public abstract class Frg_base extends Fragment implements OnRequestCallback, On
     public RequestManager mRequestManager;
     private boolean onResumed;
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -75,22 +74,27 @@ public abstract class Frg_base extends Fragment implements OnRequestCallback, On
                 textView.setText(birth);
             }
         });
+        customPicker.setOnCancelListener(new CustomPicker.OnCancelListener() {
+            @Override
+            public void onCancel() {
+                textView.setText("");
+            }
+        });
     }
 
     public abstract int setLayoutId();
 
     public abstract void initView();
 
-    public void queryYdjwData(String method_name) {
-        mRequestManager.addRequest(Global.ip, Global.port, Global.postfix, method_name
+    public void queryYdjwData(String id, String method_name) {
+        mRequestManager.addRequest(id, Global.ip, Global.port, Global.postfix, method_name
                 , assembleRequestObj(method_name), 15000);
         mRequestManager.postRequestWithoutDialog();
     }
 
-    public void queryYdjwDataNoDialog(String method_name) {
-        mRequestManager.addRequest(Global.ip, Global.port, Global.postfix, method_name
+    public void queryYdjwDataNoDialog(String id, String method_name) {
+        mRequestManager.addRequest(id, Global.ip, Global.port, Global.postfix, method_name
                 , assembleRequestObj(method_name), 15000);
-//        mRequestManager.postRequestWithoutDialog();
     }
 
     public void queryYdjwDataX() {

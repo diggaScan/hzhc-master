@@ -131,6 +131,20 @@ public class Ac_base extends AppCompatActivity {
         intent.putExtra("bundle", bundle);
         startActivity(intent);
     }
+    public void hop2Activitynew(Class<? extends AppCompatActivity> clazz, Bundle bundle) {
+        Intent intent = new Intent(this, clazz);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("bundle", bundle);
+        startActivity(intent);
+    }
+
+
+    public void hop2ActivitySingleTask(Class<? extends AppCompatActivity> clazz, Bundle bundle) {
+        Intent intent = new Intent(this, clazz);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("bundle", bundle);
+        startActivity(intent);
+    }
 
     public void hop2ActivityForResult(Class<? extends AppCompatActivity> clazz, Bundle bundle, int flag) {
         Intent intent = new Intent(this, clazz);

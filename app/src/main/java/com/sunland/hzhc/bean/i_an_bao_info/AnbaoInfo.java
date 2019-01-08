@@ -1,7 +1,7 @@
 package com.sunland.hzhc.bean.i_an_bao_info;
 
 public class AnbaoInfo {
-    private String EDITION;//"安保版本,值为 01 ,02  03，"
+    private String EDITION;//"安保版本,值为  06护城河版本，02路面版本 01安保版本
 
     private String ISUSE;// "是否启用。1：启用；2：未启用"
 

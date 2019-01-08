@@ -92,7 +92,6 @@ public class Ac_metro_address extends Ac_base_info {
             case V_config.SUBWAY_INFO:
                 SubwayInfoRequestBean subwayInfoRequestBean = new SubwayInfoRequestBean();
                 assembleBasicRequest(subwayInfoRequestBean);
-                subwayInfoRequestBean.setYhdm("012146");
                 subwayInfoRequestBean.setNumber(et_id_input.getText().toString());
                 return subwayInfoRequestBean;
         }

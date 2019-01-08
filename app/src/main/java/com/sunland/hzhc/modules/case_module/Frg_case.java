@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sunland.hzhc.Ac_main;
 import com.sunland.hzhc.Frg_base;
@@ -53,7 +54,11 @@ public class Frg_case extends Frg_base {
                 bundle.putString("ajlb", lbbh);
                 bundle.putString("afsj", afsj);
                 bundle.putString("gxdw", dwbh);
-                ((Ac_main) context).hop2Activity(Ac_case.class, bundle);
+                if(ajbh.isEmpty()&&(lbbh==null||lbbh.isEmpty())&&afsj.isEmpty()&&(dwbh==null||dwbh.isEmpty())){
+                    Toast.makeText(context,"请至少输入一个搜索条件",Toast.LENGTH_SHORT).show();
+                }else {
+                    ((Ac_main) context).hop2Activity(Ac_case.class, bundle);
+                }
                 break;
             case R.id.case_time:
                 openDatePicker(tv_case_time);

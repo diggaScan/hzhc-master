@@ -25,6 +25,7 @@ public class InspectPersonJsonRet extends ResultBase {
      * bjxx	背景信息	背景信息
      */
     private String status;
+
     private RyxxRes ryxx;
 
     public String getStatus() {

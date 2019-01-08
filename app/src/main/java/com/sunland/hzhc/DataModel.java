@@ -112,12 +112,12 @@ public class DataModel {
             R.drawable.ic_name_clicked, R.drawable.ic_batch_clicked, R.drawable.ic_hotel_clicked, R.drawable.ic_internet_clicked, R.drawable.ic_phone_clicked,
             R.drawable.ic_case_clicked, R.drawable.ic_abroad_clicked};
 
-    public static final String[] MODULE_NAMES = {"身份证", "机动车", "电动车", "姓名组合", "旅馆", "网吧", "电话", "案件", "境外人员"
-            , "批量核查", "人脸识别", "设置"};
-
+    public static final String[] MODULE_NAMES = {"身份证", "机动车", "电动车", "姓名组合", "旅馆", "网吧", "电话", "案件","批量核查"};
+//"境外人员", , "人脸识别", "设置"
     public static final Integer[] MODULES_ICON = {R.drawable.ic_identity_unclicked, R.drawable.ic_vehicle_unclicked, R.drawable.ic_e_vehicle_unclicked,
             R.drawable.ic_name_unclicked, R.drawable.ic_hotel_unclicked, R.drawable.ic_internet_unclicked, R.drawable.ic_phone_unclicked,
-            R.drawable.ic_case_unclicked, R.drawable.ic_abroad_unclicked, R.drawable.ic_batch_unclicked, R.drawable.ic_face_rec_unclicked, R.drawable.ic_setting_unclicked};
+            R.drawable.ic_case_unclicked,R.drawable.ic_batch_unclicked};
+//    R.drawable.ic_abroad_unclicked,  R.drawable.ic_face_rec_unclicked, R.drawable.ic_setting_unclicked
 
     public static final String[] HANGZHOU_DISTRICTS = {"杭州市", "上城区", "下城区", "江干区", "拱墅区", "西湖区", "滨江区", "萧山区", "余杭区", "桐庐县", "淳安县", "建德市",
             "富阳区", "临安市", "经济技术开发区"};

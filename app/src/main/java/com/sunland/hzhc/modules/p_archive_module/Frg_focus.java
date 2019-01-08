@@ -8,6 +8,7 @@ import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,8 @@ public class Frg_focus extends Frg_base {
     public TextView tv_focus_str;
     @BindView(R.id.people_focus)
     public RecyclerView rv_people_focus;
+    @BindView(R.id.focus_container)
+    public RelativeLayout rl_focus_container;
 
     private String sfzh;//身份证号码
     private List<InfoGZXXResp> gzxx_list;//关注信息列表
@@ -78,7 +81,7 @@ public class Frg_focus extends Frg_base {
         btn_focus.setVisibility(View.GONE);
         btn_retry.setVisibility(View.GONE);
         sfzh = ((Ac_archive) context).identity_num;
-
+        rl_focus_container.setVisibility(View.GONE);
         myAdapter = new MyAdapter();
         rv_people_focus.setAdapter(myAdapter);
         rv_people_focus.setLayoutManager(new LinearLayoutManager(context));
@@ -91,9 +94,9 @@ public class Frg_focus extends Frg_base {
             public void run() {
                 try {
                     MyTaskParams taskParams = new MyTaskParams();
-                    taskParams.putHead("jySfzh", "330103199107170010");
-                    taskParams.putHead("jyXm", URLEncoder.encode("华晓阳", "UTF-8"));
-                    taskParams.putHead("jyBmbh", "330100230500");//330100230500;04E5E90AFFD64035B700F6B62D772E2E
+                    taskParams.putHead("jySfzh", V_config.JYSFZH);
+                    taskParams.putHead("jyXm", URLEncoder.encode(V_config.JYXM, "UTF-8"));
+                    taskParams.putHead("jyBmbh", V_config.JYBMBH);//330100230500;04E5E90AFFD64035B700F6B62D772E2E
                     taskParams.putHead("version", Global.VERSION_URL);
                     taskParams.putEntity("sfzh", sfzh);
                     final String result = QueryHttp.post(Global.PERSON_CHECK_QGZT_URL, taskParams);
@@ -131,8 +134,8 @@ public class Frg_focus extends Frg_base {
     public void onResume() {
         super.onResume();
         if (isVisible) {
-            queryYdjwDataNoDialog("INSPECT_PERSON",V_config.INSPECT_PERSON);
-            queryYdjwDataNoDialog("PERSON_FOCUS_INFO",V_config.PERSON_FOCUS_INFO);
+            queryYdjwDataNoDialog("INSPECT_PERSON", V_config.INSPECT_PERSON);
+            queryYdjwDataNoDialog("PERSON_FOCUS_INFO", V_config.PERSON_FOCUS_INFO);
             queryYdjwDataX();
             queryWanted();
         }
@@ -150,7 +153,6 @@ public class Frg_focus extends Frg_base {
                 InspectPersonReqBean inspectPersonReqBean = new InspectPersonReqBean();
                 assembleBasicRequest(inspectPersonReqBean);
                 Request request = new Request();
-                inspectPersonReqBean.setYhdm(V_config.YHDM);
                 Dlxx dlxx = new Dlxx();
                 dlxx.setHCDZ(V_config.hc_address);
                 request.setDlxx(dlxx);
@@ -224,10 +226,10 @@ public class Frg_focus extends Frg_base {
         super.onFragmentVisible();
 
         if (!load_inspect_person) {
-            queryYdjwDataNoDialog("INSPECT_PERSON",V_config.INSPECT_PERSON);
+            queryYdjwDataNoDialog("INSPECT_PERSON", V_config.INSPECT_PERSON);
         }
         if (!load_person_focus_info) {
-            queryYdjwDataNoDialog("PERSON_FOCUS_INFO",V_config.PERSON_FOCUS_INFO);
+            queryYdjwDataNoDialog("PERSON_FOCUS_INFO", V_config.PERSON_FOCUS_INFO);
         }
         queryYdjwDataX();
         if (!load_wanted) {

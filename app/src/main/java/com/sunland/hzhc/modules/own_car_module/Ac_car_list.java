@@ -44,7 +44,7 @@ public class Ac_car_list extends Ac_base_info {
         setToolbarTitle("名下机动车");
         handleIntent();
         initView();
-        queryYdjwDataNoDialog("GET_CAR_INFO_BY_SFZH",V_config.GET_CAR_INFO_BY_SFZH);
+        queryYdjwDataNoDialog("GET_CAR_INFO_BY_SFZH", V_config.GET_CAR_INFO_BY_SFZH);
         queryYdjwDataX();
         showLoading_layout(true);
     }
@@ -121,10 +121,14 @@ public class Ac_car_list extends Ac_base_info {
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
                     bundle.putString("cphm", info.getHphm());
-                    bundle.putString("hpzl", "");
+                    bundle.putString("hpzl", info.getCllx_code().substring(0, 2));
                     bundle.putString("fdjh", "");
                     bundle.putString("clsbh", "");
-                    hop2Activity(Ac_clcx.class, bundle);
+                    Intent intent = new Intent(Ac_car_list.this, Ac_clcx.class);
+                    intent.putExtra("bundle",bundle);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+//                    hop2Activity(Ac_clcx.class, bundle);
                 }
             });
         }

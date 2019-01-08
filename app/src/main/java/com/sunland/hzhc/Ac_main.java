@@ -87,6 +87,20 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
         initView();
     }
 
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Bundle bundle=intent.getBundleExtra("bundle");
+        boolean isFromSsj = bundle.getBoolean("isFromSsj", false);
+        if (isFromSsj) {
+            intent.putExtras(bundle);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -101,6 +115,15 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
         Intent intent = getIntent();
         if (intent != null) {
             isFromSsj = intent.getBooleanExtra(DataModel.FROM_SSJ_FLAG, false);
+            if (isFromSsj) {
+                V_config.YHDM = intent.getStringExtra("yhdm");
+                V_config.JYSFZH = intent.getStringExtra("sfz");
+                V_config.JYXM = intent.getStringExtra("xm");
+                V_config.JYBMBH = intent.getStringExtra("bmdm");
+                V_config.gpsX = intent.getStringExtra("lx");
+                V_config.gpsY = intent.getStringExtra("ly");
+                V_config.hc_address = intent.getStringExtra(DataModel.RECORD_BUNDLE_ADDR);
+            }
         }
     }
 

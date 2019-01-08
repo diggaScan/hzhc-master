@@ -83,15 +83,14 @@ public class Ac_module_list extends Ac_base {
             myViewHolder.rl_container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (i <= 8) {
+                    if (i <=7) {
                         Intent intent = new Intent();
                         intent.putExtra("position", i);
                         setResult(RESULT_OK, intent);
                         finish();
                     }
-                    if (i == 9) {
+                    if (i == 8) {
                         hop2Activity(Ac_batch_check.class);
-
                     }
                 }
             });

@@ -1,6 +1,9 @@
 package com.sunland.hzhc;
 
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -96,6 +99,9 @@ public class Ac_location extends Ac_base_info {
     private int req_location = -1;
     private String metro_address_code;
 
+    private LocationManager locationManager;
+    private LocationListener mLocationListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,8 +109,47 @@ public class Ac_location extends Ac_base_info {
         handleIntent();
 //        getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
         showToolbar(false);
+
         initView();
         initMap();
+    }
+
+    private void getGpsInfo() {
+// TODO: 2019/1/4/004 要注册一个广播监听gps设置是否开启
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (location != null) {
+            V_config.gpsX = Double.valueOf(location.getLongitude()).toString();
+            V_config.gpsY = Double.valueOf(location.getAltitude()).toString();
+        }
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Toast.makeText(Ac_location.this, "请在设置中开启GPS定位", Toast.LENGTH_LONG).show();
+        } else {
+            mLocationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    V_config.gpsX = Double.valueOf(location.getLongitude()).toString();
+                    V_config.gpsY = Double.valueOf(location.getLongitude()).toString();
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+
+                }
+            };
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
+        }
     }
 
     @OnClick({R.id.qrscan, R.id.metro, R.id.enter})
@@ -138,11 +183,18 @@ public class Ac_location extends Ac_base_info {
                 } else {
                     V_config.hc_address = et_address.getText().toString();
                     Intent intent2 = new Intent(Ac_location.this, Ac_main.class);
+                    intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent2);
                     finish();
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getGpsInfo();
     }
 
     @Override
@@ -155,7 +207,7 @@ public class Ac_location extends Ac_base_info {
                 if (resultCode == RESULT_OK) {
                     metro_address_code = data.getStringExtra("result");
                     loading_layout.setVisibility(View.VISIBLE);
-                    queryYdjwDataNoDialog("SUBWAY_INFO",V_config.SUBWAY_INFO);
+                    queryYdjwDataNoDialog("SUBWAY_INFO", V_config.SUBWAY_INFO);
                     queryYdjwDataX();
                 } else {
                     Toast.makeText(Ac_location.this, "二维码解析异常", Toast.LENGTH_SHORT).show();
@@ -190,7 +242,6 @@ public class Ac_location extends Ac_base_info {
             case V_config.SUBWAY_INFO:
                 SubwayInfoRequestBean subwayInfoRequestBean = new SubwayInfoRequestBean();
                 assembleBasicRequest(subwayInfoRequestBean);
-                subwayInfoRequestBean.setYhdm("012146");
                 subwayInfoRequestBean.setNumber(metro_address_code);
                 return subwayInfoRequestBean;
         }
@@ -276,9 +327,12 @@ public class Ac_location extends Ac_base_info {
                     task1.setTaskListener(new GAdapter());
                     task1.execute();
                 } else {
-                    if (!MobilePoliceApp.gps_jd.equals("")) {
-                        jd = MobilePoliceApp.gps_jd;
-                        wd = MobilePoliceApp.gps_wd;
+//                    if (!MobilePoliceApp.gps_jd.equals("")) {
+//                        jd = MobilePoliceApp.gps_jd;
+//                        wd = MobilePoliceApp.gps_wd;
+                    if (!V_config.gpsX.equals("")) {
+                        jd = V_config.gpsX;
+                        wd = V_config.gpsY;
                     } else {
                         jd = "120.19404248126632";
                         wd = "30.232071189613492";
@@ -521,5 +575,14 @@ public class Ac_location extends Ac_base_info {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (locationManager != null && mLocationListener != null) {
+            locationManager.removeUpdates(mLocationListener);
+        }
+        mLocationListener = null;
+        locationManager = null;
 
+    }
 }

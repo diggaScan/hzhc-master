@@ -16,7 +16,6 @@ import com.sunland.hzhc.Ac_main;
 import com.sunland.hzhc.DataModel;
 import com.sunland.hzhc.Frg_base;
 import com.sunland.hzhc.R;
-import com.sunland.hzhc.modules.sfz_module.Ac_rycx;
 import com.sunland.hzhc.utils.UtilsString;
 import com.sunland.sunlandkeyboard.SunlandKeyBoardManager;
 
@@ -61,10 +60,10 @@ public class Frg_vehicle extends Frg_base {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String cphm=s.toString();
+                String cphm = s.toString();
                 String hpzl_str = sb_vehicle.getSelectedItem();
                 String hpzl_num = DataModel.VEHICLEMODLES.get(hpzl_str);
-                if (!UtilsString.isAutoQueryVeh(hpzl_num,cphm)) {
+                if (!UtilsString.isAutoQueryVeh(hpzl_num, cphm)) {
                     return;
                 }
                 String fdjh = et_engine_num.getText().toString();
@@ -86,6 +85,7 @@ public class Frg_vehicle extends Frg_base {
 
                     ((Ac_main) context).hop2Activity(Ac_clcx.class, bundle);
                 }
+                ((Ac_main) context).sunlandKeyBoardManager.hideKeyboard();
             }
 
             @Override
@@ -100,7 +100,6 @@ public class Frg_vehicle extends Frg_base {
         int id = view.getId();
         switch (id) {
             case R.id.query:
-
                 String cphm = et_number.getText().toString();
                 String hpzl_str = sb_vehicle.getSelectedItem();
                 String hpzl_num = DataModel.VEHICLEMODLES.get(hpzl_str);
@@ -122,12 +121,18 @@ public class Frg_vehicle extends Frg_base {
 
                     ((Ac_main) context).hop2Activity(Ac_clcx.class, bundle);
                 }
+                ((Ac_main) context).sunlandKeyBoardManager.hideKeyboard();
                 break;
             case R.id.scan:
                 Intent mIntent = new Intent();
                 mIntent.setClassName("cn.com.cybertech.ocr", "cn.com.cybertech.RecognitionActivity");
                 mIntent.putExtra("camera", true);    // true为视频识别，false为拍照识别。如果不加此参数默认为true，使用视频识别的方式。
-                startActivityForResult(mIntent, 111);
+                if (mIntent.resolveActivity(context.getPackageManager()) != null) {
+                    startActivityForResult(mIntent, 111);
+                } else {
+                    Toast.makeText(context, "未安装号牌识别模块", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
         }
     }

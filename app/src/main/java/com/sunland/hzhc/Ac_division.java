@@ -28,16 +28,22 @@ public class Ac_division extends Ac_base_info {
     public TextView tv_abhl;
     @BindView(R.id.loading_layout)
     public FrameLayout loading_layout;
-
+    @BindView(R.id.app_version)
+    public TextView tv_app_version;
     private List<AnbaoInfo> flavours;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.ac_division);
+        initView();
         showToolbar(false);
         queryYdjwDataNoDialog("GET_AN_BAO_INFO", V_config.GET_AN_BAO_INFO);
         queryYdjwDataX();
+    }
+
+    public void initView() {
+
     }
 
     @Override
@@ -84,6 +90,7 @@ public class Ac_division extends Ac_base_info {
         switch (id) {
             case R.id.lmhc:
                 if (flavours.get(0).getISUSE().equals("1")) {
+                    V_config.LBR = flavours.get(0).getEDITION();
                     hop2Activity(Ac_location.class);
                 } else {
                     Toast.makeText(this, "未被授权访问该板块", Toast.LENGTH_SHORT).show();
@@ -91,6 +98,7 @@ public class Ac_division extends Ac_base_info {
                 break;
             case R.id.hchhl:
                 if (flavours.get(1).getISUSE().equals("1")) {
+                    V_config.LBR = flavours.get(0).getEDITION();
                     hop2Activity(Ac_location.class);
                 } else {
                     Toast.makeText(this, "未被授权访问该板块", Toast.LENGTH_SHORT).show();
@@ -98,6 +106,7 @@ public class Ac_division extends Ac_base_info {
                 break;
             case R.id.abhl:
                 if (flavours.get(2).getISUSE().equals("1")) {
+                    V_config.LBR = flavours.get(0).getEDITION();
                     hop2Activity(Ac_location.class);
                 } else {
                     Toast.makeText(this, "未被授权访问该板块", Toast.LENGTH_SHORT).show();
@@ -105,6 +114,4 @@ public class Ac_division extends Ac_base_info {
                 break;
         }
     }
-
-
 }

@@ -3,6 +3,7 @@ package com.sunland.hzhc.modules.ddc_module;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.sunland.hzhc.Ac_main;
 import com.sunland.hzhc.DataModel;
@@ -49,7 +50,12 @@ public class Frg_e_vehicle extends Frg_base {
                     bundle.putBoolean(DataModel.FROM_SSJ_FLAG, true);
                     ((Ac_main) context).hopWithssj(Ac_ddc_list.class, bundle);
                 } else {
-                    ((Ac_main) context).hop2Activity(Ac_ddc_list.class, bundle);
+                    if(hphm.isEmpty()&&fdjh.isEmpty()&&cjh.isEmpty()){
+                        Toast.makeText(context,"号牌，车架号和电动机号至少选填一个",Toast.LENGTH_SHORT).show();
+                    }else {
+                        ((Ac_main) context).hop2Activity(Ac_ddc_list.class, bundle);
+                    }
+
                 }
 
                 break;

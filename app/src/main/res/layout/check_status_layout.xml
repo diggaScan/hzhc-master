@@ -124,5 +124,67 @@
             android:textColor="@color/light_blue"
             android:textStyle="bold" />
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/form_text_margin_left"
+        android:layout_marginRight="@dimen/form_text_margin_left"
+        android:background="@color/divider_color" />
+
+    <RelativeLayout
+        android:id="@+id/focus_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/focus_str"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/input_height"
+            android:gravity="center_vertical"
+            android:maxEms="5"
+            android:paddingLeft="@dimen/form_text_margin_left"
+            android:text="关注信息"
+            android:textColor="@color/str_color"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/focus_road_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/focus_str"
+            android:layout_toLeftOf="@id/focus_retry"
+            android:layout_toRightOf="@id/focus_str"
+            android:gravity="center_vertical"
+            android:minHeight="@dimen/input_height"
+            android:paddingLeft="@dimen/form_text_margin_left"
+            android:textColor="@color/content_color"
+            android:textSize="@dimen/content_text_size" />
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/focus_loading_icon_hc"
+            style="@style/SpinKitView.Small.Circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/focus_str"
+            android:paddingLeft="8dp"
+            app:SpinKit_Color="@color/colorPrimary" />
+
+        <Button
+            android:id="@+id/focus_retry"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:background="@null"
+            android:text="重查"
+            android:textColor="@color/light_blue"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
 </LinearLayout>
 

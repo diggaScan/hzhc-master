@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sunland.hzhc.Ac_main;
 import com.sunland.hzhc.Frg_base;
@@ -54,7 +55,12 @@ public class Frg_internet_cafe extends Frg_base {
                 bundle.putString("wbbh", wbbh);
                 bundle.putString("swsj_q", swsj_q);
                 bundle.putString("swsj_z", swsj_z);
-                ((Ac_main) context).hop2Activity(Ac_internet_cafe.class, bundle);
+                if(wbmc.isEmpty()){
+                    Toast.makeText(context,"请选择网吧名称",Toast.LENGTH_SHORT).show();
+                }else {
+                    ((Ac_main) context).hop2Activity(Ac_internet_cafe.class, bundle);
+                }
+
                 break;
             case R.id.time_from:
                 openDatePicker(tv_time_from);

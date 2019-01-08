@@ -7,11 +7,13 @@ import com.sunland.hzhc.Ac_base;
 import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.bean.i_an_bao_info.AnBaoResBean;
+import com.sunland.hzhc.bean.i_car_focus.VehicleFocusResBean;
 import com.sunland.hzhc.bean.i_car_info_joint.ClxxzhResponseBean;
 import com.sunland.hzhc.bean.i_case_cate.CaseCateResBean;
 import com.sunland.hzhc.bean.i_case_info.CaseListResBean;
 import com.sunland.hzhc.bean.i_charge_case.DwListResBean;
 import com.sunland.hzhc.bean.i_country_people.PersonOfCountryJsonRet;
+import com.sunland.hzhc.bean.i_e_bike_focus.EVehicleFocusResBean;
 import com.sunland.hzhc.bean.i_e_bike_info.DdcListResBean;
 import com.sunland.hzhc.bean.i_hotel_names.LgLbResBean;
 import com.sunland.hzhc.bean.i_hotel_people_info.LGResBean;
@@ -21,6 +23,7 @@ import com.sunland.hzhc.bean.i_internet_cafe_people.RyResBean;
 import com.sunland.hzhc.bean.i_mobile_join.RyPhoneResBean;
 import com.sunland.hzhc.bean.i_owned_car.OwnedCarResBean;
 import com.sunland.hzhc.bean.i_people_complex.RyzhxxResBean;
+import com.sunland.hzhc.bean.i_person_focus.PeopleFocusResBean;
 import com.sunland.hzhc.bean.i_person_join_info.XmzhResBean;
 import com.sunland.hzhc.bean.i_subway_info.SubwayInfoResBean;
 import com.sunland.hzhc.bean.i_wb_list.WbListResBean;
@@ -35,7 +38,6 @@ import java.util.Date;
 public abstract class Ac_base_info extends Ac_base implements OnRequestCallback {
 
     public RequestManager mRequestManager;
-
 
 
     @Override
@@ -57,6 +59,11 @@ public abstract class Ac_base_info extends Ac_base implements OnRequestCallback 
         mRequestManager.addRequest(id, Global.ip, Global.port, Global.postfix, method_name
                 , assembleRequestObj(method_name), 15000);
 //        mRequestManager.postRequestWithoutDialog();
+    }
+
+    public void queryYdjwDataSingle(String id, String method_name) {
+        mRequestManager.newRequest(id, Global.ip, Global.port, Global.postfix, method_name
+                , assembleRequestObj(method_name), 15000).postRequest();
     }
 
     // TODO: 2018/12/5/005 重载的方法要整合
@@ -83,6 +90,7 @@ public abstract class Ac_base_info extends Ac_base implements OnRequestCallback 
         requestBean.setGpsX(V_config.gpsX);
         requestBean.setGpsY(V_config.gpsY);
     }
+
 
     @Override
     public <T> void onRequestFinish(String reqId, String reqName, T bean) {
@@ -128,6 +136,12 @@ public abstract class Ac_base_info extends Ac_base implements OnRequestCallback 
                 return DwListResBean.class;
             case V_config.GET_AN_BAO_INFO:
                 return AnBaoResBean.class;
+            case V_config.GET_ELECTRIC_CAR_FOCUS_INFO:
+                return EVehicleFocusResBean.class;
+            case V_config.CAR_FOCUS:
+                return VehicleFocusResBean.class;
+            case V_config.PERSON_FOCUS_INFO:
+                return PeopleFocusResBean.class;
         }
         return null;
     }

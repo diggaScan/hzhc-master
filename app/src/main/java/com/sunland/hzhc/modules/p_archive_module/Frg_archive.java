@@ -80,7 +80,7 @@ public class Frg_archive extends Frg_base {
         super.onResume();
         if (isVisible) {
             loading_layout.setVisibility(View.VISIBLE);
-            queryYdjwDataNoDialog("GET_PERSON_INFO_BY_SFZH",V_config.GET_PERSON_INFO_BY_SFZH);
+            queryYdjwDataNoDialog("GET_PERSON_INFO_BY_SFZH", V_config.GET_PERSON_INFO_BY_SFZH);
             queryYdjwDataX();
         }
 
@@ -168,7 +168,7 @@ public class Frg_archive extends Frg_base {
         if (load_get_person_info_by_sfzh) {
             return;
         }
-        queryYdjwDataNoDialog("GET_PERSON_INFO_BY_SFZH",V_config.GET_PERSON_INFO_BY_SFZH);
+        queryYdjwDataNoDialog("GET_PERSON_INFO_BY_SFZH", V_config.GET_PERSON_INFO_BY_SFZH);
         queryYdjwDataX();
     }
 }

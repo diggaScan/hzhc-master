@@ -57,7 +57,7 @@ public class Ac_ddc_list extends Ac_base_info {
         handleIntent();
         initView();
         showLoading_layout(true);
-        queryYdjwDataNoDialog("GET_ELECTRIC_CAR_INFO",V_config.GET_ELECTRIC_CAR_INFO);
+        queryYdjwDataNoDialog("GET_ELECTRIC_CAR_INFO", V_config.GET_ELECTRIC_CAR_INFO);
         queryYdjwDataX();
     }
 
@@ -88,7 +88,7 @@ public class Ac_ddc_list extends Ac_base_info {
                 if (view.isFooterRefreshing()) {
                     add_pages++;
                     cur_page = 1 + add_pages;
-                    queryYdjwDataNoDialog("GET_ELECTRIC_CAR_INFO",V_config.GET_ELECTRIC_CAR_INFO);
+                    queryYdjwDataNoDialog("GET_ELECTRIC_CAR_INFO", V_config.GET_ELECTRIC_CAR_INFO);
                     queryYdjwDataX();
                 }
             }
@@ -110,6 +110,12 @@ public class Ac_ddc_list extends Ac_base_info {
         switch (reqName) {
             case V_config.GET_ELECTRIC_CAR_INFO:
                 DdcxxplReqBean ddcxxplReqBean = new DdcxxplReqBean();
+                assembleBasicRequest(ddcxxplReqBean);
+
+                if (isFromSsj) {
+                    ddcxxplReqBean.setLbr(V_config.ssjBbh);
+                }
+
                 ddcxxplReqBean.setCurrentPage(cur_page);
                 ddcxxplReqBean.setTotalCount(items_per_page);
                 ddcxxplReqBean.setHphm(hphm);
@@ -145,7 +151,6 @@ public class Ac_ddc_list extends Ac_base_info {
         }
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -153,7 +158,7 @@ public class Ac_ddc_list extends Ac_base_info {
             if (resultCode == RESULT_OK) {
                 Bundle bundle = data.getBundleExtra("bundle");
                 Intent intent = new Intent();
-                intent.putExtras(bundle);
+                intent.putExtra("bundle", bundle);
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -195,6 +200,7 @@ public class Ac_ddc_list extends Ac_base_info {
                     bundle.putString("clpp", info.getClpp());
                     bundle.putString("cjh", info.getCjh());
                     bundle.putString("fdjh", info.getFdjh());
+                    bundle.putString("csys", info.getCsys());
                     if (isFromSsj) {
                         bundle.putBoolean(DataModel.FROM_SSJ_FLAG, true);
                         hopWithssj(Ac_ddc.class, bundle);

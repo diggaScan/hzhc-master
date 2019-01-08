@@ -94,6 +94,7 @@ public class Ac_login extends Ac_base implements OnRequestCallback {
             }
         }, null);
         queryYdjwData(V_config.USER_LOGIN);
+
     }
 
     @Override
@@ -105,20 +106,19 @@ public class Ac_login extends Ac_base implements OnRequestCallback {
     @Override
     public <T> void onRequestFinish(String reqId, String reqName, T bean) {
         dialogUtils.dialogDismiss();
-
         LoginResBean loginResBean = (LoginResBean) bean;
         if (loginResBean == null) {
             Toast.makeText(this, "服务异常", Toast.LENGTH_SHORT).show();
             return;
         }
-//        Dljyxx dljyxx = loginResBean.getDljyxx();
-//        if (dljyxx == null) {
-//            Toast.makeText(this, "警员信息为空", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        V_config.JYSFZH = dljyxx.getUsernumber();
-//        V_config.JYXM = dljyxx.getJyname();
-//        V_config.JYBMBH = dljyxx.getBmcode();
+        Dljyxx dljyxx = loginResBean.getDljyxx();
+        if (dljyxx == null) {
+            Toast.makeText(this, loginResBean.getMessage(), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        V_config.JYSFZH = dljyxx.getUsernumber();
+        V_config.JYXM = dljyxx.getJyname();
+        V_config.JYBMBH = dljyxx.getBmcode();
 
         //code 0 允许登录
         //code 1 登录失败
@@ -126,7 +126,7 @@ public class Ac_login extends Ac_base implements OnRequestCallback {
             V_config.YHDM = et_username.getText().toString();
             saveLog(0, OperationLog.OperationResult.CODE_SUCCESS, appendString(V_config.YHDM, V_config.BRAND,
                     V_config.MODEL));//yhdm,手机品牌，手机型号，警号
-            hop2Activity(Ac_location.class);
+            hop2Activity(Ac_division.class);
         } else {
             saveLog(0, OperationLog.OperationResult.CODE_FAILURE,
                     appendString(V_config.YHDM, V_config.BRAND, V_config.MODEL));

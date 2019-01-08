@@ -52,9 +52,11 @@ public class Frg_id extends Frg_base {
                         bundle.putString("id", s.toString());
                         bundle.putBoolean(DataModel.FROM_SSJ_FLAG, true);
                         ((Ac_main) context).hopWithssj(Ac_rycx.class, bundle);
+                        ((Ac_main) context).sunlandKeyBoardManager.hideKeyboard();
                     } else {
                         bundle.putString("id", s.toString());
                         ((Ac_main) context).hop2Activity(Ac_rycx.class, bundle);
+                        ((Ac_main) context).sunlandKeyBoardManager.hideKeyboard();
                     }
                 }
             }
@@ -85,6 +87,7 @@ public class Frg_id extends Frg_base {
                     bundle.putString("id", identity);
                     ((Ac_main) context).hop2Activity(Ac_rycx.class, bundle);
                 }
+                ((Ac_main) context).sunlandKeyBoardManager.hideKeyboard();
                 break;
             case R.id.nfc_scan:
                 Frg_nfc_ocr frg_nfc_ocr = new Frg_nfc_ocr();

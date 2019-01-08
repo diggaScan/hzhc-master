@@ -16,10 +16,14 @@ import android.widget.Toast;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.gson.Gson;
 import com.sunland.hzhc.Ac_location;
+import com.sunland.hzhc.Ac_main;
 import com.sunland.hzhc.DataModel;
 import com.sunland.hzhc.R;
 import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
+import com.sunland.hzhc.bean.i_car_focus.CarFocus_info;
+import com.sunland.hzhc.bean.i_car_focus.VehicleFocusReqBean;
+import com.sunland.hzhc.bean.i_car_focus.VehicleFocusResBean;
 import com.sunland.hzhc.bean.i_car_info_joint.CarInfoJoinDto;
 import com.sunland.hzhc.bean.i_car_info_joint.ClxxzhReqBean;
 import com.sunland.hzhc.bean.i_car_info_joint.ClxxzhResponseBean;
@@ -36,13 +40,14 @@ import com.sunland.hzhc.bean.i_inspect_person.InspectPersonJsonRet;
 import com.sunland.hzhc.bean.i_inspect_person.InspectPersonReqBean;
 import com.sunland.hzhc.bean.i_inspect_person.RyxxReq;
 import com.sunland.hzhc.bean.i_inspect_person.RyxxRes;
-import com.sunland.hzhc.bean.ssjBean.VehicleInfo;
+import com.sunland.hzhc.bean.ssjB.VehicleInfo;
 import com.sunland.hzhc.modules.Ac_base_info;
 import com.sunland.hzhc.modules.lmhc_module.LmhcResBean;
 import com.sunland.hzhc.modules.lmhc_module.MyTaskParams;
 import com.sunland.hzhc.modules.lmhc_module.QueryHttp;
 import com.sunland.hzhc.modules.p_archive_module.Ac_archive;
 import com.sunland.hzhc.modules.sfz_module.Ac_rycx;
+import com.sunland.hzhc.utils.UtilsString;
 import com.sunlandgroup.Global;
 import com.sunlandgroup.def.bean.result.ResultBase;
 import com.sunlandgroup.utils.JsonUtils;
@@ -95,6 +100,12 @@ public class Ac_clcx extends Ac_base_info {
     public SpinKitView loading_hc;
     @BindView(R.id.loading_icon_zt)
     public SpinKitView loading_zt;
+    @BindView(R.id.focus_str)
+    public TextView tv_focus_str;
+    @BindView(R.id.focus_road_check)
+    public TextView tv_focus_road_check;
+    @BindView(R.id.focus_loading_icon_hc)
+    public SpinKitView sk_loading_icon;
 
     private String sfzh;
     private boolean isFromssj;
@@ -102,12 +113,16 @@ public class Ac_clcx extends Ac_base_info {
     private String clsyr = "";//车辆所有人
     private String pp = "";//品牌
     private String xh = "";//型号
+    private String cllx_str;//车辆类型中文
     private String ys = "";//颜色
     private String fdjxlh = "";//发动机序列号
+    private String sffa;//是否涉案 0未涉案 1涉案
+
     private String hclx = "";//核查类型  01安保 02 路面
-    private StringBuilder clxx = new StringBuilder();//盗抢信息+关注信息+情报接口返回的描述信息
+    private StringBuilder wfqk = new StringBuilder();//盗抢信息+关注信息+情报接口返回的描述信息
 
     private boolean load_car_info;
+    private boolean load_car_focus;
     private boolean load_inspect_car;
     private boolean load_country_person;
     private boolean load_wanted;
@@ -131,10 +146,12 @@ public class Ac_clcx extends Ac_base_info {
         super.onStart();
         if (!load_car_info) {
             showLoading_layout(true);
-            queryYdjwDataNoDialog("CAR_INFO_JOIN",V_config.CAR_INFO_JOIN);
+            queryYdjwDataNoDialog("CAR_INFO_JOIN", V_config.CAR_INFO_JOIN);
+        }
+        if (!load_car_focus) {
+            queryYdjwDataNoDialog("CAR_FOCUS", V_config.CAR_FOCUS);
         }
         queryYdjwDataX();
-
     }
 
     @Override
@@ -154,6 +171,7 @@ public class Ac_clcx extends Ac_base_info {
 
     private void initView() {
         tv_hc_location.setText(V_config.hc_address);
+        tv_focus_str.setText("车辆关注信息");
     }
 
     @Override
@@ -162,6 +180,9 @@ public class Ac_clcx extends Ac_base_info {
             case V_config.CAR_INFO_JOIN:
                 ClxxzhReqBean bean = new ClxxzhReqBean();
                 assembleBasicRequest(bean);
+                if (isFromssj) {
+                    bean.setLbr(V_config.ssjBbh);
+                }
                 CarInfoJoinDto carInfoJoinJson = new CarInfoJoinDto();
                 carInfoJoinJson.setHphm(cphm);
                 carInfoJoinJson.setClsbdh(clsbh);
@@ -174,12 +195,19 @@ public class Ac_clcx extends Ac_base_info {
             case V_config.COUNTRY_PERSON:
                 CountryPersonReqBean countryPersonReqBean = new CountryPersonReqBean();
                 assembleBasicRequest(countryPersonReqBean);
+                if (isFromssj) {
+                    countryPersonReqBean.setLbr(V_config.ssjBbh);
+                }
                 countryPersonReqBean.setSfzh(sfzh);
                 return countryPersonReqBean;
             case V_config.INSPECT_CAR:
                 InspectCarReqBean inspectCarReqBean = new InspectCarReqBean();
                 assembleBasicRequest(inspectCarReqBean);
+                if (isFromssj) {
+                    inspectCarReqBean.setLbr(V_config.ssjBbh);
+                }
                 Request request = new Request();
+                request.setLrb(V_config.LBR);
                 Dlxx dlxx = new Dlxx();
                 dlxx.setHCDZ(V_config.hc_address);
                 Clxx clxx = new Clxx();
@@ -192,11 +220,14 @@ public class Ac_clcx extends Ac_base_info {
             case V_config.INSPECT_PERSON:
                 InspectPersonReqBean inspectPersonReqBean = new InspectPersonReqBean();
                 assembleBasicRequest(inspectPersonReqBean);
+                if (isFromssj) {
+                    inspectPersonReqBean.setLbr(V_config.ssjBbh);
+                }
                 com.sunland.hzhc.bean.i_inspect_person.Request request_p = new com.sunland.hzhc.bean.i_inspect_person.Request();
-                inspectPersonReqBean.setYhdm(V_config.YHDM);
                 com.sunland.hzhc.bean.i_inspect_person.Dlxx dlxx_p = new com.sunland.hzhc.bean.i_inspect_person.Dlxx();
                 dlxx_p.setHCDZ(V_config.hc_address);
                 request_p.setDlxx(dlxx_p);
+                request_p.setLrb(V_config.LBR);
                 RyxxReq ryxxReq = new RyxxReq();
                 ryxxReq.setJNJW("01");
                 ryxxReq.setZJLX("10");
@@ -205,20 +236,30 @@ public class Ac_clcx extends Ac_base_info {
                 request_p.setRyxxReq(ryxxReq);
                 inspectPersonReqBean.setRequest(request_p);
                 return inspectPersonReqBean;
-
+            case V_config.CAR_FOCUS:
+                load_car_focus = true;
+                VehicleFocusReqBean vehicleFocusReqBean = new VehicleFocusReqBean();
+                assembleBasicRequest(vehicleFocusReqBean);
+                if (isFromssj) {
+                    vehicleFocusReqBean.setLbr(V_config.ssjBbh);
+                }
+                vehicleFocusReqBean.setCphm(cphm);
+                vehicleFocusReqBean.setHpzl(hpzl);
+                vehicleFocusReqBean.setSyr_sfzmhm(sfzh);
+                return vehicleFocusReqBean;
         }
         return null;
     }
 
 
-    @OnClick({R.id.sfzh_check, R.id.focus, R.id.location_container, R.id.ssj, R.id.retry})
+    @OnClick({R.id.sfzh_check, R.id.focus, R.id.location_container, R.id.ssj, R.id.retry, R.id.focus_retry})
     public void onClick(View view) {
         int id = view.getId();
         Bundle bundle = new Bundle();
         switch (id) {
             case R.id.sfzh_check:
                 bundle.putString("id", sfzh);
-                hop2Activity(Ac_rycx.class, bundle);
+                hop2ActivitySingleTask(Ac_rycx.class, bundle);
                 break;
             case R.id.focus:
                 bundle.putString("id", sfzh);
@@ -234,22 +275,38 @@ public class Ac_clcx extends Ac_base_info {
                 VehicleInfo vehicleInfo = new VehicleInfo();
                 initVehicleInfo(vehicleInfo);
                 if (isFromssj) {
+
                     bundle.putInt(DataModel.RECORD_BUNDLE_TYPE, 1);
                     bundle.putString(DataModel.RECORD_BUNDLE_ADDR, V_config.hc_address);
                     bundle.putString(DataModel.RECORD_BUNDLE_DATA, new Gson().toJson(vehicleInfo));
+                    bundle.putString("yhdm", V_config.YHDM);
+                    bundle.putString("sfz", V_config.JYSFZH);
+                    bundle.putString("xm", V_config.JYXM);
+                    bundle.putString("bmdm", V_config.JYBMBH);
+                    bundle.putString("lx", V_config.gpsX);
+                    bundle.putString("ly", V_config.gpsY);
+                    bundle.putBoolean("isFromSsj", isFromssj);
                     intent.putExtra("bundle", bundle);
-                    setResult(RESULT_OK, intent);
-                    finish();
+                    hop2Activitynew(Ac_main.class, bundle);
+
+//                    setResult(RESULT_OK, intent);
+//                    finish();
                 } else {
                     intent.setAction("com.sunland.action.record");
                     bundle.putInt(DataModel.RECORD_BUNDLE_TYPE, 1);
                     bundle.putString(DataModel.RECORD_BUNDLE_ADDR, V_config.hc_address);
                     bundle.putString(DataModel.RECORD_BUNDLE_DATA, new Gson().toJson(vehicleInfo));
+                    bundle.putString("yhdm", V_config.YHDM);
+                    bundle.putString("sfz", V_config.JYSFZH);
+                    bundle.putString("xm", V_config.JYXM);
+                    bundle.putString("bmdm", V_config.JYBMBH);
+                    bundle.putString("lx", V_config.gpsX);
+                    bundle.putString("ly", V_config.gpsY);
                     intent.putExtras(bundle);
-                    try {
+                    if (intent.resolveActivity(getPackageManager()) == null) {
+                        Toast.makeText(this, "请安装随手记应用", Toast.LENGTH_SHORT).show();
+                    } else {
                         startActivity(intent);
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
                 }
                 break;
@@ -257,7 +314,13 @@ public class Ac_clcx extends Ac_base_info {
                 tv_road_check.setText("");
                 loading_hc.setVisibility(View.VISIBLE);
                 inspect_time = 0;
-                queryYdjwDataNoDialog("INSPECT_CAR",V_config.INSPECT_CAR);
+                queryYdjwDataNoDialog("INSPECT_CAR", V_config.INSPECT_CAR);
+                queryYdjwDataX();
+                break;
+            case R.id.focus_retry:
+                tv_focus_road_check.setText("");
+                sk_loading_icon.setVisibility(View.VISIBLE);
+                queryYdjwDataNoDialog("CAR_FOCUS", V_config.CAR_FOCUS);
                 queryYdjwDataX();
                 break;
         }
@@ -307,14 +370,18 @@ public class Ac_clcx extends Ac_base_info {
                 pp = infoJDCXQs.getClpp();
                 xh = infoJDCXQs.getClxh();
                 clsbh = infoJDCXQs.getClsbdh();
+                cllx_str = infoJDCXQs.getCllx();
                 fdjh = infoJDCXQs.getFdjh();
                 fdjxlh = infoJDCXQs.getFdjxh();
                 ys = infoJDCXQs.getClys();
                 queryWanted();
-                queryYdjwDataNoDialog("COUNTRY_PERSON",V_config.COUNTRY_PERSON);
-                queryYdjwDataNoDialog("INSPECT_CAR",V_config.INSPECT_CAR);
+                if (!UtilsString.checkId(sfzh.toString()).equals("")) {
+                    queryYdjwDataNoDialog("COUNTRY_PERSON", V_config.COUNTRY_PERSON);
+                } else {
+                    btn_sfzh.setVisibility(View.GONE);
+                }
+                queryYdjwDataNoDialog("INSPECT_CAR", V_config.INSPECT_CAR);
                 queryYdjwDataX();
-
                 break;
             case V_config.COUNTRY_PERSON:
                 PersonOfCountryJsonRet personOfCountry = (PersonOfCountryJsonRet) resultBase;
@@ -343,7 +410,7 @@ public class Ac_clcx extends Ac_base_info {
                 }
                 break;
             case V_config.INSPECT_CAR:
-                queryYdjwDataNoDialog("INSPECT_PERSON",V_config.INSPECT_PERSON);
+                queryYdjwDataNoDialog("INSPECT_PERSON", V_config.INSPECT_PERSON);
                 queryYdjwDataX();
                 InspectCarResBean inspectCarResBean = (InspectCarResBean) resultBase;
                 if (inspectCarResBean == null) {
@@ -352,7 +419,7 @@ public class Ac_clcx extends Ac_base_info {
                 }
                 CLxxRes clxx = inspectCarResBean.getClxx();
                 if (clxx == null) {
-                    result_car_inspect = "<font color=\"#FF7F50\">未返回车辆信息</font>";
+                    result_car_inspect = "车核查接口" + ":<font color=\"#FF7F50\">" + inspectCarResBean.getMessage() + "</font>";
                     return;
                 }
                 load_inspect_car = true;
@@ -360,41 +427,75 @@ public class Ac_clcx extends Ac_base_info {
                 if (!clxx.getFhm().equals("000") || clxx.getHcjg().equals("存疑")) {
                     result = "<font color=\"#d13931\">" + clxx.getHcjg() + "</font>" + clxx.getBjxx();
                     startVibrate();
-
+                    wfqk.append(clxx.getHcjg()).append(clxx.getBjxx()).append("\n");
+                    sffa = "1";
                 } else {
                     result = "<font color=\"#05b163\">" + clxx.getHcjg() + "</font>" + clxx.getBjxx();
+
                 }
                 result_car_inspect = result;
-
-
                 break;
             case V_config.INSPECT_PERSON:
-
                 loading_hc.setVisibility(View.GONE);
                 InspectPersonJsonRet inspectPersonJsonRet = (InspectPersonJsonRet) resultBase;
                 if (inspectPersonJsonRet == null) {
                     Toast.makeText(this, "杭州人核录接口异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
                 if (ryxxRes == null) {
-                    tv_road_check.setText(Html.fromHtml("<font color=\"#FF7F50\">未获取人核查信息</font>" + "<br/><br/>" + result_car_inspect));
+                    tv_road_check.setText(Html.fromHtml("人核查接口:" + "<font color=\"#FF7F50\">" + inspectPersonJsonRet.getMessage() + "</font>" + "<br/><br/>" + result_car_inspect));
                     return;
                 }
 
                 load_inspect_person = true;
                 String result_p;
-                if (!ryxxRes.getFhm().equals("000") || ryxxRes.getHcjg().equals("存疑")) {
+                if ("通过".equals(ryxxRes.getHcjg())) {
+                    result_p = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
+                } else {
                     startVibrate();
                     result_p = "<font color=\"#d13931\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
-                } else {
-                    result_p = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
-                }
-                result_person_inspect = result_p;
-                tv_road_check.setText(Html.fromHtml(result_person_inspect + "<br/><br/>" + result_car_inspect));
-                break;
-        }
+                    wfqk.append(ryxxRes.getHcjg()).append(ryxxRes.getBjxx()).append("\n");
 
+                }
+
+
+                result_person_inspect = result_p;
+                tv_road_check.setText(Html.fromHtml(result_car_inspect + "<br/>" + result_person_inspect));
+                break;
+            case V_config.CAR_FOCUS:
+                sk_loading_icon.setVisibility(View.GONE);
+                VehicleFocusResBean vehicleFocusResBean = (VehicleFocusResBean) resultBase;
+                if (vehicleFocusResBean == null) {
+                    Toast.makeText(this, "车辆关注接口异常", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                List<CarFocus_info> list = vehicleFocusResBean.getCarList();
+                if (list == null || list.isEmpty()) {
+                    tv_focus_road_check.setText(vehicleFocusResBean.getMessage());
+                    return;
+                }
+
+                StringBuilder stringBuilder = new StringBuilder();
+                for (CarFocus_info carFocus_info : list) {
+                    if (carFocus_info.getStatus().equals("1")) {
+                        startVibrate();
+                        stringBuilder.append("<font color=\"#d13931\">" + carFocus_info.getLb() + "</font>").append("\n");
+                        sffa = "1";
+                        wfqk.append(carFocus_info.getLb()).append(carFocus_info.getNr()).append("\n");
+                    }
+                    if (carFocus_info.getNr() != null) {
+                        stringBuilder.append(carFocus_info.getNr()).append("\n\n");
+                    }
+                }
+                if (stringBuilder.toString().isEmpty()) {
+                    tv_focus_road_check.setText(Html.fromHtml("<font color=\"#05b163\"> 无相关记录</font>"));
+                } else {
+                    tv_focus_road_check.setText(Html.fromHtml(stringBuilder.toString()));
+                }
+        }
     }
 
     private void queryWanted() {
@@ -421,11 +522,12 @@ public class Ac_clcx extends Ac_base_info {
                             }
                             load_wanted = true;
                             tv_wanted.setText(lmhcResBean.getMessage());
-                            if (lmhcResBean.getStatus().equals("-1")) {
-                                tv_wanted.setTextColor(getResources().getColor(R.color.non_warning_color));
-                            } else {
+                            if (lmhcResBean.getStatus().equals("2100")) {
                                 startVibrate();
                                 tv_wanted.setTextColor(getResources().getColor(R.color.warning_color));
+                                sffa = "1";
+                            } else {
+                                tv_wanted.setTextColor(getResources().getColor(R.color.non_warning_color));
                             }
                         }
                     });
@@ -461,18 +563,20 @@ public class Ac_clcx extends Ac_base_info {
     }
 
     private void initVehicleInfo(VehicleInfo vehicleInfo) {
-        vehicleInfo.setHphm(cphm);
-        vehicleInfo.setHpzl(hpzl);
-        vehicleInfo.setSyrzjhm(sfzh);
-        vehicleInfo.setClsyr(clsyr);
+
+        vehicleInfo.setClph(cphm);
+        vehicleInfo.setCjh(clsbh);
+        vehicleInfo.setFdjh(fdjh);
+        vehicleInfo.setCllb(cllx_str);
+        vehicleInfo.setCllbdm(hpzl);
+//        vehicleInfo.setCsysdm(ys);//无颜色代码信息
         vehicleInfo.setPp(pp);
         vehicleInfo.setXh(xh);
-        vehicleInfo.setYs(ys);
-        vehicleInfo.setClsbdh(clsbh);
-        vehicleInfo.setFdjh(fdjh);
-        vehicleInfo.setFdjxlh(fdjxlh);
-        vehicleInfo.setHclx(hclx);
-        vehicleInfo.setClxx(clxx.toString());
-
+        vehicleInfo.setCsys(ys);
+//        vehicleInfo.setTz();
+        vehicleInfo.setJsyname(clsyr);
+        vehicleInfo.setJsysfzh(sfzh);
+        vehicleInfo.setSffa(sffa);
+        vehicleInfo.setWfqk(wfqk.toString());
     }
 }

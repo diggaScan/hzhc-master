@@ -287,7 +287,6 @@ public class DialogUtils {
         if (mDialog != null) {
             mDialog.dismiss();
         }
-
         recycle();
     }
 

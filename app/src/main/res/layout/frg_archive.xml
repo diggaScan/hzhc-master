@@ -551,6 +551,7 @@
                     android:id="@+id/car_reg"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:gravity="center_vertical"
                     android:layout_marginLeft="@dimen/form_margin_left"
                     android:textColor="@color/content_color"
                     android:textSize="@dimen/content_text_size" />

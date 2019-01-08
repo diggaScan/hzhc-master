@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.concretejungle.spinbutton.SpinButton;
 import com.sunland.hzhc.Ac_main;
@@ -60,7 +61,12 @@ public class Frg_name extends Frg_base {
                 bundle.putInt("xb", xb);
                 bundle.putString("csrq", csrq);
                 bundle.putString("hjqh", code);
-                ((Ac_main) context).hop2Activity(Ac_xmzh_list.class, bundle);
+                if((xm==null||xm.isEmpty())&&(csrq==null||csrq.isEmpty())&&(code==null||code.isEmpty())){
+                    Toast.makeText(context,"姓名，出生日期和地区至少选填一个",Toast.LENGTH_SHORT).show();
+                }else {
+                    ((Ac_main) context).hop2Activity(Ac_xmzh_list.class, bundle);
+                }
+
                 break;
             case R.id.birth:
                 openDatePicker(tv_birth);

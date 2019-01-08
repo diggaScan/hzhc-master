@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sunland.hzhc.Ac_main;
 import com.sunland.hzhc.Frg_base;
@@ -53,7 +54,12 @@ public class Frg_hotel extends Frg_base {
                 bundle.putString("fjh", fjh);
                 bundle.putString("rzrq_q", rzrq_q);
                 bundle.putString("rzrq_z", rzrq_z);
-                ((Ac_main) context).hop2Activity(Ac_hotel.class, bundle);
+                if(lgdm==null||lgdm.isEmpty()){
+                    Toast.makeText(context,"请选择旅馆名称",Toast.LENGTH_SHORT).show();
+                }else {
+                    ((Ac_main) context).hop2Activity(Ac_hotel.class, bundle);
+                }
+
                 break;
             case R.id.time_from:
                 openDatePicker(tv_time_from);

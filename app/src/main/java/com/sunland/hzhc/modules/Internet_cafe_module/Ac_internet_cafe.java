@@ -53,7 +53,7 @@ public class Ac_internet_cafe extends Ac_base_info {
         setContentLayout(R.layout.ac_internet_cafe);
         showNavIcon(true);
         setToolbarTitle("上网人员列表");
-        queryYdjwDataNoDialog("GET_INTERNET_CAFE_PERSON_INFO",V_config.GET_INTERNET_CAFE_PERSON_INFO);
+        queryYdjwDataNoDialog("GET_INTERNET_CAFE_PERSON_INFO", V_config.GET_INTERNET_CAFE_PERSON_INFO);
         queryYdjwDataX();
         showLoading_layout(true);
         initView();
@@ -82,7 +82,7 @@ public class Ac_internet_cafe extends Ac_base_info {
                 if (view.isFooterRefreshing()) {
                     add_pages++;
                     cur_page = 1 + add_pages;
-                    queryYdjwDataNoDialog("GET_INTERNET_CAFE_PERSON_INFO",V_config.GET_INTERNET_CAFE_PERSON_INFO);
+                    queryYdjwDataNoDialog("GET_INTERNET_CAFE_PERSON_INFO", V_config.GET_INTERNET_CAFE_PERSON_INFO);
                     queryYdjwDataX();
                 }
             }

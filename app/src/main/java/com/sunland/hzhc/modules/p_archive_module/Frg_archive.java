@@ -69,6 +69,7 @@ public class Frg_archive extends Frg_base {
     private boolean load_get_person_info_by_sfzh;
 
 
+
     @Override
     public int setLayoutId() {
         return R.layout.frg_archive;
@@ -101,6 +102,11 @@ public class Frg_archive extends Frg_base {
 
     @Override
     public <T> void onRequestFinish(String reqId, String reqName, T bean) {
+
+        if(isDestroyView){
+            return;
+        }
+
         loading_layout.setVisibility(View.GONE);
         PersonArchiveResBean resBean = (PersonArchiveResBean) bean;
         if (resBean == null) {
@@ -171,4 +177,6 @@ public class Frg_archive extends Frg_base {
         queryYdjwDataNoDialog("GET_PERSON_INFO_BY_SFZH", V_config.GET_PERSON_INFO_BY_SFZH);
         queryYdjwDataX();
     }
+
+
 }

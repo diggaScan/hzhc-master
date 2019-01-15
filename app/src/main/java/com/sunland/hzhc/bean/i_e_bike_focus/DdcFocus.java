@@ -6,7 +6,7 @@ public class DdcFocus {
     private String lb;//		类别
     private String nr;//		关注内容
     private String bh;//		编号
-    private String status;//		状态：0/无数据1/有数据
+    private String status;//	String	0:服务异常 1：无记录2：有记录
 
     public String getSj() {
         return sj;

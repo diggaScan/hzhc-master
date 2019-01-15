@@ -120,8 +120,21 @@ public class Ac_location extends Ac_base_info {
 
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if (location != null) {
-            V_config.gpsX = Double.valueOf(location.getLongitude()).toString();
-            V_config.gpsY = Double.valueOf(location.getAltitude()).toString();
+            //杭州经纬度范围东经118.35°-120.5°，北纬29.183°-30.55°(来自互联网)。
+            String currentLongitude = String.valueOf(location.getLongitude());
+            boolean isInHzLongitude = (currentLongitude.compareTo("118.35") > 0 && currentLongitude.compareTo("120.5") < 0);
+            String currentLatitude = String.valueOf(location.getLatitude());
+            boolean isInHzLatitude = (currentLatitude.compareTo("29.183") > 0 && currentLatitude.compareTo("30.55") < 0);
+            if (isInHzLongitude && isInHzLatitude) {
+                V_config.gpsX = String.format("%.5f", location.getLongitude());
+                V_config.gpsY = String.format("%.5f", location.getLatitude());
+            }
+
+
+//            V_config.gpsX = "" + Location.convert(location.getLongitude(), Location.FORMAT_DEGREES);
+//            V_config.gpsY = "" + Location.convert(location.getLatitude(), Location.FORMAT_DEGREES);
+//            V_config.gpsX = Double.valueOf(location.getLongitude()).toString();
+//            V_config.gpsY = Double.valueOf(location.getAltitude()).toString();
         }
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Toast.makeText(Ac_location.this, "请在设置中开启GPS定位", Toast.LENGTH_LONG).show();
@@ -129,8 +142,14 @@ public class Ac_location extends Ac_base_info {
             mLocationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
-                    V_config.gpsX = Double.valueOf(location.getLongitude()).toString();
-                    V_config.gpsY = Double.valueOf(location.getLongitude()).toString();
+                    V_config.gpsX = String.format("%.5f", location.getLongitude());
+                    V_config.gpsY = String.format("%.5f", location.getLatitude());
+
+//                    V_config.gpsX = "" + Location.convert(location.getLongitude(), Location.FORMAT_DEGREES);
+//                    V_config.gpsY = "" + Location.convert(location.getLatitude(), Location.FORMAT_DEGREES);
+
+//                    V_config.gpsX = Double.valueOf(location.getLongitude()).toString();
+//                    V_config.gpsY = Double.valueOf(location.getLongitude()).toString();
                 }
 
                 @Override
@@ -335,7 +354,9 @@ public class Ac_location extends Ac_base_info {
                         wd = V_config.gpsY;
                     } else {
                         jd = "120.19404248126632";
+                        V_config.gpsX = String.format("%.5f", Double.valueOf(jd));
                         wd = "30.232071189613492";
+                        V_config.gpsY = String.format("%.5f", Double.valueOf(wd));
                     }
                     addressPath = Config.ADDRESS + "lx=" + jd + "&ly=" + wd + "&pagesize=10";
                     Log.d(TAG, "onMapInitialized: " + addressPath);

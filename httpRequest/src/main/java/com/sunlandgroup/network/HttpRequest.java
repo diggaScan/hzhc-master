@@ -271,7 +271,7 @@ public class HttpRequest {
                             if (resultRoot == null) {
                                 mResponseInfo.setResponse("后台返回数据格式异常");
                             } else {
-                                if (TextUtils.isEmpty(resultRoot.getData()) && !resultRoot.getCode().equals("0")) {
+                                if (resultRoot.getCode().equals("1")) {
                                     mResponseInfo.setResponse("请求失败：" + resultRoot.getMessage());
                                 } else {
                                     mResponseInfo.setCode(resultRoot.getCode());

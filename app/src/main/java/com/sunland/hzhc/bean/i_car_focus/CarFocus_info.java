@@ -1,12 +1,12 @@
 package com.sunland.hzhc.bean.i_car_focus;
 
-public class CarFocus_info  {
+public class CarFocus_info {
     private String sj;//		发生时间
     private String dw;//		录入单位
     private String lb;//		数据类别
     private String bh;//		记录编号
     private String nr;//		记录内容
-    private String status;//	0：无记录 1：有记录
+    private String status;//	String	0:服务异常 1：无记录2：有记录
 
     public String getSj() {
         return sj;

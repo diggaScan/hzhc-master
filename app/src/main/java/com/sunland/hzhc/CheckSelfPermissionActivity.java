@@ -19,7 +19,8 @@ public abstract class CheckSelfPermissionActivity extends Ac_base {
             Manifest.permission.CALL_PHONE,
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.CAMERA
     };
 
     private List<String> permission_ungranted = new ArrayList<>();

@@ -163,6 +163,10 @@ public class RequestManager implements OnRequestCallback {
         mRequestList.add(new HttpRequest(id, ip, port, postfix, reqName, obj, this, timeout));
     }
 
+    public <T> HttpRequest newRequest(String id, String ip, String port, String postfix, String reqName, T obj, int timeout) {
+        return new HttpRequest(id, ip, port, postfix, reqName, obj, this, timeout);
+    }
+
     public synchronized void postRequest() {
         if (mRequestList == null || mRequestList.size() == 0)
             return;
@@ -189,12 +193,10 @@ public class RequestManager implements OnRequestCallback {
     public synchronized void postRequestWithoutDialog() {
         if (mRequestList == null || mRequestList.size() == 0)
             return;
-        for (int i = 0; i < mRequestList.size(); i++) {
-            mRequestList.get(i).postRequest();
 
+        for (int i = 0; i <  mRequestList.size(); i = 0) {
+            mRequestList.remove(i).postRequest();
         }
-
-
     }
 
     /**
@@ -215,12 +217,12 @@ public class RequestManager implements OnRequestCallback {
      */
     @Override
     public <T> void onRequestFinish(String reqId, String reqName, T bean) {
-        for (HttpRequest request : mRequestList) {
-            if (request.getmReqId().equals(reqId)) {
-                mRequestList.remove(request);
-                break;
-            }
-        }
+//        for (HttpRequest request : mRequestList) {
+//            if (request.getmReqId().equals(reqId)) {
+//                mRequestList.remove(request);
+//                break;
+//            }
+//        }
 
         if (mRequestList.size() == 0) {
             if (mProgressDlg != null)

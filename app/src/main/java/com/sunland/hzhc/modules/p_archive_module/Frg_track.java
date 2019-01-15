@@ -81,6 +81,10 @@ public class Frg_track extends Frg_base {
 
     @Override
     public <T> void onRequestFinish(String reqId, String reqName, T bean) {
+        if(isDestroyView){
+            return;
+        }
+
         loading_layout.setVisibility(View.GONE);
 
         TrackResBean resBean = (TrackResBean) bean;

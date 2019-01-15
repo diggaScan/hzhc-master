@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.util.Base64;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -106,10 +109,16 @@ public class Ac_clcx extends Ac_base_info {
     public TextView tv_focus_road_check;
     @BindView(R.id.focus_loading_icon_hc)
     public SpinKitView sk_loading_icon;
+    @BindView(R.id.access_deny_info)
+    public TextView access_deny_info;
+    @BindView(R.id.info_container)
+    public LinearLayout ll_container;
 
     private String sfzh;
+    private boolean isSfzh;
     private boolean isFromssj;
 
+    private boolean isPoliceinfo;
     private String clsyr = "";//车辆所有人
     private String pp = "";//品牌
     private String xh = "";//型号
@@ -152,6 +161,19 @@ public class Ac_clcx extends Ac_base_info {
             queryYdjwDataNoDialog("CAR_FOCUS", V_config.CAR_FOCUS);
         }
         queryYdjwDataX();
+    }
+
+    public void showWarningIfPolice(String code) {
+        isPoliceinfo = true;
+        invalidateOptionsMenu();
+        ll_container.setVisibility(View.GONE);
+        access_deny_info.setVisibility(View.VISIBLE);
+        if (code.equals("7")) {
+            access_deny_info.setText("警员信息，无权限查询！");
+        } else if (code.equals("6")) {
+            access_deny_info.setText("无权限查询！");
+        }
+
     }
 
     @Override
@@ -237,7 +259,6 @@ public class Ac_clcx extends Ac_base_info {
                 inspectPersonReqBean.setRequest(request_p);
                 return inspectPersonReqBean;
             case V_config.CAR_FOCUS:
-                load_car_focus = true;
                 VehicleFocusReqBean vehicleFocusReqBean = new VehicleFocusReqBean();
                 assembleBasicRequest(vehicleFocusReqBean);
                 if (isFromssj) {
@@ -252,7 +273,7 @@ public class Ac_clcx extends Ac_base_info {
     }
 
 
-    @OnClick({R.id.sfzh_check, R.id.focus, R.id.location_container, R.id.ssj, R.id.retry, R.id.focus_retry})
+    @OnClick({R.id.sfzh_check, R.id.focus, R.id.location_container, R.id.retry, R.id.focus_retry})
     public void onClick(View view) {
         int id = view.getId();
         Bundle bundle = new Bundle();
@@ -269,46 +290,6 @@ public class Ac_clcx extends Ac_base_info {
             case R.id.location_container:
                 bundle.putInt("req_location", V_config.REQ_LOCATION);
                 hop2ActivityForResult(Ac_location.class, bundle, V_config.REQ_LOCATION);
-                break;
-            case R.id.ssj://存储至随手记
-                Intent intent = new Intent();
-                VehicleInfo vehicleInfo = new VehicleInfo();
-                initVehicleInfo(vehicleInfo);
-                if (isFromssj) {
-
-                    bundle.putInt(DataModel.RECORD_BUNDLE_TYPE, 1);
-                    bundle.putString(DataModel.RECORD_BUNDLE_ADDR, V_config.hc_address);
-                    bundle.putString(DataModel.RECORD_BUNDLE_DATA, new Gson().toJson(vehicleInfo));
-                    bundle.putString("yhdm", V_config.YHDM);
-                    bundle.putString("sfz", V_config.JYSFZH);
-                    bundle.putString("xm", V_config.JYXM);
-                    bundle.putString("bmdm", V_config.JYBMBH);
-                    bundle.putString("lx", V_config.gpsX);
-                    bundle.putString("ly", V_config.gpsY);
-                    bundle.putBoolean("isFromSsj", isFromssj);
-                    intent.putExtra("bundle", bundle);
-                    hop2Activitynew(Ac_main.class, bundle);
-
-//                    setResult(RESULT_OK, intent);
-//                    finish();
-                } else {
-                    intent.setAction("com.sunland.action.record");
-                    bundle.putInt(DataModel.RECORD_BUNDLE_TYPE, 1);
-                    bundle.putString(DataModel.RECORD_BUNDLE_ADDR, V_config.hc_address);
-                    bundle.putString(DataModel.RECORD_BUNDLE_DATA, new Gson().toJson(vehicleInfo));
-                    bundle.putString("yhdm", V_config.YHDM);
-                    bundle.putString("sfz", V_config.JYSFZH);
-                    bundle.putString("xm", V_config.JYXM);
-                    bundle.putString("bmdm", V_config.JYBMBH);
-                    bundle.putString("lx", V_config.gpsX);
-                    bundle.putString("ly", V_config.gpsY);
-                    intent.putExtras(bundle);
-                    if (intent.resolveActivity(getPackageManager()) == null) {
-                        Toast.makeText(this, "请安装随手记应用", Toast.LENGTH_SHORT).show();
-                    } else {
-                        startActivity(intent);
-                    }
-                }
                 break;
             case R.id.retry:
                 tv_road_check.setText("");
@@ -328,6 +309,7 @@ public class Ac_clcx extends Ac_base_info {
 
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
+        String code;
         switch (reqName) {
             case V_config.CAR_INFO_JOIN:
                 showLoading_layout(false);
@@ -342,6 +324,12 @@ public class Ac_clcx extends Ac_base_info {
                     return;
                 }
                 load_car_info = true;
+                code = resBean.getCode();
+                if (code.equals("6") || code.equals("7")) {
+                    showWarningIfPolice(code);
+                    return;
+                }
+
                 InfoJDCXQs infoJDCXQs = infoJDCXQ_list.get(0);
                 if (infoJDCXQs == null) {
                     Toast.makeText(this, "未获得相关车辆信息", Toast.LENGTH_SHORT).show();
@@ -363,7 +351,7 @@ public class Ac_clcx extends Ac_base_info {
                 setText(tv_car_color, infoJDCXQs.getClys());
                 setText(tv_sbdm, infoJDCXQs.getClsbdh());
                 setText(tv_fdjh, infoJDCXQs.getFdjh());
-                setText(tv_fdj_sequence, infoJDCXQs.getFdjxh());
+                setText(tv_fdj_sequence, infoJDCXQs.getFdjxh());//发动机型号不对应发动机序列号
 
                 //用于随手记传递
                 clsyr = infoJDCXQs.getClsyr();
@@ -375,7 +363,8 @@ public class Ac_clcx extends Ac_base_info {
                 fdjxlh = infoJDCXQs.getFdjxh();
                 ys = infoJDCXQs.getClys();
                 queryWanted();
-                if (!UtilsString.checkId(sfzh.toString()).equals("")) {
+                isSfzh = !UtilsString.checkId(sfzh).equals("");
+                if (isSfzh) {
                     queryYdjwDataNoDialog("COUNTRY_PERSON", V_config.COUNTRY_PERSON);
                 } else {
                     btn_sfzh.setVisibility(View.GONE);
@@ -390,6 +379,11 @@ public class Ac_clcx extends Ac_base_info {
                     return;
                 }
                 load_country_person = true;
+                code = personOfCountry.getCode();
+                if (code.equals("6") || code.equals("7")) {
+                    showWarningIfPolice(code);
+                    return;
+                }
                 final String xp = personOfCountry.getXP();
                 if (xp != null) {
                     new Thread(new Runnable() {
@@ -410,8 +404,13 @@ public class Ac_clcx extends Ac_base_info {
                 }
                 break;
             case V_config.INSPECT_CAR:
-                queryYdjwDataNoDialog("INSPECT_PERSON", V_config.INSPECT_PERSON);
-                queryYdjwDataX();
+                if (isSfzh) {
+                    queryYdjwDataNoDialog("INSPECT_PERSON", V_config.INSPECT_PERSON);
+                    queryYdjwDataX();
+                } else {
+                    loading_hc.setVisibility(View.GONE);
+                }
+
                 InspectCarResBean inspectCarResBean = (InspectCarResBean) resultBase;
                 if (inspectCarResBean == null) {
                     Toast.makeText(this, "杭州车核查接口异常", Toast.LENGTH_SHORT).show();
@@ -420,20 +419,32 @@ public class Ac_clcx extends Ac_base_info {
                 CLxxRes clxx = inspectCarResBean.getClxx();
                 if (clxx == null) {
                     result_car_inspect = "车核查接口" + ":<font color=\"#FF7F50\">" + inspectCarResBean.getMessage() + "</font>";
+                    if (!isSfzh) {
+                        tv_road_check.setText(Html.fromHtml(result_car_inspect));
+                    }
                     return;
                 }
                 load_inspect_car = true;
+                code = inspectCarResBean.getCode();
+                if (code.equals("6") || code.equals("7")) {
+                    showWarningIfPolice(code);
+                    return;
+                }
                 String result;
-                if (!clxx.getFhm().equals("000") || clxx.getHcjg().equals("存疑")) {
+                if ("通过".equals(clxx.getHcjg())) {
+                    result = "<font color=\"#05b163\">" + clxx.getHcjg() + "</font>" + clxx.getBjxx();
+                } else {
                     result = "<font color=\"#d13931\">" + clxx.getHcjg() + "</font>" + clxx.getBjxx();
                     startVibrate();
-                    wfqk.append(clxx.getHcjg()).append(clxx.getBjxx()).append("\n");
                     sffa = "1";
-                } else {
-                    result = "<font color=\"#05b163\">" + clxx.getHcjg() + "</font>" + clxx.getBjxx();
-
                 }
+                wfqk.append(clxx.getHcjg()).append(clxx.getBjxx()).append("\n");
                 result_car_inspect = result;
+
+                if (!isSfzh) {
+                    tv_road_check.setText(Html.fromHtml(result_car_inspect));
+                }
+
                 break;
             case V_config.INSPECT_PERSON:
                 loading_hc.setVisibility(View.GONE);
@@ -450,16 +461,19 @@ public class Ac_clcx extends Ac_base_info {
                 }
 
                 load_inspect_person = true;
+                code = inspectPersonJsonRet.getCode();
+                if (code.equals("6") || code.equals("7")) {
+                    showWarningIfPolice(code);
+                    return;
+                }
                 String result_p;
                 if ("通过".equals(ryxxRes.getHcjg())) {
                     result_p = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
                 } else {
                     startVibrate();
                     result_p = "<font color=\"#d13931\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
-                    wfqk.append(ryxxRes.getHcjg()).append(ryxxRes.getBjxx()).append("\n");
-
                 }
-
+                wfqk.append(ryxxRes.getHcjg()).append(ryxxRes.getBjxx()).append("\n");
 
                 result_person_inspect = result_p;
                 tv_road_check.setText(Html.fromHtml(result_car_inspect + "<br/>" + result_person_inspect));
@@ -477,17 +491,21 @@ public class Ac_clcx extends Ac_base_info {
                     tv_focus_road_check.setText(vehicleFocusResBean.getMessage());
                     return;
                 }
-
+                load_car_focus = true;
+                code = vehicleFocusResBean.getCode();
+                if (code.equals("6") || code.equals("7")) {
+                    showWarningIfPolice(code);
+                    return;
+                }
                 StringBuilder stringBuilder = new StringBuilder();
                 for (CarFocus_info carFocus_info : list) {
-                    if (carFocus_info.getStatus().equals("1")) {
-                        startVibrate();
-                        stringBuilder.append("<font color=\"#d13931\">" + carFocus_info.getLb() + "</font>").append("\n");
+                    if (carFocus_info.getStatus().equals("2")) {
+                        stringBuilder.append(carFocus_info.getLb()).append("\n");
                         sffa = "1";
                         wfqk.append(carFocus_info.getLb()).append(carFocus_info.getNr()).append("\n");
-                    }
-                    if (carFocus_info.getNr() != null) {
-                        stringBuilder.append(carFocus_info.getNr()).append("\n\n");
+                        if (carFocus_info.getNr() != null) {
+                            stringBuilder.append(": ").append(carFocus_info.getNr()).append("\n\n");
+                        }
                     }
                 }
                 if (stringBuilder.toString().isEmpty()) {
@@ -554,6 +572,65 @@ public class Ac_clcx extends Ac_base_info {
                 tv_hc_location.setText(V_config.hc_address);
             }
         }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.clear();
+        if (!isPoliceinfo)
+            getMenuInflater().inflate(R.menu.ssj_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        Bundle bundle = new Bundle();
+        switch (id) {
+            case R.id.ssj://存储至随手记
+                Intent intent = new Intent();
+                VehicleInfo vehicleInfo = new VehicleInfo();
+                initVehicleInfo(vehicleInfo);
+                if (isFromssj) {
+
+                    bundle.putInt(DataModel.RECORD_BUNDLE_TYPE, 1);
+                    bundle.putString(DataModel.RECORD_BUNDLE_ADDR, V_config.hc_address);
+                    bundle.putString(DataModel.RECORD_BUNDLE_DATA, new Gson().toJson(vehicleInfo));
+                    bundle.putString("yhdm", V_config.YHDM);
+                    bundle.putString("sfz", V_config.JYSFZH);
+                    bundle.putString("xm", V_config.JYXM);
+                    bundle.putString("bmdm", V_config.JYBMBH);
+                    bundle.putString("lx", V_config.gpsX);
+                    bundle.putString("ly", V_config.gpsY);
+                    bundle.putBoolean("fromHc", true);
+                    bundle.putBoolean("isFromSsj", isFromssj);
+                    intent.putExtra("bundle", bundle);
+                    hop2ActivitySingle(Ac_main.class, bundle);
+
+//                    setResult(RESULT_OK, intent);
+//                    finish();
+                } else {
+                    intent.setAction("com.sunland.action.record");
+                    bundle.putInt(DataModel.RECORD_BUNDLE_TYPE, 1);
+                    bundle.putString(DataModel.RECORD_BUNDLE_ADDR, V_config.hc_address);
+                    bundle.putString(DataModel.RECORD_BUNDLE_DATA, new Gson().toJson(vehicleInfo));
+                    bundle.putString("yhdm", V_config.YHDM);
+                    bundle.putString("sfz", V_config.JYSFZH);
+                    bundle.putString("xm", V_config.JYXM);
+                    bundle.putString("bmdm", V_config.JYBMBH);
+                    bundle.putString("lx", V_config.gpsX);
+                    bundle.putString("ly", V_config.gpsY);
+                    bundle.putBoolean("fromHc", true);
+                    intent.putExtras(bundle);
+                    if (intent.resolveActivity(getPackageManager()) == null) {
+                        Toast.makeText(this, "请安装随手记应用", Toast.LENGTH_SHORT).show();
+                    } else {
+                        startActivity(intent);
+                    }
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -2,23 +2,16 @@ apply plugin: 'com.android.application'
 
 android {
 
-    signingConfigs {
-        release {
-            keyAlias 'key0'
-            keyPassword '13567497155abc'
-            storeFile file('F:/asKeyStore/yptKeystore.jks')
-            storePassword '13567497155abc'
-        }
-    }
+
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.sunland.hzhc"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        signingConfig signingConfigs.release
+  
     }
     packagingOptions {
         exclude 'META-INF/LGPL2.1'
@@ -29,10 +22,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+
         }
         debug {
-            signingConfig signingConfigs.release
+
         }
     }
     useLibrary 'org.apache.http.legacy'

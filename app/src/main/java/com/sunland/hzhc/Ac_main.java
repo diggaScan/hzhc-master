@@ -91,7 +91,7 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Bundle bundle=intent.getBundleExtra("bundle");
+        Bundle bundle = intent.getBundleExtra("bundle");
         boolean isFromSsj = bundle.getBoolean("isFromSsj", false);
         if (isFromSsj) {
             intent.putExtras(bundle);
@@ -116,13 +116,26 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
         if (intent != null) {
             isFromSsj = intent.getBooleanExtra(DataModel.FROM_SSJ_FLAG, false);
             if (isFromSsj) {
-                V_config.YHDM = intent.getStringExtra("yhdm");
-                V_config.JYSFZH = intent.getStringExtra("sfz");
-                V_config.JYXM = intent.getStringExtra("xm");
-                V_config.JYBMBH = intent.getStringExtra("bmdm");
-                V_config.gpsX = intent.getStringExtra("lx");
-                V_config.gpsY = intent.getStringExtra("ly");
-                V_config.hc_address = intent.getStringExtra(DataModel.RECORD_BUNDLE_ADDR);
+                String yhdm = intent.getStringExtra("yhdm");
+                V_config.YHDM = yhdm == null ? V_config.YHDM : yhdm;
+
+                String jysfzh = intent.getStringExtra("sfz");
+                V_config.JYSFZH = jysfzh == null ? V_config.JYSFZH : jysfzh;
+
+                String jyxm = intent.getStringExtra("xm");
+                V_config.JYXM = jyxm == null ? V_config.JYXM : jyxm;
+
+                String jybmbh = intent.getStringExtra("bmdm");
+                V_config.JYBMBH = jybmbh == null ? V_config.JYBMBH : jybmbh;
+
+                String gpsx = intent.getStringExtra("lx");
+                V_config.gpsX = gpsx == null ? V_config.gpsX : gpsx;
+
+                String gpsy = intent.getStringExtra("ly");
+                V_config.gpsY = gpsy == null ? V_config.gpsY : gpsy;
+
+                String hc_address = intent.getStringExtra(DataModel.RECORD_BUNDLE_ADDR);
+                V_config.hc_address = hc_address == null ? V_config.hc_address : hc_address;
             }
         }
     }
@@ -130,7 +143,6 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
     private void initWindowStyle() {
         if (toolbar != null)
             setSupportActionBar(toolbar);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);

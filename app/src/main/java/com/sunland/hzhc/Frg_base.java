@@ -33,7 +33,7 @@ public abstract class Frg_base extends Fragment implements OnRequestCallback, On
     public boolean isVisible;
     public RequestManager mRequestManager;
     private boolean onResumed;
-
+    public boolean isDestroyView;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -154,6 +154,11 @@ public abstract class Frg_base extends Fragment implements OnRequestCallback, On
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        isDestroyView=true;
+    }
 
     @Override
     public <T> void onRequestFinish(String reqId, String reqName, T bean) {

@@ -1,524 +1,542 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/plateform_background"
-    android:orientation="vertical"
-    android:overScrollMode="never"
-    android:scrollbars="none">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/container"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="@color/plateform_background"
+        android:orientation="vertical"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
-        <include layout="@layout/hc_location_layout" />
-
-        <include layout="@layout/check_status_layout" />
-
-        <FrameLayout
+        <LinearLayout
+            android:id="@+id/info_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/form_margin_left"
-            android:layout_marginRight="@dimen/form_margin_left"
-            android:background="@color/white">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <TableLayout
+            <include layout="@layout/hc_location_layout" />
+
+            <include layout="@layout/check_status_layout" />
+
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:shrinkColumns="1"
-                android:stretchColumns="1">
+                android:layout_marginLeft="@dimen/form_margin_left"
+                android:layout_marginRight="@dimen/form_margin_left"
+                android:background="@color/white">
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/input_height"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/input_height"
-                        android:gravity="center_vertical"
-                        android:maxEms="5"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="身份证号码"
-                        android:textColor="@color/str_color"
-                        android:textSize="@dimen/str_text_size" />
-
-                    <TextView
-                        android:id="@+id/id_num"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/input_height"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:textColor="@color/content_color"
-                        android:textSize="@dimen/content_text_size" />
-
-
-                </TableRow>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/form_text_margin_left"
-                    android:layout_marginRight="@dimen/form_text_margin_left"
-                    android:background="@color/divider_color" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/input_height"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/input_height"
-                        android:gravity="center_vertical"
-                        android:maxEms="5"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="姓名"
-                        android:textColor="@color/str_color"
-                        android:textSize="@dimen/str_text_size" />
-
-                    <TextView
-                        android:id="@+id/name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/input_height"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:textColor="@color/content_color"
-                        android:textSize="@dimen/content_text_size" />
-                </TableRow>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/form_text_margin_left"
-                    android:layout_marginRight="@dimen/form_text_margin_left"
-                    android:background="@color/divider_color" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/input_height"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/input_height"
-                        android:gravity="center_vertical"
-                        android:maxEms="5"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="性别"
-                        android:textColor="@color/str_color"
-                        android:textSize="@dimen/str_text_size" />
-
-                    <TextView
-                        android:id="@+id/gender"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:textColor="@color/content_color"
-                        android:textSize="@dimen/content_text_size" />
-                </TableRow>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/form_text_margin_left"
-                    android:layout_marginRight="@dimen/form_text_margin_left"
-                    android:background="@color/divider_color" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/input_height"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/input_height"
-                        android:gravity="center_vertical"
-                        android:maxEms="5"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="出生日期"
-                        android:textColor="@color/str_color"
-                        android:textSize="@dimen/str_text_size" />
-
-                    <TextView
-                        android:id="@+id/birth"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:textColor="@color/content_color"
-                        android:textSize="@dimen/content_text_size" />
-                </TableRow>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/form_text_margin_left"
-                    android:layout_marginRight="@dimen/form_text_margin_left"
-                    android:background="@color/divider_color" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/input_height"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/input_height"
-                        android:gravity="center_vertical"
-                        android:maxEms="5"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="民族"
-                        android:textColor="@color/str_color"
-                        android:textSize="@dimen/str_text_size" />
-
-                    <TextView
-                        android:id="@+id/ethnic_group"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:textColor="@color/content_color"
-                        android:textSize="@dimen/content_text_size" />
-                </TableRow>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/form_text_margin_left"
-                    android:layout_marginRight="@dimen/form_text_margin_left"
-                    android:background="@color/divider_color" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/input_height"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/input_height"
-                        android:gravity="center_vertical"
-                        android:maxEms="5"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="籍贯"
-                        android:textColor="@color/str_color"
-                        android:textSize="@dimen/str_text_size" />
-
-                    <TextView
-                        android:id="@+id/origin_place"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:textColor="@color/content_color"
-                        android:textSize="@dimen/content_text_size" />
-                </TableRow>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/form_text_margin_left"
-                    android:layout_marginRight="@dimen/form_text_margin_left"
-                    android:background="@color/divider_color" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/input_height"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/input_height"
-                        android:gravity="center_vertical"
-                        android:maxEms="5"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="驾驶证"
-                        android:textColor="@color/str_color"
-                        android:textSize="@dimen/str_text_size" />
-
-                    <TextView
-                        android:id="@+id/driver_license"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:textColor="@color/content_color"
-                        android:textSize="@dimen/content_text_size" />
-                </TableRow>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/form_text_margin_left"
-                    android:layout_marginRight="@dimen/form_text_margin_left"
-                    android:background="@color/divider_color" />
-
-                <TableRow
+                <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:shrinkColumns="1"
+                    android:stretchColumns="1">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <TableRow
+                        android:layout_width="match_parent"
                         android:layout_height="@dimen/input_height"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical"
-                        android:maxEms="5"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="登记机动车"
-                        android:textColor="@color/str_color"
-                        android:textSize="@dimen/str_text_size" />
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/vehicles"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:textColor="@color/content_color"
-                        android:textSize="@dimen/content_text_size" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/input_height"
+                            android:gravity="center_vertical"
+                            android:maxEms="5"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:text="身份证号码"
+                            android:textColor="@color/str_color"
+                            android:textSize="@dimen/str_text_size" />
 
-                    <TextView
-                        android:id="@+id/jdc_check"
-                        android:layout_width="48dp"
-                        android:layout_height="32dp"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center"
-                        android:text="核查"
-                        android:textColor="@color/light_blue"
-                        android:textStyle="bold"
-                        android:visibility="gone" />
-                </TableRow>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/form_text_margin_left"
-                    android:layout_marginRight="@dimen/form_text_margin_left"
-                    android:background="@color/divider_color" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/input_height"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/input_height"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical"
-                        android:maxEms="5"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="登记电动车"
-                        android:textColor="@color/str_color"
-                        android:textSize="@dimen/str_text_size" />
+                        <TextView
+                            android:id="@+id/id_num"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/input_height"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:textColor="@color/content_color"
+                            android:textSize="@dimen/content_text_size" />
 
 
-                    <TextView
-                        android:id="@+id/e_vehicles"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:textColor="@color/content_color"
-                        android:textSize="@dimen/content_text_size" />
-
-                    <TextView
-                        android:id="@+id/fjdc_check"
-                        android:layout_width="48dp"
-                        android:layout_height="32dp"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center"
-                        android:text="核查"
-                        android:textColor="@color/light_blue"
-                        android:textStyle="bold"
-                        android:visibility="gone" />
-
-                </TableRow>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/form_text_margin_left"
-                    android:layout_marginRight="@dimen/form_text_margin_left"
-                    android:background="@color/divider_color" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/input_height"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/input_height"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical"
-                        android:maxEms="5"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="电话号码"
-                        android:textColor="@color/str_color"
-                        android:textSize="@dimen/str_text_size" />
-
-                    <TextView
-                        android:id="@+id/phone_num"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:textColor="@color/content_color"
-                        android:textSize="@dimen/content_text_size" />
-
-                    <TextView
-
-                        android:id="@+id/phone_check"
-                        android:layout_width="48dp"
-                        android:layout_height="32dp"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center"
-                        android:text="联系"
-                        android:textColor="@color/light_blue"
-                        android:textStyle="bold"
-                        android:visibility="gone" />
-
-                </TableRow>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/form_text_margin_left"
-                    android:layout_marginRight="@dimen/form_text_margin_left"
-                    android:background="@color/divider_color" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/input_height"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/input_height"
-                        android:gravity="center_vertical"
-                        android:maxEms="20"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="户籍地址"
-                        android:textColor="@color/str_color"
-                        android:textSize="@dimen/str_text_size" />
-
-                    <TextView
-                        android:id="@+id/origin_address"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_span="2"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:textColor="@color/content_color"
-                        android:textSize="@dimen/content_text_size" />
-                </TableRow>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/form_text_margin_left"
-                    android:layout_marginRight="@dimen/form_text_margin_left"
-                    android:background="@color/divider_color" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:maxEms="5"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="暂住地址"
-                        android:textColor="@color/str_color"
-                        android:textSize="@dimen/str_text_size" />
-
-                    <TextView
-                        android:id="@+id/temp_address"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_span="2"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:minHeight="50dp"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:textColor="@color/content_color"
-                        android:textSize="@dimen/content_text_size" />
-                </TableRow>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/form_text_margin_left"
-                    android:layout_marginRight="@dimen/form_text_margin_left"
-                    android:background="@color/divider_color" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:maxEms="5"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:text="访查信息"
-                        android:minHeight="40dp"
-                        android:textColor="@color/str_color"
-                        android:textSize="@dimen/str_text_size" />
-
-                    <TextView
-                        android:id="@+id/fcxx"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_span="2"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/form_text_margin_left"
-                        android:textColor="@color/content_color"
-                        android:textSize="@dimen/content_text_size" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:orientation="horizontal">
+                    </TableRow>
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="20dp" />
-                </TableRow>
-            </TableLayout>
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/form_text_margin_left"
+                        android:layout_marginRight="@dimen/form_text_margin_left"
+                        android:background="@color/divider_color" />
 
-            <ImageView
-                android:id="@+id/xp"
-                android:layout_width="@dimen/input_heightx3d2"
-                android:layout_height="@dimen/input_heightx4"
-                android:layout_gravity="right|top" />
-        </FrameLayout>
-    </LinearLayout>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/input_height"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/input_height"
+                            android:gravity="center_vertical"
+                            android:maxEms="5"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:text="姓名"
+                            android:textColor="@color/str_color"
+                            android:textSize="@dimen/str_text_size" />
+
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/input_height"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:textColor="@color/content_color"
+                            android:textSize="@dimen/content_text_size" />
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/form_text_margin_left"
+                        android:layout_marginRight="@dimen/form_text_margin_left"
+                        android:background="@color/divider_color" />
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/input_height"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/input_height"
+                            android:gravity="center_vertical"
+                            android:maxEms="5"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:text="性别"
+                            android:textColor="@color/str_color"
+                            android:textSize="@dimen/str_text_size" />
+
+                        <TextView
+                            android:id="@+id/gender"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:textColor="@color/content_color"
+                            android:textSize="@dimen/content_text_size" />
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/form_text_margin_left"
+                        android:layout_marginRight="@dimen/form_text_margin_left"
+                        android:background="@color/divider_color" />
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/input_height"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/input_height"
+                            android:gravity="center_vertical"
+                            android:maxEms="5"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:text="出生日期"
+                            android:textColor="@color/str_color"
+                            android:textSize="@dimen/str_text_size" />
+
+                        <TextView
+                            android:id="@+id/birth"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:textColor="@color/content_color"
+                            android:textSize="@dimen/content_text_size" />
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/form_text_margin_left"
+                        android:layout_marginRight="@dimen/form_text_margin_left"
+                        android:background="@color/divider_color" />
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/input_height"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/input_height"
+                            android:gravity="center_vertical"
+                            android:maxEms="5"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:text="民族"
+                            android:textColor="@color/str_color"
+                            android:textSize="@dimen/str_text_size" />
+
+                        <TextView
+                            android:id="@+id/ethnic_group"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:textColor="@color/content_color"
+                            android:textSize="@dimen/content_text_size" />
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/form_text_margin_left"
+                        android:layout_marginRight="@dimen/form_text_margin_left"
+                        android:background="@color/divider_color" />
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/input_height"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/input_height"
+                            android:gravity="center_vertical"
+                            android:maxEms="5"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:text="籍贯"
+                            android:textColor="@color/str_color"
+                            android:textSize="@dimen/str_text_size" />
+
+                        <TextView
+                            android:id="@+id/origin_place"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:textColor="@color/content_color"
+                            android:textSize="@dimen/content_text_size" />
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/form_text_margin_left"
+                        android:layout_marginRight="@dimen/form_text_margin_left"
+                        android:background="@color/divider_color" />
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/input_height"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/input_height"
+                            android:gravity="center_vertical"
+                            android:maxEms="5"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:text="驾驶证"
+                            android:textColor="@color/str_color"
+                            android:textSize="@dimen/str_text_size" />
+
+                        <TextView
+                            android:id="@+id/driver_license"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:textColor="@color/content_color"
+                            android:textSize="@dimen/content_text_size" />
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/form_text_margin_left"
+                        android:layout_marginRight="@dimen/form_text_margin_left"
+                        android:background="@color/divider_color" />
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/input_height"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:maxEms="5"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:text="登记机动车"
+                            android:textColor="@color/str_color"
+                            android:textSize="@dimen/str_text_size" />
+
+                        <TextView
+                            android:id="@+id/vehicles"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:textColor="@color/content_color"
+                            android:textSize="@dimen/content_text_size" />
+
+                        <TextView
+                            android:id="@+id/jdc_check"
+                            android:layout_width="48dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center"
+                            android:text="核查"
+                            android:textColor="@color/light_blue"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/form_text_margin_left"
+                        android:layout_marginRight="@dimen/form_text_margin_left"
+                        android:background="@color/divider_color" />
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/input_height"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/input_height"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:maxEms="5"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:text="登记电动车"
+                            android:textColor="@color/str_color"
+                            android:textSize="@dimen/str_text_size" />
 
 
-</ScrollView>
+                        <TextView
+                            android:id="@+id/e_vehicles"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:textColor="@color/content_color"
+                            android:textSize="@dimen/content_text_size" />
+
+                        <TextView
+                            android:id="@+id/fjdc_check"
+                            android:layout_width="48dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center"
+                            android:text="核查"
+                            android:textColor="@color/light_blue"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/form_text_margin_left"
+                        android:layout_marginRight="@dimen/form_text_margin_left"
+                        android:background="@color/divider_color" />
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/input_height"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/input_height"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:maxEms="5"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:text="电话号码"
+                            android:textColor="@color/str_color"
+                            android:textSize="@dimen/str_text_size" />
+
+                        <TextView
+                            android:id="@+id/phone_num"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:textColor="@color/content_color"
+                            android:textSize="@dimen/content_text_size" />
+
+                        <TextView
+
+                            android:id="@+id/phone_check"
+                            android:layout_width="48dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center"
+                            android:text="联系"
+                            android:textColor="@color/light_blue"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/form_text_margin_left"
+                        android:layout_marginRight="@dimen/form_text_margin_left"
+                        android:background="@color/divider_color" />
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/input_height"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/input_height"
+                            android:gravity="center_vertical"
+                            android:maxEms="20"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:text="户籍地址"
+                            android:textColor="@color/str_color"
+                            android:textSize="@dimen/str_text_size" />
+
+                        <TextView
+                            android:id="@+id/origin_address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_span="2"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:textColor="@color/content_color"
+                            android:textSize="@dimen/content_text_size" />
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/form_text_margin_left"
+                        android:layout_marginRight="@dimen/form_text_margin_left"
+                        android:background="@color/divider_color" />
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:maxEms="5"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:text="暂住地址"
+                            android:textColor="@color/str_color"
+                            android:textSize="@dimen/str_text_size" />
+
+                        <TextView
+                            android:id="@+id/temp_address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_span="2"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:minHeight="50dp"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:textColor="@color/content_color"
+                            android:textSize="@dimen/content_text_size" />
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/form_text_margin_left"
+                        android:layout_marginRight="@dimen/form_text_margin_left"
+                        android:background="@color/divider_color" />
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:maxEms="5"
+                            android:minHeight="40dp"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:text="访查信息"
+                            android:textColor="@color/str_color"
+                            android:textSize="@dimen/str_text_size" />
+
+                        <TextView
+                            android:id="@+id/fcxx"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_span="2"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/form_text_margin_left"
+                            android:textColor="@color/content_color"
+                            android:textSize="@dimen/content_text_size" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp" />
+                    </TableRow>
+                </TableLayout>
+
+                <ImageView
+                    android:id="@+id/xp"
+                    android:layout_width="@dimen/input_heightx3d2"
+                    android:layout_height="@dimen/input_heightx4"
+                    android:layout_gravity="right|top" />
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/access_deny_info"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/round_access_deny_background"
+        android:gravity="center"
+        android:text="警员信息，不可查询"
+        android:textColor="@color/white"
+        android:textSize="21sp" />
+
+</FrameLayout>

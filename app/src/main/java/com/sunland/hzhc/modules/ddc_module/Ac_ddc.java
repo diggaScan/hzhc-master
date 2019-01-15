@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Base64;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -278,7 +280,7 @@ public class Ac_ddc extends Ac_base_info {
                 load_inspect_person = true;
                 RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
                 if (ryxxRes == null) {
-                    check_result = "人核查接口:" + "<font color=\"#FF7F50\">" + inspectPersonJsonRet.getMessage() + "</font>";
+                    tv_road_check.setText(Html.fromHtml("人核查接口:" + "<font color=\"#FF7F50\">" + inspectPersonJsonRet.getMessage() + "</font>"));
                     return;
                 }
 
@@ -288,7 +290,6 @@ public class Ac_ddc extends Ac_base_info {
                 } else {
                     check_result = "<font color=\"#d13931\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
                     startVibrate();
-
                 }
                 tv_road_check.setText(Html.fromHtml(check_result));
                 break;
@@ -302,19 +303,21 @@ public class Ac_ddc extends Ac_base_info {
                 }
                 List<DdcFocus> list = eVehicleFocusResBean.getDdcList();
                 if (list == null || list.isEmpty()) {
-                    Toast.makeText(this, eVehicleFocusResBean.getMessage(), Toast.LENGTH_SHORT).show();
+                    tv_focus_road_check.setText(Html.fromHtml("<font color=\"#05b163\">" + eVehicleFocusResBean.getMessage() + "</font>"));
                     return;
                 }
                 load_ddc_focus = true;
                 StringBuilder sb = new StringBuilder();
                 for (DdcFocus ddcFocus : list) {
-                    if (ddcFocus.getStatus().equals("1")) {
-                        startVibrate();
-                        sb.append("<font color=\"#d13931\">" + ddcFocus.getLb() + "</font>").append("<br/>");
+                    if (ddcFocus.getStatus().equals("2")) {
+                        sb.append(ddcFocus.getLb());
+                        if (ddcFocus.getNr() != null) {
+                            sb.append(": ").append(ddcFocus.getNr());
+                        } else {
+                            sb.append(": ").append("无");
+                        }
                     }
-                    if (ddcFocus.getNr() != null) {
-                        sb.append(ddcFocus.getNr());
-                    }
+
                 }
                 if (sb.toString().isEmpty()) {
                     tv_focus_road_check.setText(Html.fromHtml("<font color=\"#05b163\"> 无相关记录</font>"));
@@ -333,7 +336,7 @@ public class Ac_ddc extends Ac_base_info {
         }
     }
 
-    @OnClick({R.id.ddc_check, R.id.focus, R.id.ssj, R.id.retry, R.id.location_container, R.id.focus_retry})
+    @OnClick({R.id.ddc_check, R.id.focus, R.id.retry, R.id.location_container, R.id.focus_retry})
     public void onClick(View view) {
         int id = view.getId();
         Bundle bundle = new Bundle();
@@ -351,6 +354,32 @@ public class Ac_ddc extends Ac_base_info {
                 bundle.putInt("req_location", V_config.REQ_LOCATION);
                 hop2ActivityForResult(Ac_location.class, bundle, V_config.REQ_LOCATION);
                 break;
+            case R.id.retry:
+                tv_road_check.setText("");
+                loading_hc.setVisibility(View.VISIBLE);
+                queryYdjwDataNoDialog("INSPECT_PERSON", V_config.INSPECT_PERSON);
+                queryYdjwDataX();
+                break;
+            case R.id.focus_retry:
+                tv_focus_road_check.setText("");
+                sk_loading_icon.setVisibility(View.VISIBLE);
+                queryYdjwDataNoDialog("GET_ELECTRIC_CAR_FOCUS_INFO", V_config.GET_ELECTRIC_CAR_FOCUS_INFO);
+                queryYdjwDataX();
+                break;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.ssj_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        Bundle bundle = new Bundle();
+        switch (id) {
             case R.id.ssj:
                 Intent intent = new Intent();
                 NonVehicleInfo nonVehicleInfo = new NonVehicleInfo();
@@ -366,8 +395,9 @@ public class Ac_ddc extends Ac_base_info {
                     bundle.putString("lx", V_config.gpsX);
                     bundle.putString("ly", V_config.gpsY);
                     bundle.putBoolean("isFromSsj", isFromSsj);
+                    bundle.putBoolean("fromHc", true);
                     intent.putExtra("bundle", bundle);
-                    hop2Activitynew(Ac_main.class, bundle);
+                    hop2ActivitySingle(Ac_main.class, bundle);
 
 //                    setResult(RESULT_OK, intent);
 //                    finish();
@@ -382,6 +412,7 @@ public class Ac_ddc extends Ac_base_info {
                     bundle.putString("bmdm", V_config.JYBMBH);
                     bundle.putString("lx", V_config.gpsX);
                     bundle.putString("ly", V_config.gpsY);
+                    bundle.putBoolean("fromHc", true);
                     intent.putExtras(bundle);
                     if (intent.resolveActivity(getPackageManager()) == null) {
                         Toast.makeText(this, "请安装随手记应用", Toast.LENGTH_SHORT).show();
@@ -390,19 +421,8 @@ public class Ac_ddc extends Ac_base_info {
                     }
                 }
                 break;
-            case R.id.retry:
-                tv_road_check.setText("");
-                loading_hc.setVisibility(View.VISIBLE);
-                queryYdjwDataNoDialog("INSPECT_PERSON", V_config.INSPECT_PERSON);
-                queryYdjwDataX();
-                break;
-            case R.id.focus_retry:
-                tv_focus_road_check.setText("");
-                sk_loading_icon.setVisibility(View.VISIBLE);
-                queryYdjwDataNoDialog("GET_ELECTRIC_CAR_FOCUS_INFO", V_config.GET_ELECTRIC_CAR_FOCUS_INFO);
-                queryYdjwDataX();
-                break;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initNonVehicleInfo(NonVehicleInfo nonVehicleInfo) {

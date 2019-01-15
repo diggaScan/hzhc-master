@@ -77,7 +77,6 @@ public class Frg_vehicle extends Frg_base {
                 bundle.putString("hpzl", hpzl_num);
                 bundle.putString("fdjh", fdjh);
                 bundle.putString("clsbh", clsbh);
-
                 if (((Ac_main) context).isFromSsj) {
                     bundle.putBoolean(DataModel.FROM_SSJ_FLAG, true);
                     ((Ac_main) context).hopWithssj(Ac_clcx.class, bundle);
@@ -127,12 +126,11 @@ public class Frg_vehicle extends Frg_base {
                 Intent mIntent = new Intent();
                 mIntent.setClassName("cn.com.cybertech.ocr", "cn.com.cybertech.RecognitionActivity");
                 mIntent.putExtra("camera", true);    // true为视频识别，false为拍照识别。如果不加此参数默认为true，使用视频识别的方式。
-                if (mIntent.resolveActivity(context.getPackageManager()) != null) {
+                if (context.getPackageManager().queryIntentActivities(mIntent, 0).size() != 0) {
                     startActivityForResult(mIntent, 111);
                 } else {
                     Toast.makeText(context, "未安装号牌识别模块", Toast.LENGTH_SHORT).show();
                 }
-
                 break;
         }
     }

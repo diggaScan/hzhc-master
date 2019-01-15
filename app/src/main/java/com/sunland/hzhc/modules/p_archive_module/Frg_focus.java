@@ -170,7 +170,9 @@ public class Frg_focus extends Frg_base {
 
     @Override
     public <T> void onRequestFinish(String reqId, String reqName, T bean) {
-
+        if(isDestroyView){
+            return;
+        }
         switch (reqName) {
             case V_config.PERSON_FOCUS_INFO:
                 PeopleFocusResBean peopleFocusResBean = (PeopleFocusResBean) bean;
@@ -201,22 +203,30 @@ public class Frg_focus extends Frg_base {
                 break;
             case V_config.INSPECT_PERSON:
                 InspectPersonJsonRet inspectPersonJsonRet = (InspectPersonJsonRet) bean;
+                loading_hc.setVisibility(View.GONE);
                 if (inspectPersonJsonRet == null) {
                     Toast.makeText(context, "杭州人核查接口异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                loading_hc.setVisibility(View.GONE);
+
                 RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
-                if (ryxxRes != null) {
-                    String result;
-                    if (!ryxxRes.getFhm().equals("000") || ryxxRes.getHcjg().equals("存疑")) {
-                        result = "<font color=\"#d13931\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
-                    } else {
-                        result = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
-                    }
-                    tv_hcjg.setText(Html.fromHtml(result));
-                    load_inspect_person = true;
+                if (ryxxRes == null) {
+                    tv_hcjg.setText(Html.fromHtml("人核查接口:" + "<font color=\"#FF7F50\">" + inspectPersonJsonRet.getMessage() + "</font>"));
+                    return;
                 }
+
+
+                String result;
+                // TODO: 2019/1/8/008
+                if ("通过".equals(ryxxRes.getHcjg())) {
+                    result = "<font color=\"#05b163\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
+                } else {
+                    result = "<font color=\"#d13931\">" + ryxxRes.getHcjg() + "</font>" + ryxxRes.getBjxx();
+                }
+
+                tv_hcjg.setText(Html.fromHtml(result));
+                load_inspect_person = true;
+
                 break;
         }
     }

@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -113,6 +114,10 @@ public class Ac_rycx extends Ac_base_info {
     public TextView tv_focus_road_check;
     @BindView(R.id.focus_loading_icon_hc)
     public SpinKitView sk_loading_icon;
+    @BindView(R.id.access_deny_info)
+    public TextView access_deny_info;
+    @BindView(R.id.info_container)
+    public LinearLayout ll_container;
 
     private boolean load_inspect_person;
     private boolean load_country_person;
@@ -120,6 +125,7 @@ public class Ac_rycx extends Ac_base_info {
     private boolean load_person_focus;
     private boolean load_zt_info;
 
+    private boolean isPoliceInfo;
     private String sfzh = "";//身份证号
 
     private int jdc_num;
@@ -163,6 +169,19 @@ public class Ac_rycx extends Ac_base_info {
         initView();
     }
 
+
+    public void showWarningIfPolice(String code) {
+        isPoliceInfo = true;
+        invalidateOptionsMenu();
+        ll_container.setVisibility(View.GONE);
+        access_deny_info.setVisibility(View.VISIBLE);
+        if (code.equals("7")) {
+            access_deny_info.setText("警员信息，无权限查询！");
+        } else if (code.equals("6")) {
+            access_deny_info.setText("无权限查询！");
+        }
+
+    }
 
     @Override
     protected void onStart() {
@@ -365,6 +384,7 @@ public class Ac_rycx extends Ac_base_info {
 
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase resultBase) {
+        String code;
         switch (reqName) {
             case V_config.PERSON_COMPLEX:
                 showLoading_layout(false);
@@ -374,6 +394,12 @@ public class Ac_rycx extends Ac_base_info {
                     return;
                 }
                 load_person_complex = true;
+
+                code = ryzhxxResBean.getCode();
+                if (code.equals("6") || code.equals("7")) {
+                    showWarningIfPolice(code);
+                    return;
+                }
                 setText(tv_id_num, ryzhxxResBean.getSfzh());
                 setText(tv_name, ryzhxxResBean.getXm());
                 setText(tv_gender, ryzhxxResBean.getXb());
@@ -509,7 +535,15 @@ public class Ac_rycx extends Ac_base_info {
                     Toast.makeText(this, "全国库人员信息查询异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 load_country_person = true;
+
+                code = personOfCountry.getCode();
+                if (code.equals("6") || code.equals("7")) {
+                    showWarningIfPolice(code);
+                    return;
+                }
+
                 final String xp = personOfCountry.getXP();
                 gj = personOfCountry.getJGGJ();
                 new Thread(new Runnable() {
@@ -535,6 +569,7 @@ public class Ac_rycx extends Ac_base_info {
                     Toast.makeText(this, "杭州人核录接口异常", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
                 if (ryxxRes == null) {
                     tv_road_check.setText(Html.fromHtml("人核查接口:" + "<font color=\"#FF7F50\">" + inspectPersonJsonRet.getMessage() + "</font>"));
@@ -542,6 +577,11 @@ public class Ac_rycx extends Ac_base_info {
                 }
 
                 load_inspect_person = true;
+                code = inspectPersonJsonRet.getCode();
+                if (code.equals("6") || code.equals("7")) {
+                    showWarningIfPolice(code);
+                    return;
+                }
                 String result;
                 // TODO: 2019/1/8/008
                 if ("通过".equals(ryxxRes.getHcjg())) {
@@ -567,10 +607,16 @@ public class Ac_rycx extends Ac_base_info {
                 }
                 List<InfoGZXXResp> list = peopleFocusResBean.getGzxxList();
                 if (list == null || list.isEmpty()) {
-                    Toast.makeText(this, "人员关注信息无内容返回", Toast.LENGTH_SHORT).show();
+                    tv_focus_road_check.setText(Html.fromHtml("人核查接口:" + "<font color=\"#FF7F50\">" + peopleFocusResBean.getMessage() + "</font>"));
                     return;
                 }
+
                 load_person_focus = true;
+                code = peopleFocusResBean.getCode();
+                if (code.equals("6") || code.equals("7")) {
+                    showWarningIfPolice(code);
+                    return;
+                }
                 StringBuilder sb = new StringBuilder();
 
                 for (InfoGZXXResp infoGZXXResp : list) {
@@ -581,7 +627,6 @@ public class Ac_rycx extends Ac_base_info {
                 if (sb.toString().isEmpty()) {
                     tv_focus_road_check.setText(Html.fromHtml("<font color=\"#05b163\"> 无相关记录</font>"));
                 } else {
-                    startVibrate();
                     tv_focus_road_check.setText(Html.fromHtml(sb.toString()));
                 }
 
@@ -590,10 +635,13 @@ public class Ac_rycx extends Ac_base_info {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.ac_sfz_menu, menu);
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.clear();
+        if (!isPoliceInfo)
+            getMenuInflater().inflate(R.menu.ac_sfz_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -615,8 +663,6 @@ public class Ac_rycx extends Ac_base_info {
                 PersonInfo personInfo = new PersonInfo();
                 initPersonInfo(personInfo);
                 if (isFromssj) {
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.setClass(this,Ac_main.class);
                     bundle.putInt(DataModel.RECORD_BUNDLE_TYPE, 0);
                     bundle.putString(DataModel.RECORD_BUNDLE_ADDR, V_config.hc_address);
                     bundle.putString(DataModel.RECORD_BUNDLE_DATA, new Gson().toJson(personInfo));
@@ -627,8 +673,9 @@ public class Ac_rycx extends Ac_base_info {
                     bundle.putString("lx", V_config.gpsX);
                     bundle.putString("ly", V_config.gpsY);
                     bundle.putBoolean("isFromSsj", isFromssj);
+                    bundle.putBoolean("fromHc", true);
                     intent.putExtra("bundle", bundle);
-                    startActivity(intent);
+                    hop2ActivitySingle(Ac_main.class, bundle);
 //                    hop2Activity(Ac_main.class, bundle);
 //                    setResult(RESULT_OK, intent);
 ////                    finish();
@@ -643,6 +690,7 @@ public class Ac_rycx extends Ac_base_info {
                     bundle.putString("bmdm", V_config.JYBMBH);
                     bundle.putString("lx", V_config.gpsX);
                     bundle.putString("ly", V_config.gpsY);
+                    bundle.putBoolean("fromHc", true);
                     intent.putExtras(bundle);
                     if (intent.resolveActivity(getPackageManager()) == null) {
                         Toast.makeText(this, "请安装随手记应用", Toast.LENGTH_SHORT).show();

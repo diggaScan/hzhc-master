@@ -89,27 +89,39 @@ public class Ac_division extends Ac_base_info {
         int id = view.getId();
         switch (id) {
             case R.id.lmhc:
-                if (flavours.get(0).getISUSE().equals("1")) {
-                    V_config.LBR = flavours.get(0).getEDITION();
-                    hop2Activity(Ac_location.class);
-                } else {
-                    Toast.makeText(this, "未被授权访问该板块", Toast.LENGTH_SHORT).show();
+                for (AnbaoInfo anbaoInfo : flavours) {
+                    if (anbaoInfo.getEDITION().equals("02")) {
+                        if (anbaoInfo.getISUSE().equals("1")) {
+                            V_config.LBR = anbaoInfo.getEDITION();
+                            hop2Activity(Ac_location.class);
+                        } else {
+                            Toast.makeText(this, "未被授权访问该板块", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
                 break;
             case R.id.hchhl:
-                if (flavours.get(1).getISUSE().equals("1")) {
-                    V_config.LBR = flavours.get(0).getEDITION();
-                    hop2Activity(Ac_location.class);
-                } else {
-                    Toast.makeText(this, "未被授权访问该板块", Toast.LENGTH_SHORT).show();
+                for (AnbaoInfo anbaoInfo : flavours) {
+                    if (anbaoInfo.getEDITION().equals("06")) {
+                        if (anbaoInfo.getISUSE().equals("1")) {
+                            V_config.LBR = anbaoInfo.getEDITION();
+                            hop2Activity(Ac_location.class);
+                        } else {
+                            Toast.makeText(this, "未被授权访问该板块", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
                 break;
             case R.id.abhl:
-                if (flavours.get(2).getISUSE().equals("1")) {
-                    V_config.LBR = flavours.get(0).getEDITION();
-                    hop2Activity(Ac_location.class);
-                } else {
-                    Toast.makeText(this, "未被授权访问该板块", Toast.LENGTH_SHORT).show();
+                for (AnbaoInfo anbaoInfo : flavours) {
+                    if (anbaoInfo.getEDITION().equals("01")) {
+                        if (anbaoInfo.getISUSE().equals("1")) {
+                            V_config.LBR = anbaoInfo.getEDITION();
+                            hop2Activity(Ac_location.class);
+                        } else {
+                            Toast.makeText(this, "未被授权访问该板块", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
                 break;
         }

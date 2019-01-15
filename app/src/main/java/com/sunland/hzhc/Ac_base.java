@@ -131,7 +131,8 @@ public class Ac_base extends AppCompatActivity {
         intent.putExtra("bundle", bundle);
         startActivity(intent);
     }
-    public void hop2Activitynew(Class<? extends AppCompatActivity> clazz, Bundle bundle) {
+
+    public void hop2ActivitySingle(Class<? extends AppCompatActivity> clazz, Bundle bundle) {
         Intent intent = new Intent(this, clazz);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("bundle", bundle);

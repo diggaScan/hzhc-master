@@ -160,6 +160,7 @@ public class Ac_clcx extends Ac_base_info {
         if (!load_car_focus) {
             queryYdjwDataNoDialog("CAR_FOCUS", V_config.CAR_FOCUS);
         }
+
         queryYdjwDataX();
     }
 
@@ -320,6 +321,7 @@ public class Ac_clcx extends Ac_base_info {
                 }
                 List<InfoJDCXQs> infoJDCXQ_list = resBean.getInfoJDCXQs();
                 if (infoJDCXQ_list == null || infoJDCXQ_list.isEmpty()) {
+                    showNullInfo();
                     Toast.makeText(this, "未获得相关车辆信息", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -332,6 +334,7 @@ public class Ac_clcx extends Ac_base_info {
 
                 InfoJDCXQs infoJDCXQs = infoJDCXQ_list.get(0);
                 if (infoJDCXQs == null) {
+                    showNullInfo();
                     Toast.makeText(this, "未获得相关车辆信息", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -631,6 +634,21 @@ public class Ac_clcx extends Ac_base_info {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showNullInfo() {
+        setText(tv_id_num, "");
+        setText(tv_name, "");
+        setText(tv_plateform_num, "");
+        setText(tv_car_type, "");
+        setText(tv_car_brand, "");
+        setText(tv_type_num, "");
+        setText(tv_car_color, "");
+        setText(tv_sbdm, "");
+        setText(tv_fdjh, "");
+        setText(tv_fdj_sequence, "");//发动机型号不对应发动机序列号
+        loading_hc.setVisibility(View.GONE);
+        tv_road_check.setText(Html.fromHtml("人车核查接口:" + "<font color=\"#FF7F50\">需先获取车辆或人员信息才能查询此接口</font>"));
     }
 
     @Override

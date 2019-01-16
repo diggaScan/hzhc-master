@@ -38,7 +38,7 @@ public class DataModel {
 
     public final static String FROM_SSJ_FLAG = "fromRandomRecord";
     public final static String[] VEHICLEMODELS = {
-            "小型汽车", "大型汽车", "使馆汽车", "领馆汽车", "境外汽车",
+            "小型汽车", "大型汽车", "小型新能源汽车", "大型新能源汽车", "使馆汽车", "领馆汽车", "境外汽车",
             "外籍汽车", "两、三轮摩托车", "轻便摩托车", "使馆摩托车", "领馆摩托车",
             "境外摩托车", "外籍摩托车", "农用运输车类", "拖拉机", "挂车",
             "教练汽车", "教练摩托车", "试验汽车", "试验摩托车", "临时入境汽车",
@@ -61,6 +61,8 @@ public class DataModel {
 
         VEHICLEMODLES.put("大型汽车", "01");
         VEHICLEMODLES.put("小型汽车", "02");
+        VEHICLEMODLES.put("小型新能源汽车", "52");
+        VEHICLEMODLES.put("大型新能源汽车", "51");
         VEHICLEMODLES.put("使馆汽车", "03");
         VEHICLEMODLES.put("领馆汽车", "04");
         VEHICLEMODLES.put("境外汽车", "05");
@@ -112,11 +114,11 @@ public class DataModel {
             R.drawable.ic_name_clicked, R.drawable.ic_batch_clicked, R.drawable.ic_hotel_clicked, R.drawable.ic_internet_clicked, R.drawable.ic_phone_clicked,
             R.drawable.ic_case_clicked, R.drawable.ic_abroad_clicked};
 
-    public static final String[] MODULE_NAMES = {"身份证", "机动车", "电动车", "姓名组合", "旅馆", "网吧", "电话", "案件","批量核查"};
-//"境外人员", , "人脸识别", "设置"
+    public static final String[] MODULE_NAMES = {"身份证", "机动车", "电动车", "姓名组合", "旅馆", "网吧", "电话", "案件", "批量核查"};
+    //"境外人员", , "人脸识别", "设置"
     public static final Integer[] MODULES_ICON = {R.drawable.ic_identity_unclicked, R.drawable.ic_vehicle_unclicked, R.drawable.ic_e_vehicle_unclicked,
             R.drawable.ic_name_unclicked, R.drawable.ic_hotel_unclicked, R.drawable.ic_internet_unclicked, R.drawable.ic_phone_unclicked,
-            R.drawable.ic_case_unclicked,R.drawable.ic_batch_unclicked};
+            R.drawable.ic_case_unclicked, R.drawable.ic_batch_unclicked};
 //    R.drawable.ic_abroad_unclicked,  R.drawable.ic_face_rec_unclicked, R.drawable.ic_setting_unclicked
 
     public static final String[] HANGZHOU_DISTRICTS = {"杭州市", "上城区", "下城区", "江干区", "拱墅区", "西湖区", "滨江区", "萧山区", "余杭区", "桐庐县", "淳安县", "建德市",

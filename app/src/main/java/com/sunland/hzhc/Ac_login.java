@@ -111,6 +111,7 @@ public class Ac_login extends Ac_base implements OnRequestCallback {
             Toast.makeText(this, "服务异常", Toast.LENGTH_SHORT).show();
             return;
         }
+
         Dljyxx dljyxx = loginResBean.getDljyxx();
         if (dljyxx == null) {
             Toast.makeText(this, loginResBean.getMessage(), Toast.LENGTH_SHORT).show();

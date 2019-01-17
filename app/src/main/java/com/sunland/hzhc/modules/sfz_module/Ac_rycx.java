@@ -50,6 +50,7 @@ import com.sunland.hzhc.modules.lmhc_module.MyTaskParams;
 import com.sunland.hzhc.modules.lmhc_module.QueryHttp;
 import com.sunland.hzhc.modules.own_car_module.Ac_car_list;
 import com.sunland.hzhc.modules.p_archive_module.Ac_archive;
+import com.sunland.hzhc.utils.UtilsString;
 import com.sunlandgroup.Global;
 import com.sunlandgroup.def.bean.result.ResultBase;
 import com.sunlandgroup.utils.JsonUtils;
@@ -269,6 +270,31 @@ public class Ac_rycx extends Ac_base_info {
             if (bundle != null) {
                 sfzh = bundle.getString("id");
                 isFromssj = bundle.getBoolean("fromRandomRecord");
+
+                String yhdm = bundle.getString("yhdm");
+                if (!UtilsString.isNullOrEmpty(yhdm)) {
+                    V_config.YHDM = yhdm;
+                }
+
+                String jysfzh = bundle.getString("jysfzh");
+                if (!UtilsString.isNullOrEmpty(jysfzh)) {
+                    V_config.JYSFZH = jysfzh;
+                }
+
+                String jyxm = bundle.getString("jyxm");
+                if (!UtilsString.isNullOrEmpty(jyxm)) {
+                    V_config.JYXM = jyxm;
+                }
+
+                String jybmbh = bundle.getString("jybmbh");
+                if (!UtilsString.isNullOrEmpty(jybmbh)) {
+                    V_config.JYBMBH = jybmbh;
+                }
+                String lbr=bundle.getString("lbr");
+                if(!UtilsString.isNullOrEmpty(jybmbh)){
+                    V_config.LBR=lbr;
+                }
+
             }
         }
     }
@@ -572,7 +598,11 @@ public class Ac_rycx extends Ac_base_info {
 
                 RyxxRes ryxxRes = inspectPersonJsonRet.getRyxx();
                 if (ryxxRes == null) {
-                    tv_road_check.setText(Html.fromHtml("人核查接口:" + "<font color=\"#FF7F50\">" + inspectPersonJsonRet.getMessage() + "</font>"));
+                    if (V_config.hc_address == null || V_config.hc_address.isEmpty()) {
+                        tv_road_check.setText(Html.fromHtml("<font color=\"#FF7F50\"> 请填写核查地址后重查</font>"));
+                    } else {
+                        tv_road_check.setText(Html.fromHtml("人核查接口:" + "<font color=\"#FF7F50\">" + inspectPersonJsonRet.getMessage() + "</font>"));
+                    }
                     return;
                 }
 

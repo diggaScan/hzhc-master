@@ -75,9 +75,9 @@ public class Frg_id extends Frg_base {
             case R.id.query:
                 String identity = et_id.getText().toString();
                 if (UtilsString.checkId(identity).equals("")) {
-                    Toast.makeText(context, "请输入正确的身份证号", Toast.LENGTH_SHORT).show();
-                    break;
-                }
+                Toast.makeText(context, "请输入正确的身份证号", Toast.LENGTH_SHORT).show();
+                break;
+            }
                 Bundle bundle = new Bundle();
                 if (((Ac_main) context).isFromSsj) {
                     bundle.putString("id", identity);

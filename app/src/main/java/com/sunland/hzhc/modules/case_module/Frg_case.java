@@ -54,9 +54,9 @@ public class Frg_case extends Frg_base {
                 bundle.putString("ajlb", lbbh);
                 bundle.putString("afsj", afsj);
                 bundle.putString("gxdw", dwbh);
-                if(ajbh.isEmpty()&&(lbbh==null||lbbh.isEmpty())&&afsj.isEmpty()&&(dwbh==null||dwbh.isEmpty())){
-                    Toast.makeText(context,"请至少输入一个搜索条件",Toast.LENGTH_SHORT).show();
-                }else {
+                if (ajbh.isEmpty() && (lbbh == null || lbbh.isEmpty()) && afsj.isEmpty() && (dwbh == null || dwbh.isEmpty())) {
+                    Toast.makeText(context, "请至少输入一个搜索条件", Toast.LENGTH_SHORT).show();
+                } else {
                     ((Ac_main) context).hop2Activity(Ac_case.class, bundle);
                 }
                 break;
@@ -80,6 +80,9 @@ public class Frg_case extends Frg_base {
                 if (resultCode == RESULT_OK) {
                     tv_case_cate.setText(data.getStringExtra("cate_name"));
                     lbbh = data.getStringExtra("cate_code");
+                } else {
+                    tv_case_cate.setText("");
+                    lbbh = null;
                 }
                 break;
             case REQ_DW:

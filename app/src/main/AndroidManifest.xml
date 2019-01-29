@@ -62,7 +62,7 @@
         <activity
             android:name=".Ac_main"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="com.sunland.hzhc.intent.action.QUERY" />
                 <category android:name="android.intent.category.DEFAULT" />

@@ -103,11 +103,12 @@ public class Frg_vehicle extends Frg_base {
                 String hpzl_str = sb_vehicle.getSelectedItem();
                 String hpzl_num = DataModel.VEHICLEMODLES.get(hpzl_str);
                 String fdjh = et_engine_num.getText().toString();
-                if (cphm.isEmpty()) {
-                    Toast.makeText(context, "机动车号牌不能为空", Toast.LENGTH_SHORT).show();
+
+                String clsbh = et_vehivle_id.getText().toString();
+                if (cphm.isEmpty() && fdjh.isEmpty() && clsbh.isEmpty()) {
+                    Toast.makeText(context, "号牌，发动机号和识别号至少选填一个", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String clsbh = et_vehivle_id.getText().toString();
                 Bundle bundle = new Bundle();
                 bundle.putString("cphm", cphm);
                 bundle.putString("hpzl", hpzl_num);

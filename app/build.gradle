@@ -8,10 +8,10 @@ android {
         applicationId "com.sunland.hzhc"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0.0.0"
+        versionCode 3
+        versionName "1.0.2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-  
+
     }
     packagingOptions {
         exclude 'META-INF/LGPL2.1'

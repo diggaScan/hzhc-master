@@ -290,9 +290,9 @@ public class Ac_rycx extends Ac_base_info {
                 if (!UtilsString.isNullOrEmpty(jybmbh)) {
                     V_config.JYBMBH = jybmbh;
                 }
-                String lbr=bundle.getString("lbr");
-                if(!UtilsString.isNullOrEmpty(jybmbh)){
-                    V_config.LBR=lbr;
+                String lbr = bundle.getString("lbr");
+                if (!UtilsString.isNullOrEmpty(jybmbh)) {
+                    V_config.LBR = lbr;
                 }
 
             }

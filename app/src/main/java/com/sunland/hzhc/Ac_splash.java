@@ -29,11 +29,7 @@ public class Ac_splash extends CheckSelfPermissionActivity implements OnRequestC
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         toolbar.setVisibility(View.GONE);
-        //独立App版
-        if (mApplication.isIsoApp()) {
-            hop2Activity(Ac_login.class);
-            return;
-        }
+
         //广达App版，免密登录
         if (mApplication.isAppCyber()) {
             User user = cn.com.cybertech.pdk.UserInfo.getUser(this);
@@ -49,6 +45,12 @@ public class Ac_splash extends CheckSelfPermissionActivity implements OnRequestC
             }
             mRequestManager = new RequestManager(this, this);
             queryYdjwData(V_config.MM_USER_LOGIN);
+        }
+
+//        独立App版
+        if (mApplication.isIsoApp()) {
+            hop2Activity(Ac_login.class);
+            return;
         }
     }
 
@@ -95,7 +97,7 @@ public class Ac_splash extends CheckSelfPermissionActivity implements OnRequestC
             Toast.makeText(this, "服务异常", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!loginResBean.getCode().equals("0")) {
+        if (loginResBean.getCode().equals("0")) {
             saveLog(0, OperationLog.OperationResult.CODE_SUCCESS, appendString(V_config.YHDM, V_config.BRAND, V_config.MODEL));
             hop2Activity(Ac_division.class);
         } else {

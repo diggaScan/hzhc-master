@@ -61,9 +61,9 @@ public class Frg_name extends Frg_base {
                 bundle.putInt("xb", xb);
                 bundle.putString("csrq", csrq);
                 bundle.putString("hjqh", code);
-                if((xm==null||xm.isEmpty())&&(csrq==null||csrq.isEmpty())&&(code==null||code.isEmpty())){
-                    Toast.makeText(context,"姓名，出生日期和地区至少选填一个",Toast.LENGTH_SHORT).show();
-                }else {
+                if ((xm == null || xm.isEmpty()) && (csrq == null || csrq.isEmpty()) && (code == null || code.isEmpty())) {
+                    Toast.makeText(context, "姓名，出生日期和地区至少选填一个", Toast.LENGTH_SHORT).show();
+                } else {
                     ((Ac_main) context).hop2Activity(Ac_xmzh_list.class, bundle);
                 }
 
@@ -84,6 +84,9 @@ public class Frg_name extends Frg_base {
             if (resultCode == RESULT_OK) {
                 code = data.getStringExtra("code");
                 tv_territory.setText(data.getStringExtra("name"));
+            } else {
+                code = "";
+                tv_territory.setText("");
             }
         }
     }

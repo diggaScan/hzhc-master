@@ -208,4 +208,12 @@ public class UtilsString {
             return true;
         return false;
     }
+
+    public static boolean isNullOrEmpty(String str) {
+        if (str == null || str.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

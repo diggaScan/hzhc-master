@@ -184,7 +184,7 @@ public class Ac_jg_list extends Ac_base {
                 Cursor cursor3 = database.rawQuery("SELECT name FROM huji WHERE code LIKE ?", new String[]{code});
                 if (cursor3 != null && cursor3.getCount() > 0) {
                     cursor3.moveToFirst();
-                    cursor3.moveToNext();
+
                     while (!cursor3.isAfterLast()) {
                         dataSet_districts.add(cursor3.getString(0));
                         cursor3.moveToNext();

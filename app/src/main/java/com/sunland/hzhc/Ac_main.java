@@ -98,7 +98,6 @@ public class Ac_main extends CheckSelfPermissionActivity implements NfcReceiver.
             setResult(RESULT_OK, intent);
             finish();
         }
-
     }
 
     @Override

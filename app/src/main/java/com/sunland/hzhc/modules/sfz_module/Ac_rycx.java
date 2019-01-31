@@ -39,8 +39,6 @@ import com.sunland.hzhc.bean.i_people_complex.RyzhxxReqBean;
 import com.sunland.hzhc.bean.i_people_complex.RyzhxxResBean;
 import com.sunland.hzhc.bean.i_people_complex.XQInfoZZ;
 import com.sunland.hzhc.bean.i_person_focus.FocusReqBean;
-import com.sunland.hzhc.bean.i_person_focus.InfoGZXXResp;
-import com.sunland.hzhc.bean.i_person_focus.PeopleFocusResBean;
 import com.sunland.hzhc.bean.ssjB.PersonInfo;
 import com.sunland.hzhc.modules.Ac_base_info;
 import com.sunland.hzhc.modules.ddc_module.Ac_ddc_list;
@@ -109,12 +107,12 @@ public class Ac_rycx extends Ac_base_info {
     public SpinKitView loading_zt;
     @BindView(R.id.retry)
     public Button btn_retry;
-    @BindView(R.id.focus_str)
-    public TextView tv_focus_str;
-    @BindView(R.id.focus_road_check)
-    public TextView tv_focus_road_check;
-    @BindView(R.id.focus_loading_icon_hc)
-    public SpinKitView sk_loading_icon;
+    //    @BindView(R.id.focus_str)
+//    public TextView tv_focus_str;
+//    @BindView(R.id.focus_road_check)
+//    public TextView tv_focus_road_check;
+//    @BindView(R.id.focus_loading_icon_hc)
+//    public SpinKitView sk_loading_icon;
     @BindView(R.id.access_deny_info)
     public TextView access_deny_info;
     @BindView(R.id.info_container)
@@ -123,7 +121,7 @@ public class Ac_rycx extends Ac_base_info {
     private boolean load_inspect_person;
     private boolean load_country_person;
     private boolean load_person_complex;
-    private boolean load_person_focus;
+    //    private boolean load_person_focus; //取消人员关注栏目
     private boolean load_zt_info;
 
     private boolean isPoliceInfo;
@@ -165,7 +163,7 @@ public class Ac_rycx extends Ac_base_info {
         setContentLayout(R.layout.ac_info_detail_test);
         showNavIcon(true);
         setToolbarTitle("个人信息");
-        tv_focus_str.setText("人员关注信息");
+//        tv_focus_str.setText("人员关注信息");
         resources = getResources();
         initView();
     }
@@ -199,9 +197,9 @@ public class Ac_rycx extends Ac_base_info {
             queryYdjwDataNoDialog("INSPECT_PERSON", V_config.INSPECT_PERSON);
         }
 
-        if (!load_person_focus) {
-            queryYdjwDataNoDialog("PERSON_FOCUS_INFO", V_config.PERSON_FOCUS_INFO);
-        }
+//        if (!load_person_focus) {
+//            queryYdjwDataNoDialog("PERSON_FOCUS_INFO", V_config.PERSON_FOCUS_INFO);
+//        }
 
         queryYdjwDataX();
 
@@ -294,7 +292,6 @@ public class Ac_rycx extends Ac_base_info {
                 if (!UtilsString.isNullOrEmpty(jybmbh)) {
                     V_config.LBR = lbr;
                 }
-
             }
         }
     }
@@ -342,16 +339,16 @@ public class Ac_rycx extends Ac_base_info {
                 request.setRyxxReq(ryxxReq);
                 inspectPersonReqBean.setRequest(request);
                 return inspectPersonReqBean;
-            case V_config.PERSON_FOCUS_INFO:
-                FocusReqBean focusReqBean = new FocusReqBean();
-                assembleBasicRequest(focusReqBean);
-                focusReqBean.setSfzh(sfzh);
-                return focusReqBean;
+//            case V_config.PERSON_FOCUS_INFO:
+//                FocusReqBean focusReqBean = new FocusReqBean();
+//                assembleBasicRequest(focusReqBean);
+//                focusReqBean.setSfzh(sfzh);
+//                return focusReqBean;
         }
         return null;
     }
 
-    @OnClick({R.id.focus, R.id.jdc_check, R.id.fjdc_check, R.id.phone_check, R.id.location_container, R.id.retry, R.id.focus_retry})
+    @OnClick({R.id.focus, R.id.jdc_check, R.id.fjdc_check, R.id.phone_check, R.id.location_container, R.id.retry})
     public void onClick(View view) {
         int id = view.getId();
         Bundle bundle = new Bundle();
@@ -400,11 +397,11 @@ public class Ac_rycx extends Ac_base_info {
                 queryYdjwDataNoDialog("INSPECT_PERSON", V_config.INSPECT_PERSON);
                 queryYdjwDataX();
                 break;
-            case R.id.focus_retry:
-                tv_focus_road_check.setText("");
-                sk_loading_icon.setVisibility(View.VISIBLE);
-                queryYdjwDataNoDialog("PERSON_FOCUS_INFO", V_config.PERSON_FOCUS_INFO);
-                queryYdjwDataX();
+//            case R.id.focus_retry:
+//                tv_focus_road_check.setText("");
+//                sk_loading_icon.setVisibility(View.VISIBLE);
+//                queryYdjwDataNoDialog("PERSON_FOCUS_INFO", V_config.PERSON_FOCUS_INFO);
+//                queryYdjwDataX();
         }
     }
 
@@ -628,39 +625,39 @@ public class Ac_rycx extends Ac_base_info {
                 bjxx = ryxxRes.getBjxx();
                 ryxx.append(ryxxRes.getHcjg()).append(ryxxRes.getBjxx());
                 break;
-            case V_config.PERSON_FOCUS_INFO:
-                sk_loading_icon.setVisibility(View.GONE);
-                PeopleFocusResBean peopleFocusResBean = (PeopleFocusResBean) resultBase;
-                if (peopleFocusResBean == null) {
-                    Toast.makeText(this, "人员关注信息接口异常", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                List<InfoGZXXResp> list = peopleFocusResBean.getGzxxList();
-                if (list == null || list.isEmpty()) {
-                    tv_focus_road_check.setText(Html.fromHtml("人核查接口:" + "<font color=\"#FF7F50\">" + peopleFocusResBean.getMessage() + "</font>"));
-                    return;
-                }
-
-                load_person_focus = true;
-                code = peopleFocusResBean.getCode();
-                if (code.equals("6") || code.equals("7")) {
-                    showWarningIfPolice(code);
-                    return;
-                }
-                StringBuilder sb = new StringBuilder();
-
-                for (InfoGZXXResp infoGZXXResp : list) {
-                    if (infoGZXXResp.getStatus().equals("2"))
-                        sb.append("<font color=\"#d13931\">").append(infoGZXXResp.getNr()).append("<br/>")
-                                .append("录入时间:").append(infoGZXXResp.getSj()).append("</font>").append("<br/><br/>");
-                }
-                if (sb.toString().isEmpty()) {
-                    tv_focus_road_check.setText(Html.fromHtml("<font color=\"#05b163\"> 无相关记录</font>"));
-                } else {
-                    tv_focus_road_check.setText(Html.fromHtml(sb.toString()));
-                }
-
-                break;
+//            case V_config.PERSON_FOCUS_INFO:
+//                sk_loading_icon.setVisibility(View.GONE);
+//                PeopleFocusResBean peopleFocusResBean = (PeopleFocusResBean) resultBase;
+//                if (peopleFocusResBean == null) {
+//                    Toast.makeText(this, "人员关注信息接口异常", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                List<InfoGZXXResp> list = peopleFocusResBean.getGzxxList();
+//                if (list == null || list.isEmpty()) {
+//                    tv_focus_road_check.setText(Html.fromHtml("人核查接口:" + "<font color=\"#FF7F50\">" + peopleFocusResBean.getMessage() + "</font>"));
+//                    return;
+//                }
+//
+////                load_person_focus = true;
+//                code = peopleFocusResBean.getCode();
+//                if (code.equals("6") || code.equals("7")) {
+//                    showWarningIfPolice(code);
+//                    return;
+//                }
+//                StringBuilder sb = new StringBuilder();
+//
+//                for (InfoGZXXResp infoGZXXResp : list) {
+//                    if (infoGZXXResp.getStatus().equals("2"))
+//                        sb.append("<font color=\"#d13931\">").append(infoGZXXResp.getNr()).append("<br/>")
+//                                .append("录入时间:").append(infoGZXXResp.getSj()).append("</font>").append("<br/><br/>");
+//                }
+//                if (sb.toString().isEmpty()) {
+//                    tv_focus_road_check.setText(Html.fromHtml("<font color=\"#05b163\"> 无相关记录</font>"));
+//                } else {
+//                    tv_focus_road_check.setText(Html.fromHtml(sb.toString()));
+//                }
+//
+//                break;
         }
     }
 

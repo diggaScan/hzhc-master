@@ -401,8 +401,10 @@ public class Ac_location extends Ac_base_info {
                 try {
                     move_jd = center.getX() + "";
                     move_wd = center.getY() + "";
-                    V_config.gpsX = move_jd;
-                    V_config.gpsY = move_wd;
+//                    V_config.gpsX = move_jd;
+//                    V_config.gpsY = move_wd;
+                    V_config.gpsX = String.format("%.5f", move_jd);
+                    V_config.gpsY = String.format("%.5f", move_wd);
                     MobilePoliceApp.move_jd = move_jd;
                     MobilePoliceApp.move_wd = move_wd;
                     // lx=120&ly=32&pagesize=10

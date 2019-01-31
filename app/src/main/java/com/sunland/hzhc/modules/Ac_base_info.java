@@ -91,7 +91,6 @@ public abstract class Ac_base_info extends Ac_base implements OnRequestCallback 
         requestBean.setGpsY(V_config.gpsY);
     }
 
-
     @Override
     public <T> void onRequestFinish(String reqId, String reqName, T bean) {
         onDataResponse(reqId, reqName, (ResultBase) bean);
@@ -136,12 +135,12 @@ public abstract class Ac_base_info extends Ac_base implements OnRequestCallback 
                 return DwListResBean.class;
             case V_config.GET_AN_BAO_INFO:
                 return AnBaoResBean.class;
-            case V_config.GET_ELECTRIC_CAR_FOCUS_INFO:
-                return EVehicleFocusResBean.class;
-            case V_config.CAR_FOCUS:
-                return VehicleFocusResBean.class;
-            case V_config.PERSON_FOCUS_INFO:
-                return PeopleFocusResBean.class;
+//            case V_config.GET_ELECTRIC_CAR_FOCUS_INFO:
+//                return EVehicleFocusResBean.class;
+//            case V_config.CAR_FOCUS:
+//                return VehicleFocusResBean.class;
+//            case V_config.PERSON_FOCUS_INFO:
+//                return PeopleFocusResBean.class;
         }
         return null;
     }

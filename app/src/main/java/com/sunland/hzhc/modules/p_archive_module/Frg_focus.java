@@ -58,15 +58,15 @@ public class Frg_focus extends Frg_base {
     public TextView tv_focus_str;
     @BindView(R.id.people_focus)
     public RecyclerView rv_people_focus;
-    @BindView(R.id.focus_container)
-    public RelativeLayout rl_focus_container;
+//    @BindView(R.id.focus_container)
+//    public RelativeLayout rl_focus_container;
 
     private String sfzh;//身份证号码
     private List<InfoGZXXResp> gzxx_list;//关注信息列表
     private Thread thread;
     private MyAdapter myAdapter;
 
-    private boolean load_person_focus_info;
+//    private boolean load_person_focus_info;
     private boolean load_inspect_person;
     private boolean load_wanted;
 
@@ -81,7 +81,7 @@ public class Frg_focus extends Frg_base {
         btn_focus.setVisibility(View.GONE);
         btn_retry.setVisibility(View.GONE);
         sfzh = ((Ac_archive) context).identity_num;
-        rl_focus_container.setVisibility(View.GONE);
+//        rl_focus_container.setVisibility(View.GONE);
         myAdapter = new MyAdapter();
         rv_people_focus.setAdapter(myAdapter);
         rv_people_focus.setLayoutManager(new LinearLayoutManager(context));
@@ -135,7 +135,7 @@ public class Frg_focus extends Frg_base {
         super.onResume();
         if (isVisible) {
             queryYdjwDataNoDialog("INSPECT_PERSON", V_config.INSPECT_PERSON);
-            queryYdjwDataNoDialog("PERSON_FOCUS_INFO", V_config.PERSON_FOCUS_INFO);
+//            queryYdjwDataNoDialog("PERSON_FOCUS_INFO", V_config.PERSON_FOCUS_INFO);
             queryYdjwDataX();
             queryWanted();
         }
@@ -144,11 +144,11 @@ public class Frg_focus extends Frg_base {
     @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
         switch (reqName) {
-            case V_config.PERSON_FOCUS_INFO:
-                FocusReqBean focusReqBean = new FocusReqBean();
-                assembleBasicRequest(focusReqBean);
-                focusReqBean.setSfzh(sfzh);
-                return focusReqBean;
+//            case V_config.PERSON_FOCUS_INFO:
+//                FocusReqBean focusReqBean = new FocusReqBean();
+//                assembleBasicRequest(focusReqBean);
+//                focusReqBean.setSfzh(sfzh);
+//                return focusReqBean;
             case V_config.INSPECT_PERSON:
                 InspectPersonReqBean inspectPersonReqBean = new InspectPersonReqBean();
                 assembleBasicRequest(inspectPersonReqBean);
@@ -170,37 +170,37 @@ public class Frg_focus extends Frg_base {
 
     @Override
     public <T> void onRequestFinish(String reqId, String reqName, T bean) {
-        if(isDestroyView){
+        if (isDestroyView) {
             return;
         }
         switch (reqName) {
-            case V_config.PERSON_FOCUS_INFO:
-                PeopleFocusResBean peopleFocusResBean = (PeopleFocusResBean) bean;
-                if (peopleFocusResBean == null) {
-                    Toast.makeText(context, "人员关注信息接口异常", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                List<InfoGZXXResp> list = peopleFocusResBean.getGzxxList();
-                if (list == null || list.isEmpty()) {
-                    Toast.makeText(context, "人员关注信息无内容返回", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                load_person_focus_info = true;
-                for (InfoGZXXResp infoGZXXResp : list) {
-                    if (infoGZXXResp.getStatus().equals("2"))
-                        gzxx_list.add(infoGZXXResp);
-                }
-                if (gzxx_list != null && gzxx_list.size() > 0) {
-                    tv_focus_str.setVisibility(View.VISIBLE);
-                    tv_focus_str.setText("人员关注信息");
-                    tv_focus_str.setTextColor(Color.RED);
-                    rv_people_focus.setVisibility(View.VISIBLE);
-                } else {
-                    tv_focus_str.setVisibility(View.GONE);
-                }
-                myAdapter.notifyDataSetChanged();
-                load_person_focus_info = true;
-                break;
+//            case V_config.PERSON_FOCUS_INFO:
+//                PeopleFocusResBean peopleFocusResBean = (PeopleFocusResBean) bean;
+//                if (peopleFocusResBean == null) {
+//                    Toast.makeText(context, "人员关注信息接口异常", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                List<InfoGZXXResp> list = peopleFocusResBean.getGzxxList();
+//                if (list == null || list.isEmpty()) {
+//                    Toast.makeText(context, "人员关注信息无内容返回", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                load_person_focus_info = true;
+//                for (InfoGZXXResp infoGZXXResp : list) {
+//                    if (infoGZXXResp.getStatus().equals("2"))
+//                        gzxx_list.add(infoGZXXResp);
+//                }
+//                if (gzxx_list != null && gzxx_list.size() > 0) {
+//                    tv_focus_str.setVisibility(View.VISIBLE);
+//                    tv_focus_str.setText("人员关注信息");
+//                    tv_focus_str.setTextColor(Color.RED);
+//                    rv_people_focus.setVisibility(View.VISIBLE);
+//                } else {
+//                    tv_focus_str.setVisibility(View.GONE);
+//                }
+//                myAdapter.notifyDataSetChanged();
+//                load_person_focus_info = true;
+//                break;
             case V_config.INSPECT_PERSON:
                 InspectPersonJsonRet inspectPersonJsonRet = (InspectPersonJsonRet) bean;
                 loading_hc.setVisibility(View.GONE);
@@ -226,7 +226,6 @@ public class Frg_focus extends Frg_base {
 
                 tv_hcjg.setText(Html.fromHtml(result));
                 load_inspect_person = true;
-
                 break;
         }
     }
@@ -238,9 +237,9 @@ public class Frg_focus extends Frg_base {
         if (!load_inspect_person) {
             queryYdjwDataNoDialog("INSPECT_PERSON", V_config.INSPECT_PERSON);
         }
-        if (!load_person_focus_info) {
-            queryYdjwDataNoDialog("PERSON_FOCUS_INFO", V_config.PERSON_FOCUS_INFO);
-        }
+//        if (!load_person_focus_info) {
+//            queryYdjwDataNoDialog("PERSON_FOCUS_INFO", V_config.PERSON_FOCUS_INFO);
+//        }
         queryYdjwDataX();
         if (!load_wanted) {
             queryWanted();

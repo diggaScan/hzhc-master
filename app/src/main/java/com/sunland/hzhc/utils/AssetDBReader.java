@@ -16,42 +16,43 @@ public class AssetDBReader {
 
     private Context mContext;
     private SQLiteDatabase mSqLiteDatabase;
-    public AssetDBReader(Context context){
-        this.mContext=context;
+
+    public AssetDBReader(Context context) {
+        this.mContext = context;
     }
 
     public SQLiteDatabase readAssetDb(String dirPath, String dbName) {
-        File db_file=new File(dirPath,dbName);
-        Log.d("info",db_file.getAbsolutePath());
-        if(db_file.exists()){
-            mSqLiteDatabase=SQLiteDatabase.openOrCreateDatabase(db_file,null);
+        File db_file = new File(dirPath, dbName);
+        Log.d("info", db_file.getAbsolutePath());
+        if (db_file.exists()) {
+            mSqLiteDatabase = SQLiteDatabase.openOrCreateDatabase(db_file, null);
 
-        }else {
-            try{
-                InputStream is=mContext.getAssets().open(dbName);
-                FileOutputStream fos=new FileOutputStream(db_file);
-                byte[] bytes=new byte[1024];
-                int count=0;
-                while((count=is.read(bytes))>0){
-                    fos.write(bytes,0,count);
+        } else {
+            try {
+                InputStream is = mContext.getAssets().open(dbName);
+                FileOutputStream fos = new FileOutputStream(db_file);
+                byte[] bytes = new byte[1024];
+                int count = 0;
+                while ((count = is.read(bytes)) > 0) {
+                    fos.write(bytes, 0, count);
                 }
                 fos.flush();
                 fos.close();
                 is.close();
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
-            mSqLiteDatabase=SQLiteDatabase.openOrCreateDatabase(db_file,null);
+            mSqLiteDatabase = SQLiteDatabase.openOrCreateDatabase(db_file, null);
         }
         return mSqLiteDatabase;
     }
 
-    public SQLiteDatabase getDatabase(){
-        if(mSqLiteDatabase!=null){
+    public SQLiteDatabase getDatabase() {
+        if (mSqLiteDatabase != null) {
             return mSqLiteDatabase;
-        }else {
+        } else {
             return null;
         }
     }

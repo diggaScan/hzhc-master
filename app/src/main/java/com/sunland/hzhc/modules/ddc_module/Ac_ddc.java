@@ -23,9 +23,7 @@ import com.sunland.hzhc.V_config;
 import com.sunland.hzhc.bean.BaseRequestBean;
 import com.sunland.hzhc.bean.i_country_people.CountryPersonReqBean;
 import com.sunland.hzhc.bean.i_country_people.PersonOfCountryJsonRet;
-import com.sunland.hzhc.bean.i_e_bike_focus.DdcFocus;
 import com.sunland.hzhc.bean.i_e_bike_focus.EVehicleFocusReqBean;
-import com.sunland.hzhc.bean.i_e_bike_focus.EVehicleFocusResBean;
 import com.sunland.hzhc.bean.i_inspect_person.Dlxx;
 import com.sunland.hzhc.bean.i_inspect_person.InspectPersonJsonRet;
 import com.sunland.hzhc.bean.i_inspect_person.InspectPersonReqBean;
@@ -44,7 +42,6 @@ import com.sunlandgroup.def.bean.result.ResultBase;
 import com.sunlandgroup.utils.JsonUtils;
 
 import java.net.URLEncoder;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -77,12 +74,12 @@ public class Ac_ddc extends Ac_base_info {
     public SpinKitView loading_hc;
     @BindView(R.id.loading_icon_zt)
     public SpinKitView loading_zt;
-    @BindView(R.id.focus_str)
-    public TextView tv_focus_str;
-    @BindView(R.id.focus_road_check)
-    public TextView tv_focus_road_check;
-    @BindView(R.id.focus_loading_icon_hc)
-    public SpinKitView sk_loading_icon;
+//    @BindView(R.id.focus_str)
+//    public TextView tv_focus_str;
+//    @BindView(R.id.focus_road_check)
+//    public TextView tv_focus_road_check;
+//    @BindView(R.id.focus_loading_icon_hc)
+//    public SpinKitView sk_loading_icon;
 
     private String sfzh;
     private String czxm;
@@ -97,7 +94,7 @@ public class Ac_ddc extends Ac_base_info {
     private boolean load_want;
     private boolean load_country_person;
     private boolean load_inspect_person;
-    private boolean load_ddc_focus;
+    //    private boolean load_ddc_focus; //取消电动车关注信息栏目
     private String check_result;
 
     @Override
@@ -118,9 +115,9 @@ public class Ac_ddc extends Ac_base_info {
         if (!load_inspect_person) {
             queryYdjwDataNoDialog("COUNTRY_PERSON", V_config.INSPECT_PERSON);
         }
-        if (!load_ddc_focus) {
-            queryYdjwDataNoDialog("GET_ELECTRIC_CAR_FOCUS_INFO", V_config.GET_ELECTRIC_CAR_FOCUS_INFO);
-        }
+//        if (!load_ddc_focus) {
+//            queryYdjwDataNoDialog("GET_ELECTRIC_CAR_FOCUS_INFO", V_config.GET_ELECTRIC_CAR_FOCUS_INFO);
+//        }
         queryYdjwDataX();
         if (!load_want) {
             queryWanted();
@@ -146,7 +143,7 @@ public class Ac_ddc extends Ac_base_info {
     }
 
     private void initView() {
-        tv_focus_str.setText("电动车关注信息");
+//        tv_focus_str.setText("电动车关注信息");
         setText(tv_hc_loaciton, V_config.hc_address);
         setText(tv_id_num, sfzh);
         setText(tv_name, czxm);
@@ -199,16 +196,16 @@ public class Ac_ddc extends Ac_base_info {
     @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
         switch (reqName) {
-            case V_config.GET_ELECTRIC_CAR_FOCUS_INFO:
-                EVehicleFocusReqBean eVehicleFocusReqBean = new EVehicleFocusReqBean();
-                assembleBasicRequest(eVehicleFocusReqBean);
-                if (isFromSsj) {
-                    eVehicleFocusReqBean.setLbr(V_config.ssjBbh);
-                }
-                eVehicleFocusReqBean.setHphm(hphm);
-                eVehicleFocusReqBean.setCjh(cjh);
-                eVehicleFocusReqBean.setFdjh(fdjh);
-                return eVehicleFocusReqBean;
+//            case V_config.GET_ELECTRIC_CAR_FOCUS_INFO:
+//                EVehicleFocusReqBean eVehicleFocusReqBean = new EVehicleFocusReqBean();
+//                assembleBasicRequest(eVehicleFocusReqBean);
+//                if (isFromSsj) {
+//                    eVehicleFocusReqBean.setLbr(V_config.ssjBbh);
+//                }
+//                eVehicleFocusReqBean.setHphm(hphm);
+//                eVehicleFocusReqBean.setCjh(cjh);
+//                eVehicleFocusReqBean.setFdjh(fdjh);
+//                return eVehicleFocusReqBean;
             case V_config.COUNTRY_PERSON:
                 CountryPersonReqBean countryPersonReqBean = new CountryPersonReqBean();
                 assembleBasicRequest(countryPersonReqBean);
@@ -294,37 +291,37 @@ public class Ac_ddc extends Ac_base_info {
                 tv_road_check.setText(Html.fromHtml(check_result));
                 break;
 
-            case V_config.GET_ELECTRIC_CAR_FOCUS_INFO:
-                sk_loading_icon.setVisibility(View.GONE);
-                EVehicleFocusResBean eVehicleFocusResBean = (EVehicleFocusResBean) resultBase;
-                if (eVehicleFocusResBean == null) {
-                    Toast.makeText(this, "电动车关注信息接口异常", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                List<DdcFocus> list = eVehicleFocusResBean.getDdcList();
-                if (list == null || list.isEmpty()) {
-                    tv_focus_road_check.setText(Html.fromHtml("<font color=\"#05b163\">" + eVehicleFocusResBean.getMessage() + "</font>"));
-                    return;
-                }
-                load_ddc_focus = true;
-                StringBuilder sb = new StringBuilder();
-                for (DdcFocus ddcFocus : list) {
-                    if (ddcFocus.getStatus().equals("2")) {
-                        sb.append(ddcFocus.getLb());
-                        if (ddcFocus.getNr() != null) {
-                            sb.append(": ").append(ddcFocus.getNr());
-                        } else {
-                            sb.append(": ").append("无");
-                        }
-                    }
-
-                }
-                if (sb.toString().isEmpty()) {
-                    tv_focus_road_check.setText(Html.fromHtml("<font color=\"#05b163\"> 无相关记录</font>"));
-                } else {
-                    tv_focus_road_check.setText(Html.fromHtml(sb.toString()));
-                }
-                break;
+//            case V_config.GET_ELECTRIC_CAR_FOCUS_INFO:
+//                sk_loading_icon.setVisibility(View.GONE);
+//                EVehicleFocusResBean eVehicleFocusResBean = (EVehicleFocusResBean) resultBase;
+//                if (eVehicleFocusResBean == null) {
+//                    Toast.makeText(this, "电动车关注信息接口异常", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                List<DdcFocus> list = eVehicleFocusResBean.getDdcList();
+//                if (list == null || list.isEmpty()) {
+//                    tv_focus_road_check.setText(Html.fromHtml("<font color=\"#05b163\">" + eVehicleFocusResBean.getMessage() + "</font>"));
+//                    return;
+//                }
+//                load_ddc_focus = true;
+//                StringBuilder sb = new StringBuilder();
+//                for (DdcFocus ddcFocus : list) {
+//                    if (ddcFocus.getStatus().equals("2")) {
+//                        sb.append(ddcFocus.getLb());
+//                        if (ddcFocus.getNr() != null) {
+//                            sb.append(": ").append(ddcFocus.getNr());
+//                        } else {
+//                            sb.append(": ").append("无");
+//                        }
+//                    }
+//
+//                }
+//                if (sb.toString().isEmpty()) {
+//                    tv_focus_road_check.setText(Html.fromHtml("<font color=\"#05b163\"> 无相关记录</font>"));
+//                } else {
+//                    tv_focus_road_check.setText(Html.fromHtml(sb.toString()));
+//                }
+//                break;
         }
     }
 
@@ -336,7 +333,7 @@ public class Ac_ddc extends Ac_base_info {
         }
     }
 
-    @OnClick({R.id.ddc_check, R.id.focus, R.id.retry, R.id.location_container, R.id.focus_retry})
+    @OnClick({R.id.ddc_check, R.id.focus, R.id.retry, R.id.location_container})
     public void onClick(View view) {
         int id = view.getId();
         Bundle bundle = new Bundle();
@@ -360,12 +357,12 @@ public class Ac_ddc extends Ac_base_info {
                 queryYdjwDataNoDialog("INSPECT_PERSON", V_config.INSPECT_PERSON);
                 queryYdjwDataX();
                 break;
-            case R.id.focus_retry:
-                tv_focus_road_check.setText("");
-                sk_loading_icon.setVisibility(View.VISIBLE);
-                queryYdjwDataNoDialog("GET_ELECTRIC_CAR_FOCUS_INFO", V_config.GET_ELECTRIC_CAR_FOCUS_INFO);
-                queryYdjwDataX();
-                break;
+//            case R.id.focus_retry:
+//                tv_focus_road_check.setText("");
+//                sk_loading_icon.setVisibility(View.VISIBLE);
+//                queryYdjwDataNoDialog("GET_ELECTRIC_CAR_FOCUS_INFO", V_config.GET_ELECTRIC_CAR_FOCUS_INFO);
+//                queryYdjwDataX();
+//                break;
         }
     }
 

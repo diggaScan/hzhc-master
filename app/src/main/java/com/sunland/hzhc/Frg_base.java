@@ -171,8 +171,8 @@ public abstract class Frg_base extends Fragment implements OnRequestCallback, On
                 return PersonArchiveResBean.class;
             case V_config.PERSON_LOCUS_INFOS:
                 return TrackResBean.class;
-            case V_config.PERSON_FOCUS_INFO:
-                return PeopleFocusResBean.class;
+//            case V_config.PERSON_FOCUS_INFO:
+//                return PeopleFocusResBean.class;
             case V_config.INSPECT_PERSON:
                 return InspectPersonJsonRet.class;
         }

@@ -103,12 +103,12 @@ public class Ac_clcx extends Ac_base_info {
     public SpinKitView loading_hc;
     @BindView(R.id.loading_icon_zt)
     public SpinKitView loading_zt;
-    @BindView(R.id.focus_str)
-    public TextView tv_focus_str;
-    @BindView(R.id.focus_road_check)
-    public TextView tv_focus_road_check;
-    @BindView(R.id.focus_loading_icon_hc)
-    public SpinKitView sk_loading_icon;
+//    @BindView(R.id.focus_str)
+//    public TextView tv_focus_str;
+//    @BindView(R.id.focus_road_check)
+//    public TextView tv_focus_road_check;
+//    @BindView(R.id.focus_loading_icon_hc)
+//    public SpinKitView sk_loading_icon;
     @BindView(R.id.access_deny_info)
     public TextView access_deny_info;
     @BindView(R.id.info_container)
@@ -131,7 +131,7 @@ public class Ac_clcx extends Ac_base_info {
     private StringBuilder wfqk = new StringBuilder();//盗抢信息+关注信息+情报接口返回的描述信息
 
     private boolean load_car_info;
-    private boolean load_car_focus;
+//    private boolean load_car_focus;//取消车关注信息栏目
     private boolean load_inspect_car;
     private boolean load_country_person;
     private boolean load_wanted;
@@ -157,9 +157,9 @@ public class Ac_clcx extends Ac_base_info {
             showLoading_layout(true);
             queryYdjwDataNoDialog("CAR_INFO_JOIN", V_config.CAR_INFO_JOIN);
         }
-        if (!load_car_focus) {
-            queryYdjwDataNoDialog("CAR_FOCUS", V_config.CAR_FOCUS);
-        }
+//        if (!load_car_focus) {
+//            queryYdjwDataNoDialog("CAR_FOCUS", V_config.CAR_FOCUS);
+//        }
 
         queryYdjwDataX();
     }
@@ -194,7 +194,7 @@ public class Ac_clcx extends Ac_base_info {
 
     private void initView() {
         tv_hc_location.setText(V_config.hc_address);
-        tv_focus_str.setText("车辆关注信息");
+//        tv_focus_str.setText("车辆关注信息");
     }
 
     @Override
@@ -259,22 +259,22 @@ public class Ac_clcx extends Ac_base_info {
                 request_p.setRyxxReq(ryxxReq);
                 inspectPersonReqBean.setRequest(request_p);
                 return inspectPersonReqBean;
-            case V_config.CAR_FOCUS:
-                VehicleFocusReqBean vehicleFocusReqBean = new VehicleFocusReqBean();
-                assembleBasicRequest(vehicleFocusReqBean);
-                if (isFromssj) {
-                    vehicleFocusReqBean.setLbr(V_config.ssjBbh);
-                }
-                vehicleFocusReqBean.setCphm(cphm);
-                vehicleFocusReqBean.setHpzl(hpzl);
-                vehicleFocusReqBean.setSyr_sfzmhm(sfzh);
-                return vehicleFocusReqBean;
+//            case V_config.CAR_FOCUS:
+//                VehicleFocusReqBean vehicleFocusReqBean = new VehicleFocusReqBean();
+//                assembleBasicRequest(vehicleFocusReqBean);
+//                if (isFromssj) {
+//                    vehicleFocusReqBean.setLbr(V_config.ssjBbh);
+//                }
+//                vehicleFocusReqBean.setCphm(cphm);
+//                vehicleFocusReqBean.setHpzl(hpzl);
+//                vehicleFocusReqBean.setSyr_sfzmhm(sfzh);
+//                return vehicleFocusReqBean;
         }
         return null;
     }
 
 
-    @OnClick({R.id.sfzh_check, R.id.focus, R.id.location_container, R.id.retry, R.id.focus_retry})
+    @OnClick({R.id.sfzh_check, R.id.focus, R.id.location_container, R.id.retry})
     public void onClick(View view) {
         int id = view.getId();
         Bundle bundle = new Bundle();
@@ -299,12 +299,12 @@ public class Ac_clcx extends Ac_base_info {
                 queryYdjwDataNoDialog("INSPECT_CAR", V_config.INSPECT_CAR);
                 queryYdjwDataX();
                 break;
-            case R.id.focus_retry:
-                tv_focus_road_check.setText("");
-                sk_loading_icon.setVisibility(View.VISIBLE);
-                queryYdjwDataNoDialog("CAR_FOCUS", V_config.CAR_FOCUS);
-                queryYdjwDataX();
-                break;
+//            case R.id.focus_retry:
+//                tv_focus_road_check.setText("");
+//                sk_loading_icon.setVisibility(View.VISIBLE);
+//                queryYdjwDataNoDialog("CAR_FOCUS", V_config.CAR_FOCUS);
+//                queryYdjwDataX();
+//                break;
         }
     }
 
@@ -481,41 +481,41 @@ public class Ac_clcx extends Ac_base_info {
                 result_person_inspect = result_p;
                 tv_road_check.setText(Html.fromHtml(result_car_inspect + "<br/>" + result_person_inspect));
                 break;
-            case V_config.CAR_FOCUS:
-                sk_loading_icon.setVisibility(View.GONE);
-                VehicleFocusResBean vehicleFocusResBean = (VehicleFocusResBean) resultBase;
-                if (vehicleFocusResBean == null) {
-                    Toast.makeText(this, "车辆关注接口异常", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                List<CarFocus_info> list = vehicleFocusResBean.getCarList();
-                if (list == null || list.isEmpty()) {
-                    tv_focus_road_check.setText(vehicleFocusResBean.getMessage());
-                    return;
-                }
-                load_car_focus = true;
-                code = vehicleFocusResBean.getCode();
-                if (code.equals("6") || code.equals("7")) {
-                    showWarningIfPolice(code);
-                    return;
-                }
-                StringBuilder stringBuilder = new StringBuilder();
-                for (CarFocus_info carFocus_info : list) {
-                    if (carFocus_info.getStatus().equals("2")) {
-                        stringBuilder.append(carFocus_info.getLb()).append("\n");
-                        sffa = "1";
-                        wfqk.append(carFocus_info.getLb()).append(carFocus_info.getNr()).append("\n");
-                        if (carFocus_info.getNr() != null) {
-                            stringBuilder.append(": ").append(carFocus_info.getNr()).append("\n\n");
-                        }
-                    }
-                }
-                if (stringBuilder.toString().isEmpty()) {
-                    tv_focus_road_check.setText(Html.fromHtml("<font color=\"#05b163\"> 无相关记录</font>"));
-                } else {
-                    tv_focus_road_check.setText(Html.fromHtml(stringBuilder.toString()));
-                }
+//            case V_config.CAR_FOCUS:
+//                sk_loading_icon.setVisibility(View.GONE);
+//                VehicleFocusResBean vehicleFocusResBean = (VehicleFocusResBean) resultBase;
+//                if (vehicleFocusResBean == null) {
+//                    Toast.makeText(this, "车辆关注接口异常", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                List<CarFocus_info> list = vehicleFocusResBean.getCarList();
+//                if (list == null || list.isEmpty()) {
+//                    tv_focus_road_check.setText(vehicleFocusResBean.getMessage());
+//                    return;
+//                }
+//                load_car_focus = true;
+//                code = vehicleFocusResBean.getCode();
+//                if (code.equals("6") || code.equals("7")) {
+//                    showWarningIfPolice(code);
+//                    return;
+//                }
+//                StringBuilder stringBuilder = new StringBuilder();
+//                for (CarFocus_info carFocus_info : list) {
+//                    if (carFocus_info.getStatus().equals("2")) {
+//                        stringBuilder.append(carFocus_info.getLb()).append("\n");
+//                        sffa = "1";
+//                        wfqk.append(carFocus_info.getLb()).append(carFocus_info.getNr()).append("\n");
+//                        if (carFocus_info.getNr() != null) {
+//                            stringBuilder.append(": ").append(carFocus_info.getNr()).append("\n\n");
+//                        }
+//                    }
+//                }
+//                if (stringBuilder.toString().isEmpty()) {
+//                    tv_focus_road_check.setText(Html.fromHtml("<font color=\"#05b163\"> 无相关记录</font>"));
+//                } else {
+//                    tv_focus_road_check.setText(Html.fromHtml(stringBuilder.toString()));
+//                }
         }
     }
 

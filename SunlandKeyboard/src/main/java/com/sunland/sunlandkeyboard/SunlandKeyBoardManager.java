@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -50,6 +51,7 @@ import java.util.regex.Pattern;
 public class SunlandKeyBoardManager {
 
 
+    private String TAG = "delete";
     private Context mContext;
     private KeyboardView mKeyboardView;
     private Keyboard mKeyboard;
@@ -58,7 +60,7 @@ public class SunlandKeyBoardManager {
     private ComponentName mComponentName;
 
     private InputMethodManager imManager;
-
+    private boolean isNumKeyboard;
     private int softInputState;
     private int softInputAdjust;
     private boolean isActivated; //indicate whether the Keyboard View is showing.
@@ -70,6 +72,10 @@ public class SunlandKeyBoardManager {
 
     private List<EditText> targets; //存放目标EditText
     private boolean reset_flag = true;//用于防止onGlobalLayout()因布局变化无限循环
+
+    private boolean isPressingDelete;
+    private int cur_key_code;
+    private boolean should_use_pressed;
 
     private EditText cur_target;
     private KeyboardMode cur_mode;
@@ -158,6 +164,13 @@ public class SunlandKeyBoardManager {
             public boolean onTouch(View v, MotionEvent event) {
                 v.requestFocus();
                 mEditText = (EditText) v;
+                if (!editText.getText().toString().isEmpty()) {
+                    if (modes.get(editText) == KeyboardMode.VEHICLE_PLATE) {
+                        mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_english26);
+                        refreshKey();
+                        mKeyboardView.setKeyboard(mKeyboard);
+                    }
+                }
                 return false;
             }
         });
@@ -197,11 +210,18 @@ public class SunlandKeyBoardManager {
             public void onClick(View v) {
                 cur_mode = modes.get(editText);//获取当前点击目标的键盘类型
                 cur_target = editText;
-                inflateKeyboard();
+                if (!editText.getText().toString().isEmpty()) {
+                    if (modes.get(editText) == KeyboardMode.VEHICLE_PLATE) {
+                        mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_english26);
+                        mKeyboardView.setKeyboard(mKeyboard);
+                        refreshKey();
+                    }
+                } else {
+                    inflateKeyboard();
+                }
                 hideSystemSoftInput(v);
                 if (!isActivated)
                     showKeyboard();
-
             }
         });
 
@@ -219,13 +239,17 @@ public class SunlandKeyBoardManager {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().isEmpty()) {
-                    if (modes.get(editText) == KeyboardMode.VEHICLE_PLATE) {
+                    hideKeyboard();
+                    if (modes.get(editText) == KeyboardMode.VEHICLE_PLATE && !isPressingDelete) {
+                        Log.d("delete", "afterTextChanged: ");
                         mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_vehicle);
-                        mKeyboardView.setKeyboard(mKeyboard);
-
-
+                        new android.os.Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mKeyboardView.setKeyboard(mKeyboard);
+                            }
+                        }, 100);
                     }
-
                 }
             }
         });
@@ -246,17 +270,62 @@ public class SunlandKeyBoardManager {
 
         mKeyboardView.setPreviewEnabled(false);
 
+
+//        mKeyboardView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (event.getAction() == MotionEvent.ACTION_UP) {
+//                    if (cur_key_code == Keyboard.KEYCODE_DELETE) {
+//                        isPressingDelete = false;
+//                        int index = targets.indexOf(cur_target);
+//                        EditText mEditText = targets.get(index);
+//                        Editable editable = mEditText.getEditableText();
+//                        if (editable.length() == 0) {
+//                            if (modes.get(cur_target) == KeyboardMode.VEHICLE_PLATE) {
+//                                mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_vehicle);
+//                                mKeyboardView.setKeyboard(mKeyboard);
+//                            }
+//                        }
+//                    }
+//
+//                }
+//                return false ;
+//            }
+//        });
         mKeyboardView.setOnKeyboardActionListener(new KeyboardView.OnKeyboardActionListener() {
             @Override
             public void onPress(int primaryCode) {
+                Log.d(TAG, "onPress: ");
+
             }
 
             @Override
             public void onRelease(int primaryCode) {
+//                if (primaryCode == Keyboard.KEYCODE_DELETE) {
+//                    Log.d("delete", "onRelease: ");
+//                    int index = targets.indexOf(cur_target);
+//                    EditText mEditText = targets.get(index);
+//                    Editable editable = mEditText.getEditableText();
+//                    if (editable.length() == 0) {
+//                        if (modes.get(cur_target) == KeyboardMode.VEHICLE_PLATE) {
+//                            isPressingDelete = false;
+//                            mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_vehicle);
+//                            new android.os.Handler().postDelayed(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    mKeyboardView.setKeyboard(mKeyboard);
+//
+//                                }
+//                            }, 100);
+//                        }
+//                    }
+//                }
             }
 
             @Override
             public void onKey(int primaryCode, int[] keyCodes) {
+                Log.d("delete", "onKey: ");
+                cur_key_code = primaryCode;
                 int index = targets.indexOf(cur_target);
                 EditText mEditText = targets.get(index);
                 Editable editable = mEditText.getEditableText();
@@ -264,6 +333,8 @@ public class SunlandKeyBoardManager {
                 int end = mEditText.getSelectionEnd();
 
                 if (primaryCode == Keyboard.KEYCODE_DELETE) {
+                    isPressingDelete = true;
+                    isNumKeyboard = false;
                     // 回退
                     if (editable.length() > 0) {
                         if (start < end) {
@@ -278,6 +349,7 @@ public class SunlandKeyBoardManager {
                     }
                 } else if (primaryCode == mContext.getResources().getInteger(R.integer.KEYBORD_CHINESE)) { //中文
                     hideKeyboard();
+                    isNumKeyboard = false;
                     try {
                         showSystemSoftInputIfhide();
                     } catch (Exception e) {
@@ -287,52 +359,58 @@ public class SunlandKeyBoardManager {
                     mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_english26);
                     refreshKey();
                     mKeyboardView.setKeyboard(mKeyboard);
+                    isNumKeyboard = false;
                 } else if (primaryCode == mContext.getResources().getInteger(R.integer.KEYBORD_SHIFT)) {//大小写切换
                     refreshKey();
                     mKeyboardView.setKeyboard(mKeyboard);
+                    isNumKeyboard = false;
                 } else if (primaryCode == mContext.getResources().getInteger(R.integer.KEYBORD_NUM)) {//数字
                     mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_number);
                     mKeyboardView.setKeyboard(mKeyboard);
+                    isNumKeyboard = true;
                 } else if (primaryCode == mContext.getResources().getInteger(R.integer.KEYBORD_SYMBOLS)) {//符号
                     mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_symbols);
                     mKeyboardView.setKeyboard(mKeyboard);
+                    isNumKeyboard = false;
                 } else if (primaryCode == mContext.getResources().getInteger(R.integer.KEYBORD_BLANK)) {
                     editable.insert(start, " ");
                 } else if (primaryCode == mContext.getResources().getInteger(R.integer.KEYBORD_DONE)) {
                     hideKeyboard();
+                    isNumKeyboard = false;
                 } else {
                     editable.insert(start, getKeyLabel(primaryCode));
-                    if (cur_mode == KeyboardMode.VEHICLE_PLATE) {
+                    if (cur_mode == KeyboardMode.VEHICLE_PLATE && !isNumKeyboard) {
                         mKeyboard = new Keyboard(mContext, R.xml.keyboard_mode_english26);
                         mKeyboardView.setKeyboard(mKeyboard);
                         refreshKey();
                     }
+
                 }
             }
 
             @Override
             public void onText(CharSequence text) {
-
+                Log.d(TAG, "onText: ");
             }
 
             @Override
             public void swipeLeft() {
-
+                Log.d(TAG, "swipeLeft: ");
             }
 
             @Override
             public void swipeRight() {
-
+                Log.d(TAG, "swipeRight: ");
             }
 
             @Override
             public void swipeDown() {
-
+                Log.d(TAG, "swipeDown: ");
             }
 
             @Override
             public void swipeUp() {
-
+                Log.d(TAG, "swipeUp: ");
             }
         });
     }
@@ -372,7 +450,7 @@ public class SunlandKeyBoardManager {
         }
     }
 
-    private void hideKeyboard() {
+    public void hideKeyboard() {
         if (!isActivated)
             return;
 
